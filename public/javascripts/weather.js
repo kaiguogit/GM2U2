@@ -1,5 +1,4 @@
 function currentWeather(){
-  debugger;
   return $.ajax({
     url: "/api/weather/city",
     method: "get", 

@@ -1,7 +1,7 @@
 
 function readTime(){
   return $.ajax({
-    url: "/time",
+    url: "/api/time",
     method: "get",
   });
 }
