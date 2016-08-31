@@ -1,5 +1,6 @@
 var express = require('express');
-var wunderground = require ('../modules/weather')
+var wunderground = require ('../modules/weather');
+var time = require('../modules/time');
 var router = express.Router();
 
 /* GET home page. */
@@ -17,6 +18,10 @@ router.get('/weather/city', (req, res, next) => {
   wunderground.conditions().forecast().request(req.query.query, function(err, response){
     res.json(response);
   });
+});
+
+router.get('/time', (req, res, next) => {
+  res.json(time.getTimeString());
 });
 
 module.exports = router;

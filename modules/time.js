@@ -1,9 +1,13 @@
-function getTime(){
+//This is a time module
+
+//return a string for current time
+function getTimeString(){
   var now = new Date();
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
+  http://stackoverflow.com/questions/12487422/take-a-value-1-31-and-convert-it-to-ordinal-date-w-javascript
   function getOrdinal(n) {
       if((parseFloat(n) == parseInt(n)) && !isNaN(n)){
           var s=["th","st","nd","rd"],
@@ -21,8 +25,4 @@ function getTime(){
   return result;
 }
 
-$(function(){
-  console.log(getTime());
-  speak("Hello Kai");
-  speak(getTime());
-});
+module.exports.getTimeString = getTimeString;
