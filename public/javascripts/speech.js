@@ -22,3 +22,6 @@ window.speechSynthesis.onvoiceschanged = function() {
   };
   window.speak = setupSpeak();
 };
+
+//set global var modules
+var modules = {};
