@@ -1,3 +1,7 @@
+//This file loads speech synthesis.
+//It register a global function "speak(msg)"
+//call it anywhere and pass string to speak out
+
 // wait on voices to be loaded before fetching list
 window.speechSynthesis.onvoiceschanged = function() {
 
