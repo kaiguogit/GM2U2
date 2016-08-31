@@ -1,4 +1,3 @@
-require('dotenv').config();
 //Weather Underground npm
 // https://github.com/cendrizzi/wundergroundnode
 var Wunderground = require('wundergroundnode');
@@ -33,8 +32,7 @@ weather.currentWeather = (function(wunderground){
           temp_c: "Temperature is " + info.temp_c + "degrees. "
         }
         var str = Object.keys(speachInfo).reduce(function(pre, cur){return pre + speachInfo[cur]}, "");
-        console.log("inside of api call" + str);
-        
+
         resolve(str);
       });
     });
@@ -42,6 +40,5 @@ weather.currentWeather = (function(wunderground){
 }
 )(wunderground);
 
-console.log(weather);
 module.exports = weather;
 

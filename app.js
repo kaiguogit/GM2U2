@@ -1,4 +1,5 @@
 require('dotenv').config();
+const MongoClient = require('mongodb').MongoClient;
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -8,7 +9,6 @@ var bodyParser = require('body-parser');
 
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -25,8 +25,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// pass db to request
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+});
+
 app.use('/', routes);
-app.use('/users', users);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -35,6 +41,7 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+
 // error handlers
 
 // development error handler
@@ -42,6 +49,7 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
+    console.log(err.stack);
     res.render('error', {
       message: err.message,
       error: err
@@ -59,7 +67,18 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.listen(3000, function(){
-  console.log('Example app listening on port 3000!');
-});
+
+
+var db;
+
+MongoClient.connect(process.env.DB, (err, database) => {
+  if (err) return console.log(err);
+   db = database;
+   app.listen(3000, () => {
+     console.log('listening on 3000');
+   });
+})
+
+module.exports.db = db;
 module.exports = app;
+

@@ -5,7 +5,11 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index');
+  req.db.collection('boards').find().toArray(function(err, results) {
+    console.log(results)
+    res.render('index', {boards: results});
+  // send HTML file populated with quotes here
+  });
 });
 
 router.get('/api/weather/city', (req, res, next) => {
@@ -19,9 +23,20 @@ router.get('/api/weather/city', (req, res, next) => {
   });
 });
 
-
 router.get('/api/time', (req, res, next) => {
   res.json(time.getTimeString());
+});
+
+router.post('/api/boards', (req, res, next) => {
+  // console.log(err);
+  board = {name: "board1"}
+  // req.db.collection('board').save(req.body, (err, result) => {
+  req.db.collection('boards').save(board, (err, result) => {
+      if (err) return console.log(err);
+
+      console.log('saved to database');
+      res.json({message: "success"});
+  })
 });
 
 module.exports = router;
