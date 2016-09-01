@@ -79,6 +79,5 @@ MongoClient.connect(process.env.DB, (err, database) => {
    });
 })
 
-module.exports.db = db;
 module.exports = app;
 

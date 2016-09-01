@@ -6,19 +6,15 @@ var ObjectId = require('mongodb').ObjectID;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  req.db.collection('boards').find().toArray(function(err, results) {
-    console.log(results)
-    res.render('index', {boards: results});
+  req.db.collection('boards').find().toArray(function(err, boards) {
+    res.render('index', {boards: boards});
   // send HTML file populated with quotes here
   });
 });
 
 //Get Weather
 router.get('/api/weather/city', (req, res, next) => {
-  console.log("Query is "+req.query.city);
-  console.log("Query object is "+req.query);
   weather.currentWeather(req.query.city).then(function(result){
-    console.log("result is " + result);
     res.json(result);
   }).catch(function(reason){
     console.log("ERROR + reson is " + reason);
@@ -56,7 +52,7 @@ router.delete('/api/boards', (req, res, next)=>{
     }
     console.log(req.body.id + ' board got deleted');
     res.json({message: "successfully deleted board"})
-  })
+  });
 });
 
 module.exports = router;

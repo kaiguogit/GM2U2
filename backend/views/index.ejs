@@ -19,7 +19,6 @@
         <% for(var i=0; i< boards.length; i++) {%>
           <div class="board" data-id="<%= boards[i]._id%>">
             <div class="board_title">
-              <% console.log(boards[i]); %>
               <h3><%= boards[i].name %></h3>
               <button class="play">Play</button>
               <button class="delete_board">Delete</button>
