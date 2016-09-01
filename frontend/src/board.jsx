@@ -5,6 +5,7 @@ class Board extends Component {
     return (
       <div className="col s9">
         <h1>Board</h1>
+        <h1>Board</h1>
       </div>
     );
   }
