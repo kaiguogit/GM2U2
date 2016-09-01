@@ -14,25 +14,24 @@
       <div class="boards">
         <button id="add_board">Add a board</button>
         <h1>Bulletin board</h1>
-        <div class="board">
-          <div class="board_title">
-            <h3>Board 1</h3>
-            <button>Play</button>
+
+        <!-- list all boards -->
+        <% for(var i=0; i< boards.length; i++) {%>
+          <div class="board" data-id="<%= boards[i]._id%>">
+            <div class="board_title">
+              <% console.log(boards[i]); %>
+              <h3><%= boards[i].name %></h3>
+              <button class="play">Play</button>
+              <button class="delete_board">Delete</button>
+            </div>
+            <div class="board_body row">
+            </div>
           </div>
-          <div class="board_body row">
-          </div>
-        </div>
-      </div>
+        <% } %>
+      
     </div>
   </div>
 </div>
- <ul class="boards">
-  <% for(var i=0; i<boards.length; i++) {%>
-    <li class="quote">
-      <span><%= boards[i].name %></span>
-    </li>
-  <% } %>
-  </ul>
 
 
 

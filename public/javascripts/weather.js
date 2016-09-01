@@ -3,6 +3,8 @@ function currentWeather(){
     url: "/api/weather/city",
     method: "get", 
     data: {city: "/q/zmw:00000.1.71892"}
+  }).fail(function(err){
+      console.log(err);
   });
 }
 

@@ -17,7 +17,7 @@ $(function(){
   });
 
   //board play button listenner
-  $(".board > .board_title > button").click(function(){
+  $(".board > .board_title > button.play").click(function(){
     var promises = [];
     $('.board_body .board_item').each(function(i, module){
 
@@ -50,6 +50,26 @@ $(function(){
       success: function(){
         window.location.reload();
       }
+    }).fail(function(err){
+      console.log(err);
     });
   });
+
+  //delete board button listener
+  $(".board > .board_title > button.delete_board").click(function(){
+    var boardId = $(this).closest(".board").data("id");
+    $.ajax({
+      url: "/api/boards/",
+      data: {id: boardId},
+      method: "delete",
+      success: function(data){
+        console.log(data);
+        window.location.reload();
+      }
+    }).fail(function(err){
+      console.log(err);
+    });
+
+  });
+
 });
