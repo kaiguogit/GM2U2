@@ -9,12 +9,14 @@ router.get('/', function(req, res, next) {
   // if(req.session.user_id){
   //   user = models.Users.find({where: {id: req.session.user_id}})
   // }
-  models.Boards.all().then(function(boards) {
+  models.Playlists.all().then(function(playlists) {
     console.log("*******************user in route", req.user);
     if(req.user){
-      res.render('index', {boards: boards, user: req.user});
+      console.log("setting uid into session");
+      req.session["uid"] = req.user.id;
+      res.render('index', {playlists: playlists, user: req.user});
     }else{
-      res.render('index', {boards: boards, user: {}});
+      res.render('index', {playlists: playlists, user: {}});
     }
     
   // send HTML file populated with quotes here
@@ -35,40 +37,7 @@ router.get('/api/time', (req, res, next) => {
   res.json(time.getTimeString());
 });
 
-//Create Board
-router.post('/api/boards', (req, res, next) => {
 
-  //get all boards
-  models.Boards.all().then(function(boards) {
-
-    //Get board name by + 1
-    var boardName = "Board" + (boards.length + 1);
-
-    //Create board
-    models.Boards
-          .build({
-              name: boardName
-            })
-          .save()
-          .then(function() {
-            models.Boards.findAll({}).then(function(boards) {
-                  res.render('index', {boards: boards});
-              });
-          });
-  });
-});
-
-//Delete Board
-router.delete('/api/boards', (req, res, next)=>{
-  console.log("delete board id: ", req.body.id);
-  models.Boards.destroy({
-    where: {
-      id: req.body.id
-    }
-  }).then(function(board) {
-    res.json(board);
-  });
-});
 
 // Update Board
 // router.put('/task/:id', function(req, res) {
