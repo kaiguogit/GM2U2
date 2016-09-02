@@ -4,12 +4,14 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-// var cookieParser = require('cookie-parser');
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
+var routesPlaylists = require('./routes/playlists');
 var models = require("./models");
 var app = express();
 var session = require('express-session');
+// var jwt = require('jsonwebtoken');
 
 //
 // Google Oauth
@@ -21,21 +23,22 @@ var passport = require('passport');
 // Initalize sequelize with session store
 //
 //https://github.com/mweibel/connect-session-sequelize
-var SequelizeStore = require('connect-session-sequelize')(session.Store);
+// var SequelizeStore = require('connect-session-sequelize')(session.Store);
 
-//express session
+// app.use(cookieParser())
+// express session
 app.use(session({
   secret: process.env.COOKIESECRET,
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   cookie: { 
     secure: false,
     maxAge: 60000 
   }
-  ,
-  store: new SequelizeStore({
-    db: models.sequelize
-  })
+  // ,
+  // store: new SequelizeStore({
+  //   db: models.sequelize
+  // })
 }))
 
 //configure passport
@@ -46,6 +49,7 @@ passport.use(new GoogleStrategy({
     accessType: "offline"
   },
   function(accessToken, refreshToken, profile, cb) {
+    console.log("!!!!!!!!!!!!!!!!!Calling google");
     models.Users.findOrCreate({where: { name: profile.displayName, googleId: profile.id }, defaults: {job: 'Create user by google id'}})
     .spread(function(user, created) {
       console.log(user.get({
@@ -95,6 +99,7 @@ app.use(passport.session());
 
 // app.use('/auth/', pp_routes);
 app.use('/', routes);
+app.use('/api/playlists', routesPlaylists);
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile'] }));
@@ -102,9 +107,10 @@ app.get('/auth/google',
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!uid from session", req.session.uid);
     console.log("**************************user google callback is ", req.user);
     // Successful authentication, redirect home.
-    res.redirect('/');
+    res.redirect(process.env.frontend + "/");
   });
 
 // catch 404 and forward to error handler
@@ -122,7 +128,6 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    console.log(err.stack);
     res.render('error', {
       message: err.message,
       error: err
