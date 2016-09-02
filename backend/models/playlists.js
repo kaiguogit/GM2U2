@@ -1,14 +1,14 @@
 "use strict"
 
 module.exports = function(sequelize, DataTypes) {
-    var Boards = sequelize.define("Boards", {
+    var Playlists = sequelize.define("Playlists", {
         name: {
             type: DataTypes.STRING,
             allowNull: false
         }
     }, {
-       tableName: 'Boards'
+       tableName: 'Playlists'
     });
 
-    return Boards;
+    return Playlists;
 }
