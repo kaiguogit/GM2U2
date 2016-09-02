@@ -19,7 +19,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log('App mounted')
+    console.log('App mounted');
+    $.getJSON("http://localhost:3000/api/playlists")
+    .then(function(playlists) {
+      console.log("Playlists is", playlists);
+      this.setState({playlists: playlists})
+    }.bind(this));
   };
   render() {
     return (
