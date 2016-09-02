@@ -1,5 +1,5 @@
 require('dotenv').config();
-const MongoClient = require('mongodb').MongoClient;
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -14,7 +14,6 @@ var app = express();
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var passport = require('passport');
 
-var db;
 //configure passport
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -51,7 +50,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // pass db to request
 app.use(function(req,res,next){
-    req.db = db;
     req.passport = passport;
     next();
 });
@@ -103,18 +101,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
-
-
-
-
-MongoClient.connect(process.env.DB, (err, database) => {
-  if (err) return console.log(err);
-   db = database;
-   app.listen(3000, () => {
-     console.log('listening on 3000');
-   });
-})
-
+module.exports.passport = passport;
 module.exports = app;
 
