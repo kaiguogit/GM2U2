@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Navbar from "./navbar.jsx";
 import SidebarLeft from "./sidebar_left.jsx";
+import SidebarRight from "./sidebar_right.jsx";
+
 
 
 class App extends Component {
@@ -32,7 +34,12 @@ class App extends Component {
         <Navbar toggleLeftSidebar={this.toggleLeftSidebar.bind(this)} />
         <div className="row">
           <SidebarLeft open={this.state.uiState.leftSidebarOpen} />
-          
+          { !this.state.playlists &&
+            <div><h1>...loadding</h1></div>
+          }
+          { this.state.playlists &&
+            <SidebarRight playlists={this.state.playlists}/>
+          }
         </div>
       </div>
     );
