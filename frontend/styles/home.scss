@@ -1,3 +1,66 @@
-h1 {
-  color: tomato;
+/*universal*/
+
+
+/*slider left*/
+#slider_widgets{
+  // display: none;
+  border-color: black;
+  position: fixed;
+  height: calc(100vh - 64px);
+  background-color: #999;
 }
+
+#container_widgets{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: flex-start;
+}
+
+.icon{
+  padding: 5px;
+  max-width: 60px
+
+}
+
+.icon_logo{
+  height:45px;
+  width:45px;
+  margin: auto;
+}
+
+.icon_name{
+  text-align: center;
+}
+
+
+/*slider right*/
+#slider_playlists{
+  right: 0;
+  top: 64px;
+  max-width: 80vw;
+  border-color: black;
+  position: fixed;
+  height: calc(100vh - 64px);
+  background-color: #999;
+  display: flex;
+  overflow: scroll;
+}
+
+.playlist{
+  border-color: black;
+  border-style: solid;
+  margin: 5px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+/*contents*/
+#contents{
+  background-color: #ddd;
+  min-height: calc(100vh - 64px);
+}
+
+
