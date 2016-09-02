@@ -45,10 +45,22 @@ $(function(){
   //add board button listener
   $(".boards #add_board").click(function(){
     $.ajax({
-      url: "/api/boards",
+      url: "/api/playlists",
       method: "post",
       success: function(){
         window.location.reload();
+      }
+    }).fail(function(err){
+      console.log(err);
+    });
+  });
+
+  $(".boards #get_boards").click(function(){
+    $.ajax({
+      url: "/api/playlists",
+      method: "get",
+      success: function(data){
+        console.log(data);
       }
     }).fail(function(err){
       console.log(err);
@@ -59,12 +71,12 @@ $(function(){
   $(".board > .board_title > button.delete_board").click(function(){
     var boardId = $(this).closest(".board").data("id");
     $.ajax({
-      url: "/api/boards/",
+      url: "/api/playlists/",
       data: {id: boardId},
       method: "delete",
       success: function(data){
         console.log(data);
-        window.location.reload();
+        // window.location.reload();
       }
     }).fail(function(err){
       console.log(err);
