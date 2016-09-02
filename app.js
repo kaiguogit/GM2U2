@@ -4,30 +4,73 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
+// var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var routes = require('./routes/index');
-
+var models = require("./models");
 var app = express();
+var session = require('express-session');
 
+//
+// Google Oauth
+//
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var passport = require('passport');
+
+// 
+// Initalize sequelize with session store
+//
+//https://github.com/mweibel/connect-session-sequelize
+var SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+//express session
+app.use(session({
+  secret: process.env.COOKIESECRET,
+  resave: true,
+  saveUninitialized: true,
+  cookie: { 
+    secure: false,
+    maxAge: 60000 
+  }
+  ,
+  store: new SequelizeStore({
+    db: models.sequelize
+  })
+}))
 
 //configure passport
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/callback"
+    callbackURL: "http://localhost:3000/auth/google/callback",
+    accessType: "offline"
   },
   function(accessToken, refreshToken, profile, cb) {
-    var user = db.collection('users').find({ googleId: profile.id });
-      console.log("user is ", user);
-    // ({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
-    // });
-  // }
+    models.Users.findOrCreate({where: { name: profile.displayName, googleId: profile.id }, defaults: {job: 'Create user by google id'}})
+    .spread(function(user, created) {
+      console.log(user.get({
+        plain: true
+      }));
+      console.log("created",created);
+      console.log("******************found user is ", user.dataValues);
+      return cb(null,user.dataValues);
+    });
 }));
+
+//http://stackoverflow.com/questions/27637609/understanding-passport-serialize-deserialize
+// serialize and deserialize
+passport.serializeUser(function(user, done) {
+  console.log("*********************serailizing", user.id);
+  done(null, user.id);
+});
+
+
+passport.deserializeUser(function(id, done) {
+  models.Users.findById(id).then(function(user){
+    console.log("**********************deserializeUser", user.dataValues);
+    done(null, user.dataValues);
+  })
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,20 +82,16 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 // Initialize Passport and restore authentication state, if any, from the
 // session.
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
-// pass db to request
-app.use(function(req,res,next){
-    req.passport = passport;
-    next();
-});
 
 // app.use('/auth/', pp_routes);
 app.use('/', routes);
@@ -63,8 +102,8 @@ app.get('/auth/google',
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
+    console.log("**************************user google callback is ", req.user);
     // Successful authentication, redirect home.
-    console.log("successfully authenticated with google");
     res.redirect('/');
   });
 
@@ -101,6 +140,5 @@ app.use(function(err, req, res, next) {
   });
 });
 
-module.exports.passport = passport;
 module.exports = app;
 
