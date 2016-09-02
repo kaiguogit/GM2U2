@@ -11,7 +11,12 @@ router.get('/', function(req, res, next) {
   // }
   models.Boards.all().then(function(boards) {
     console.log("*******************user in route", req.user);
-    res.render('index', {boards: boards, user: req.user});
+    if(req.user){
+      res.render('index', {boards: boards, user: req.user});
+    }else{
+      res.render('index', {boards: boards, user: {}});
+    }
+    
   // send HTML file populated with quotes here
   });
 });
