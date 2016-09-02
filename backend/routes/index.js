@@ -2,11 +2,11 @@ var express = require('express');
 var weather = require('../modules/weather');
 var time = require('../modules/time');
 var router = express.Router();
-var ObjectId = require('mongodb').ObjectID;
+var models = require("../models");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  req.db.collection('boards').find().toArray(function(err, boards) {
+  models.Boards.all().then(function(boards) {
     res.render('index', {boards: boards});
   // send HTML file populated with quotes here
   });
@@ -29,29 +29,35 @@ router.get('/api/time', (req, res, next) => {
 //Create Board
 router.post('/api/boards', (req, res, next) => {
 
-  //get all boards count, + 1 for new board name
-  req.db.collection('boards').find().toArray(function(err, results){
-    var board = {};
-    board.name = "Board" + (results.length + 1);
-    //create board
-    req.db.collection('boards').save(board, (err, result) => {
-        if (err) return console.log(err);
-        console.log('saved to database');
-        res.json({message: "successfully created board"});
-    });
+  //get all boards
+  models.Boards.all().then(function(boards) {
+
+    //Get board name by + 1
+    var boardName = "Board" + (boards.length + 1);
+
+    //Create board
+    models.Boards
+          .build({
+              name: boardName
+            })
+          .save()
+          .then(function() {
+            models.Boards.findAll({}).then(function(boards) {
+                  res.render('index', {boards: boards});
+              });
+          });
   });
 });
 
 //Delete Board
 router.delete('/api/boards', (req, res, next)=>{
-  req.db.collection('boards').remove({"_id": ObjectId(req.body.id)}, 
-  (err, result) => {
-    if (err) {
-      console.log(err);
-      return res.send(500, err);
+  console.log("delete board id: ", req.body.id);
+  models.Boards.destroy({
+    where: {
+      id: req.body.id
     }
-    console.log(req.body.id + ' board got deleted');
-    res.json({message: "successfully deleted board"})
+  }).then(function(board) {
+    res.json(board);
   });
 });
 
