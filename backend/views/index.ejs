@@ -1,5 +1,12 @@
 <%- include('layout/header') %>
 <a href="/auth/google">Login with Google Account</a>
+<% if(user){ %>
+  <span>User id:<%= user.id %></span>
+  <span>User name:<%= user.name %></span>
+  <span>Google id: <%= user.googleId %></span>
+<% }else{ %>
+  <span>no users in session.</span>
+<% } %>
 <div class="container">
   <div class="row">
     <div class="col-md-2">

@@ -6,8 +6,12 @@ var models = require("../models");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  // if(req.session.user_id){
+  //   user = models.Users.find({where: {id: req.session.user_id}})
+  // }
   models.Boards.all().then(function(boards) {
-    res.render('index', {boards: boards});
+    console.log("*******************user in route", req.user);
+    res.render('index', {boards: boards, user: req.user});
   // send HTML file populated with quotes here
   });
 });
@@ -60,6 +64,24 @@ router.delete('/api/boards', (req, res, next)=>{
     res.json(board);
   });
 });
+
+// Update Board
+// router.put('/task/:id', function(req, res) {
+//   models.Tasks.find({
+//     where: {
+//       id: req.params.id
+//     }
+//   }).then(function(task) {
+//     if(task) {
+//       task.updateAttributes({
+//         title: req.body.title,
+//         completed: req.body.completed
+//       }).then(function(task) {
+//         res.send(task);
+//       });
+//     }
+//   });
+// });
 
 
 module.exports = router;
