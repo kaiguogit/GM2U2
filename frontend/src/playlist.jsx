@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
-// import Wi from './playlist.jsx';
+import WidgetIcon from './widget_icon.jsx';
 
 class Playlist extends Component {
   render() {
     return (
-      <h>{this.props.playlist.name}</h>
+      <div className='playlist'>
+        <h>{this.props.playlist.name}</h>
+        <WidgetIcon/>
+      </div>
       
     );
   }
