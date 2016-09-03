@@ -59,6 +59,9 @@ $(function(){
     $.ajax({
       url: "/api/playlists",
       method: "post",
+      headers: {
+      'Authorization':  "Bearer " + window.localStorage.token
+      },
       success: function(){
         window.location.reload();
       }
@@ -96,4 +99,30 @@ $(function(){
 
   });
 
+  $("#login").click(function(){
+    $.ajax({
+      url: "/login",
+      method: "get"
+    }).done(function(data, message){
+      console.log(data);
+      window.localStorage.token = data.token;
+      console.log(message);
+    }).fail(function(err){
+      console.log(err);
+    });
+  });
+
+
+  $("#googleAuth").click(function(){
+    $.ajax({
+      url: "/auth/google",
+      method: "get"
+    }).done(function(data, message){
+      console.log(data);
+      window.localStorage.token = data.token;
+      console.log(message);
+    }).fail(function(err){
+      console.log(err);
+    });
+  });
 });

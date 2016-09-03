@@ -7,12 +7,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
-var routesPlaylists = require('./routes/playlists');
+var routesPlaylist = require('./routes/playlists');
+var routesWeather = require('./routes/weather');
+var routesTime = require('./routes/time');
 var models = require("./models");
 var app = express();
 var session = require('express-session');
-// var jwt = require('jsonwebtoken');
-
+var jwt = require('jsonwebtoken');
+var jwt_mw = require('express-jwt');
 //
 // Google Oauth
 //
@@ -29,6 +31,7 @@ var textToSpeech = watson.text_to_speech({
   username: process.env.waston_api_username,
   password: process.env.waston_api_password
 });
+
 
 // Initalize sequelize with session store
 //
@@ -51,7 +54,10 @@ app.use(session({
   // })
 }))
 
+//
 //configure passport
+//Google Strategy
+//
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -60,7 +66,7 @@ passport.use(new GoogleStrategy({
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log("!!!!!!!!!!!!!!!!!Calling google");
-    models.Users.findOrCreate({where: { name: profile.displayName, googleId: profile.id }, defaults: {job: 'Create user by google id'}})
+    models.user.findOrCreate({where: { name: profile.displayName, googleId: profile.id }, defaults: {job: 'Create user by google id'}})
     .spread(function(user, created) {
       console.log(user.get({
         plain: true
@@ -71,6 +77,7 @@ passport.use(new GoogleStrategy({
     });
 }));
 
+
 //http://stackoverflow.com/questions/27637609/understanding-passport-serialize-deserialize
 // serialize and deserialize
 passport.serializeUser(function(user, done) {
@@ -80,16 +87,18 @@ passport.serializeUser(function(user, done) {
 
 
 passport.deserializeUser(function(id, done) {
-  models.Users.findById(id).then(function(user){
+  models.user.findById(id).then(function(user){
     console.log("**********************deserializeUser", user.dataValues);
     done(null, user.dataValues);
   })
 });
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -99,35 +108,55 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
 // Initialize Passport and restore authentication state, if any, from the
 // session.
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+//CORS 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
-// app.use('/auth/', pp_routes);
+//Define routers path
 app.use('/', routes);
-app.use('/api/playlists', routesPlaylists);
 
+
+// Route for google auth
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile'] }));
 
+// Route for google autho to callback
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!uid from session", req.session.uid);
     console.log("**************************user google callback is ", req.user);
     // Successful authentication, redirect home.
-    res.redirect(process.env.frontend + "/");
+    var token = jwt.sign({ userId: req.user.id, userName: req.user.name }, process.env.jwt_secret);
+    req.session.token = token;
+    res.redirect("/");
+    // res.json({
+    //   success: true,
+    //   message: "Enjoy your token!",
+    //   token: token
+    // });
   });
 
+
+
+app.use(jwt_mw({ secret: process.env.jwt_secret}).unless({path: ['/login']}));
+app.use('/api/playlists', routesPlaylist);
+app.use('/api/weather', routesWeather);
+app.use('/api/time', routesTime);
+
+
+
+//
+//IBM Waston Developer Cloud Synthesize
+//
 app.get('/api/synthesize', function(req, res, next) {
   var transcript = textToSpeech.synthesize(req.query);
   transcript.on('response', function(response) {
@@ -156,6 +185,7 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
+    console.log(err.stack);
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
