@@ -25,6 +25,8 @@ $(function(){
       switch(moduleName) {
         case "Time":
           promises.push(modules.time.readTime());
+
+
           break;
         case "Weather":
           promises.push(modules.weather.currentWeather());
@@ -35,11 +37,21 @@ $(function(){
 
     });
     Promise.all(promises).then(values =>{
-      values.forEach(function(value){
-        console.log(value);
-        speak(value);
+      values.forEach(function(text){
+        console.log(text);
+        // speak(value);
       });
+      var text = values.join(". ");
+      var audio = $('.audio').get(0);
+        var voice = 'en-US_AllisonVoice';
+        var utteranceOptions = {
+          text: text,
+          voice: voice,
+          sessionPermissions: 1
+          };
+        synthesizeRequest(utteranceOptions, audio);
     });
+         
   });
 
   //add board button listener

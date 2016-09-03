@@ -19,7 +19,17 @@ var session = require('express-session');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var passport = require('passport');
 
+//
+//  Waston Developer Cloud
+//
+var watson       = require('watson-developer-cloud');
 // 
+var textToSpeech = watson.text_to_speech({
+  version: 'v1',
+  username: process.env.waston_api_username,
+  password: process.env.waston_api_password
+});
+
 // Initalize sequelize with session store
 //
 //https://github.com/mweibel/connect-session-sequelize
@@ -117,6 +127,20 @@ app.get('/auth/google/callback',
     // Successful authentication, redirect home.
     res.redirect(process.env.frontend + "/");
   });
+
+app.get('/api/synthesize', function(req, res, next) {
+  var transcript = textToSpeech.synthesize(req.query);
+  transcript.on('response', function(response) {
+    if (req.query.download) {
+      response.headers['content-disposition'] = 'attachment; filename=transcript.ogg';
+    }
+  });
+  transcript.on('error', function(error) {
+    next(error);
+  });
+  transcript.pipe(res);
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
