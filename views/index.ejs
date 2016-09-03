@@ -20,11 +20,17 @@
     </div>
     <div class="col-md-10">
       <div class="boards">
-
+        <button class="download-button">Download voice</button>
+        <button class="speak-button">Speak voice</button>
         <button id="add_board">Add a board</button>
         <button id="get_boards">Get all board</button>
         <h1>Bulletin board</h1>
-
+        <div class="audioParent">
+          <h3>Player</h3>
+          <audio class="audio">
+          Your browser does not support the audio element.
+          </audio>
+        </div>
         <!-- list all boards -->
         <% for(var i=0; i< playlists.length; i++) {%>
           <div class="board" data-id="<%= playlists[i].id%>">
