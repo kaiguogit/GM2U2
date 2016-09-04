@@ -41,14 +41,18 @@ router.get('/login', function(req, res, next){
 });
 
 router.post('/login', function(req, res, next){
-  console.log("Req body is", req.body);
-  models.user.find({where: {googleId: req.body.googleProfile}})
-  .then(function(user){
+
+  models.user.findOrCreate({where: { googleId: req.body.googleId, name: req.body.username }, defaults: {job: 'Create user by google id'}})
+  .spread(function(user, created) {
+    console.log(user.get({
+      plain: true
+    }));
+    console.log("created",created);
+    console.log("******************found user is ", user.dataValues);
     user = user.dataValues;
     var token = jwt.sign({ userId: user.id, userName: user.name }, process.env.jwt_secret);
     user["token"] = token;
-    console.log(user);
     res.json(user);
-  })
+  });
 })
 module.exports = router;

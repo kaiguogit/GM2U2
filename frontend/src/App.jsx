@@ -35,6 +35,8 @@ class App extends Component {
         sidebarRightOpen: !this.state.uiState.sidebarRightOpen,
         sidebarLeftOpen: false,
       }
+    })
+  }
 
   loggedIn(username){
     this.setState({
@@ -65,7 +67,7 @@ class App extends Component {
     return (
       <div>
         {/* Navbar */}                
-        <Navbar toggleLeftSidebar={this.toggleLeftSidebar.bind(this)} toggleSidebarRight={this.toggleSidebarRight.bind(this)} loggedIn={this.loggedIn.bind(this)} />
+        <Navbar toggleSidebarLeft={this.toggleSidebarLeft.bind(this)} toggleSidebarRight={this.toggleSidebarRight.bind(this)} loggedIn={this.loggedIn.bind(this)} />
         <div className="row">
           {/* sidebar left - widgets */}
           <SidebarLeft open={this.state.uiState.sidebarLeftOpen} />

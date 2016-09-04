@@ -6,7 +6,10 @@ import GoogleLogin from 'react-google-login';
     $.ajax({
       url: "http://localhost:3000/login",
       method: "post",
-      data: {googleProfile: response.googleId}
+      data: {
+        googleId: response.googleId,
+        username: response.profileObj.name
+      }
     }).done((user) => {
       
       this.props.loggedIn(user.name);
