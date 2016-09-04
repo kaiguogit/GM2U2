@@ -12,7 +12,7 @@ module.exports = {
         },
         widgetType:{
           type: DataTypes.STRING,
-          defaultValue: "TimeWidget"
+          defaultValue: "timewidget"
         },
         createdAt: {
           type: DataTypes.DATE

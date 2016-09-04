@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         },
         widgets:{
-          type: DataTypes.ARRAY(DataTypes.UUID),
+          type: DataTypes.ARRAY(DataTypes.JSON),
           defaultValue: []
         },
         createdAt: {
