@@ -3,7 +3,7 @@
 module.exports = {
   up: function (queryInterface, Sequelize) {
      queryInterface.createTable(
-    'playlists',
+    'timeWidgets',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -20,20 +20,11 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: false
         },
-        //Todo use it to save a array of widgets
-        ///timeWidget.findAll().then(function(array){console.log(array[0].$modelOptions.name.singular)});
-        // > a
-        // [ { id: 1, model: 'timeWidget' },
-        //   { id: 1, model: 'weatherWidget' } ]
-        // > var myJsonString = JSON.stringify(a);
-        widgets:{
-          type: Sequelize.JSON,
-        },
         //foreign key usage
-        userId: {
+        playlistId: {
             type: Sequelize.INTEGER,
             references: {
-                model: 'users',
+                model: 'playlists',
                 key: 'id'
             },
             onUpdate: 'cascade',
@@ -49,12 +40,7 @@ module.exports = {
   },
 
   down: function (queryInterface, Sequelize) {
-    
-      // Add reverting commands here.
-      // Return a promise to correctly handle asynchronicity.
-
-      // Example:
-      return queryInterface.dropTable('playlists');
-    
+   
+    return queryInterface.dropTable('timeWidgets');
   }
 };
