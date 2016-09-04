@@ -1,13 +1,16 @@
 /*universal*/
 
 
-/*slider left*/
-#slider_widgets{
-  // display: none;
+/*sidebar left*/
+#sidebar_left{
   border-color: black;
   position: fixed;
   height: calc(100vh - 64px);
   background-color: #999;
+}
+
+#sidebar_left.hidden{
+  display: none;
 }
 
 #container_widgets{
@@ -34,8 +37,8 @@
 }
 
 
-/*slider right*/
-#slider_playlists{
+/*sidebar right*/
+#sidebar_right{
   right: 0;
   top: 64px;
   max-width: 80vw;
@@ -45,6 +48,12 @@
   background-color: #999;
   display: flex;
   overflow: scroll;
+  padding: 5px;
+  z-index: 1;
+}
+
+#sidebar_right.hidden{
+  display: none;
 }
 
 .playlist{
