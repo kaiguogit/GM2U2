@@ -9,10 +9,10 @@ import Footer from './footer.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       uiState: { sidebarLeftOpen: false, sidebarRightOpen: false },
-      username: window.localStorage.username
+      username: window.localStorage.username,
+      playlists: null
     }
   }
 
@@ -48,7 +48,7 @@ class App extends Component {
     console.log('App mounted');
     
     if(this.state.username){
-      console.log("Sending Ajax");
+      console.log("Getting all playlists to App component");
       $.ajax({
         url: "http://localhost:3000/api/playlists",
         method: "get",
@@ -58,11 +58,11 @@ class App extends Component {
       })
       .then(function(playlists) {
         console.log("Playlists is", playlists);
-        this.setState({playlists: playlists})
+        this.setState({playlists: playlists});
       }.bind(this));
     }
-
   };
+
   render() {
     return (
       <div>
@@ -72,14 +72,19 @@ class App extends Component {
           {/* sidebar left - widgets */}
           <SidebarLeft open={this.state.uiState.sidebarLeftOpen} />
           {/* sidebar right - playlists */}
-          { !this.state.playlists &&
+          {!this.state.playlists &&
             <div><h1>...loadding</h1></div>
           }
-          { this.state.playlists &&
+          {this.state.playlists && this.state.playlists.length === 0 &&
+            <div><h1>...loadding</h1></div>
+          }
+          {this.state.playlists && this.state.playlists.length > 0 && 
           <SidebarRight open={this.state.uiState.sidebarRightOpen} playlists={this.state.playlists}/>
           }
           {/* centered content - active playlist */}
-          <ActivePlaylist/>
+          {this.state.playlists && this.state.playlists.length > 0 && 
+            <ActivePlaylist playlist={this.state.playlists[0]} id={this.state.playlists[0].id}/>
+          }
         </div>
         {/* Footer */}
         <Footer/>

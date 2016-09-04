@@ -1,28 +1,28 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function (queryInterface, DataTypes) {
      queryInterface.createTable(
     'timeWidgets',
       {
-        id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          autoIncrement: true
+        id: { 
+          type: DataTypes.UUID, 
+          primaryKey: true, 
+          defaultValue: DataTypes.UUIDV4, 
+        },
+        widgetType:{
+          type: DataTypes.STRING,
+          defaultValue: "TimeWidget"
         },
         createdAt: {
-          type: Sequelize.DATE
+          type: DataTypes.DATE
         },
         updatedAt: {
-          type: Sequelize.DATE
-        },
-        name: {
-          type: Sequelize.STRING,
-          allowNull: false
+          type: DataTypes.DATE
         },
         //foreign key usage
         playlistId: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             references: {
                 model: 'playlists',
                 key: 'id'
