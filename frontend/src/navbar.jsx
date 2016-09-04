@@ -6,7 +6,6 @@ class Navbar extends Component {
   handleLogOut(e){
     e.preventDefault();
     window.localStorage.clear();
-    console.log("In handleLogout this is ", this);
     this.props.loggedIn(null);
   }
   render() {

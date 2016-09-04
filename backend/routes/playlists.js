@@ -9,9 +9,10 @@ var models = require("../models");
 //
 
 router.get('/',(req, res, next) => {
-  console.log("Moved routes!!!!!!!");
-  models.playlist.all().then(function(playlists){
-    console.log(playlists);
+  console.log("!!!!Getting playlists!");
+  console.log("!!!!User is ", req.user);
+  console.log("!!!!User id is ", req.user.userId);
+  models.playlist.all({where:{userId: req.user.userId}}).then(function(playlists){
     res.json(playlists);
   });
 });
@@ -68,5 +69,9 @@ router.delete('/', (req, res, next)=>{
 //       });
 //     }
 //   });
+// });
+
+// router.delete('/', (req, res, next)=>{
+  
 // });
 module.exports = router;
