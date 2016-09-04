@@ -13,7 +13,11 @@ class ActivePlaylist extends Component {
     return (
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
         <button onClick={this.handleAddWidget.bind(this)}>Add Widget</button>
-        <Widget/>
+        {
+          this.props.playlist.widgets.map(function(widgetId){
+            return <Widget widgetId={widgetId} key={widgetId}/>
+          }) 
+        }
       </div>  
     );
   }

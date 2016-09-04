@@ -1,23 +1,23 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function (queryInterface, DataTypes) {
      queryInterface.createTable(
     'playlists',
       {
         id: {
-          type: Sequelize.INTEGER,
+          type: DataTypes.INTEGER,
           primaryKey: true,
           autoIncrement: true
         },
         createdAt: {
-          type: Sequelize.DATE
+          type: DataTypes.DATE
         },
         updatedAt: {
-          type: Sequelize.DATE
+          type: DataTypes.DATE
         },
         name: {
-          type: Sequelize.STRING,
+          type: DataTypes.STRING,
           allowNull: false
         },
         //Todo use it to save a array of widgets
@@ -27,11 +27,12 @@ module.exports = {
         //   { id: 1, model: 'weatherWidget' } ]
         // > var myJsonString = JSON.stringify(a);
         widgets:{
-          type: Sequelize.JSON,
+          type: DataTypes.ARRAY(DataTypes.UUID),
+          defaultValue: []
         },
         //foreign key usage
         userId: {
-            type: Sequelize.INTEGER,
+            type: DataTypes.INTEGER,
             references: {
                 model: 'users',
                 key: 'id'

@@ -11,7 +11,13 @@ var User = function(sequelize, DataTypes) {
         googleId:{
           type: DataTypes.STRING,
           allowNull: true    
-        }
+        }, 
+        createdAt: {
+          type: DataTypes.DATE
+        },
+        updatedAt: {
+          type: DataTypes.DATE
+        },
     },{
       classMethods: {
         associate: function(models) {
