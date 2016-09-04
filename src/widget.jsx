@@ -1,7 +1,33 @@
 import React, {Component} from 'react';
 
 
+
 class Widget extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      widget: {}
+    }
+  }
+
+  componentDidMount() {
+      console.log('Widget mounted');
+      if(this.props.widgetId){
+        console.log(`Ajax, Getting widget ${this.props.widgetId}`);
+        $.ajax({
+          url: `http://localhost:3000/api/playlists/widget/${this.props.widgetId}`,
+          method: "get",
+          headers: {
+          'Authorization':  "Bearer " + window.localStorage.token
+          }
+        })
+        .then(function(widget) {
+          console.log("widget is", widget);
+          this.setState({widget: widget})
+        }.bind(this));
+      }
+    };
+    
   render() {
     return (
       <div className="card blue-grey darken-1">
