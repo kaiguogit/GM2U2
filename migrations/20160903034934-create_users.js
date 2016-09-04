@@ -1,29 +1,29 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up: function (queryInterface, DataTypes) {
 
     // return queryInterface.dropAllTables();
   queryInterface.createTable(
     'users',
     {
       id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
       createdAt: {
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       },
       updatedAt: {
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       },
       name: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
       },
       googleId: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true
       }
     },

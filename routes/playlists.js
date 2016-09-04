@@ -3,13 +3,13 @@ var weather = require('../modules/weather');
 var time = require('../modules/time');
 var router = express.Router();
 var models = require("../models");
-
+var uuid = require('node-uuid');
 //
 //Namespace for /api/playlists
 //
 
 router.get('/',(req, res, next) => {
-  console.log("!!!!Getting playlists!");
+  console.log("!!!!get /api/playlists!");
   console.log("!!!!User is ", req.user);
   console.log("!!!!User id is ", req.user.userId);
   models.playlist.all({where:{userId: req.user.userId}}).then(function(playlists){
@@ -17,6 +17,12 @@ router.get('/',(req, res, next) => {
   });
 });
 
+router.get('/:id',(req, res, next) =>{
+  console.log(`!!!!get /api/playlists ${req.params.id}`);
+  models.playlist.findById(req.params.id).then(function(playlist){
+    res.json(playlist.dataValues);
+  });
+});
 //Create Board
 router.post('/', (req, res, next) => {
   console.log("post playlist route, user in request is ", req.user);
@@ -53,25 +59,23 @@ router.delete('/', (req, res, next)=>{
   });
 });
 
-// Update Board
-// router.put('/task/:id', function(req, res) {
-//   models.Tasks.find({
-//     where: {
-//       id: req.params.id
-//     }
-//   }).then(function(task) {
-//     if(task) {
-//       task.updateAttributes({
-//         title: req.body.title,
-//         completed: req.body.completed
-//       }).then(function(task) {
-//         res.send(task);
-//       });
-//     }
-//   });
-// });
+router.get('/widget/:widgetId', (req, res, next)=>{
+  console.log("!!!!!!!id in url for playlist is ", req.params.id);
 
-// router.delete('/', (req, res, next)=>{
-  
-// });
+  //Todo Add more model and change this
+  models.timeWidget.findById(req.params.widgetId)
+  .then(function(timeWidget){
+    console.log(timeWidget);
+    res.json(timeWidget);
+  });
+});
+
+router.post('/:id/timeWidget', (req, res, next)=>{
+  console.log("!!!!!!!id in url for playlist is ", req.params.id);
+  models.timeWidget.create({id: uuid.v4(), playlistId: req.params.id})
+  .then(function(timeWidget){
+    console.log(timeWidget);
+    res.json(timeWidget);
+  });
+});
 module.exports = router;
