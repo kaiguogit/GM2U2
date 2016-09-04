@@ -4,10 +4,13 @@ var time = require('../modules/time');
 var router = express.Router();
 var models = require("../models");
 
+//
+//Namespace for /api/playlists
+//
 
 router.get('/',(req, res, next) => {
   console.log("Moved routes!!!!!!!");
-  models.Playlists.all().then(function(playlists){
+  models.playlist.all().then(function(playlists){
     console.log(playlists);
     res.json(playlists);
   });
@@ -15,15 +18,16 @@ router.get('/',(req, res, next) => {
 
 //Create Board
 router.post('/', (req, res, next) => {
+  console.log("post playlist route, user in request is ", req.user);
   console.log("!!!!!!!!!!!!!!!!!playlists");
   //get all boards
-  models.Playlists.all().then(function(playlists) {
+  models.playlist.all().then(function(playlists) {
 
     //Get board name by + 1
     var playlistName = "Playlist" + (playlists.length + 1);
 
     //Create board
-    models.Playlists
+    models.playlist
           .build({
               name: playlistName
             })
@@ -38,7 +42,7 @@ router.post('/', (req, res, next) => {
 //Delete Board
 router.delete('/', (req, res, next)=>{
   console.log("delete playlist id: ", req.body.id);
-  models.Playlists.destroy({
+  models.playlist.destroy({
     where: {
       id: req.body.id
     }
@@ -48,4 +52,21 @@ router.delete('/', (req, res, next)=>{
   });
 });
 
+// Update Board
+// router.put('/task/:id', function(req, res) {
+//   models.Tasks.find({
+//     where: {
+//       id: req.params.id
+//     }
+//   }).then(function(task) {
+//     if(task) {
+//       task.updateAttributes({
+//         title: req.body.title,
+//         completed: req.body.completed
+//       }).then(function(task) {
+//         res.send(task);
+//       });
+//     }
+//   });
+// });
 module.exports = router;

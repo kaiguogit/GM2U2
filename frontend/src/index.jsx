@@ -3,9 +3,13 @@
 // Load up the application styles
 require("../styles/application.scss");
 
-// Render the top-level React component
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App.jsx';
-console.log('inside index.jsx')
-ReactDOM.render(<App />, document.getElementById('react-root'));
+import { render } from 'react-dom';
+import { Router, browserHistory } from 'react-router';
+import routes from './routes';
+
+
+render(
+    <Router routes={routes} history={browserHistory}/>
+    ,document.getElementById('react-root')
+)
