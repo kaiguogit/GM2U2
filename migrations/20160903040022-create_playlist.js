@@ -27,7 +27,7 @@ module.exports = {
         //   { id: 1, model: 'weatherWidget' } ]
         // > var myJsonString = JSON.stringify(a);
         widgets:{
-          type: DataTypes.ARRAY(DataTypes.UUID),
+          type: DataTypes.ARRAY(DataTypes.JSON),
           defaultValue: []
         },
         //foreign key usage
