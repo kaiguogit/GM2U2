@@ -9,7 +9,15 @@ import Footer from './footer.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {uiState: { sidebarLeftOpen: false, sidebarRightOpen: false }}
+
+    this.state = {
+      uiState: { sidebarLeftOpen: false, sidebarRightOpen: false },
+      username: window.localStorage.username
+    }
+  }
+
+  getChildContext() {
+    return {username: this.state.username};
   }
 
   toggleSidebarLeft() {
@@ -27,22 +35,37 @@ class App extends Component {
         sidebarRightOpen: !this.state.uiState.sidebarRightOpen,
         sidebarLeftOpen: false,
       }
+
+  loggedIn(username){
+    this.setState({
+      username: username
     })
   }
 
   componentDidMount() {
     console.log('App mounted');
-    $.getJSON("http://localhost:3000/api/playlists")
-    .then(function(playlists) {
-      console.log("Playlists is", playlists);
-      this.setState({playlists: playlists})
-    }.bind(this));
+    
+    if(this.state.username){
+      console.log("Sending Ajax");
+      $.ajax({
+        url: "http://localhost:3000/api/playlists",
+        method: "get",
+        headers: {
+        'Authorization':  "Bearer " + window.localStorage.token
+        }
+      })
+      .then(function(playlists) {
+        console.log("Playlists is", playlists);
+        this.setState({playlists: playlists})
+      }.bind(this));
+    }
+
   };
   render() {
     return (
       <div>
-        {/* Navbar */}        
-        <Navbar toggleSidebarLeft={this.toggleSidebarLeft.bind(this)} toggleSidebarRight={this.toggleSidebarRight.bind(this)} />
+        {/* Navbar */}                
+        <Navbar toggleLeftSidebar={this.toggleLeftSidebar.bind(this)} toggleSidebarRight={this.toggleSidebarRight.bind(this)} loggedIn={this.loggedIn.bind(this)} />
         <div className="row">
           {/* sidebar left - widgets */}
           <SidebarLeft open={this.state.uiState.sidebarLeftOpen} />
@@ -62,4 +85,8 @@ class App extends Component {
     );
   }
 }
+
+App.childContextTypes = {
+  username: React.PropTypes.string
+};
 export default App;

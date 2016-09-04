@@ -25,6 +25,8 @@ $(function(){
       switch(moduleName) {
         case "Time":
           promises.push(modules.time.readTime());
+
+
           break;
         case "Weather":
           promises.push(modules.weather.currentWeather());
@@ -35,11 +37,21 @@ $(function(){
 
     });
     Promise.all(promises).then(values =>{
-      values.forEach(function(value){
-        console.log(value);
-        speak(value);
+      values.forEach(function(text){
+        console.log(text);
+        // speak(value);
       });
+      var text = values.join(". ");
+      var audio = $('.audio').get(0);
+        var voice = 'en-US_AllisonVoice';
+        var utteranceOptions = {
+          text: text,
+          voice: voice,
+          sessionPermissions: 1
+          };
+        synthesizeRequest(utteranceOptions, audio);
     });
+         
   });
 
   //add board button listener
@@ -47,6 +59,9 @@ $(function(){
     $.ajax({
       url: "/api/playlists",
       method: "post",
+      headers: {
+      'Authorization':  "Bearer " + window.localStorage.token
+      },
       success: function(){
         window.location.reload();
       }
@@ -84,4 +99,30 @@ $(function(){
 
   });
 
+  $("#login").click(function(){
+    $.ajax({
+      url: "/login",
+      method: "get"
+    }).done(function(data, message){
+      console.log(data);
+      window.localStorage.token = data.token;
+      console.log(message);
+    }).fail(function(err){
+      console.log(err);
+    });
+  });
+
+
+  $("#googleAuth").click(function(){
+    $.ajax({
+      url: "/auth/google",
+      method: "get"
+    }).done(function(data, message){
+      console.log(data);
+      window.localStorage.token = data.token;
+      console.log(message);
+    }).fail(function(err){
+      console.log(err);
+    });
+  });
 });
