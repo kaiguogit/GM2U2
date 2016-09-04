@@ -57,7 +57,7 @@ app.use(session({
 //
 //configure passport
 //Google Strategy
-//
+//https://github.com/lynndylanhurley/redux-auth/blob/master/docs/api-expectations/oauth-sign-in.md
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -117,7 +117,7 @@ app.use(passport.session());
 //CORS 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Authorization, Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
@@ -137,12 +137,12 @@ app.get('/auth/google/callback',
     // Successful authentication, redirect home.
     var token = jwt.sign({ userId: req.user.id, userName: req.user.name }, process.env.jwt_secret);
     req.session.token = token;
-    res.redirect("/");
-    // res.json({
-    //   success: true,
-    //   message: "Enjoy your token!",
-    //   token: token
-    // });
+    // res.redirect("/");
+    res.json({
+      success: true,
+      message: "Enjoy your token!",
+      token: token
+    });
   });
 
 
