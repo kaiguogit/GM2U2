@@ -9,6 +9,7 @@ var uuid = require('node-uuid');
 //Namespace for /api/playlists
 //
 
+//Get all playlist for that user
 router.get('/',(req, res, next) => {
   console.log("!!!!get /api/playlists!");
   console.log("!!!!User is ", req.user);
@@ -61,13 +62,34 @@ router.delete('/:id', (req, res, next)=>{
   });
 });
 
-
+//Create TimeWidget to this playlist
 router.post('/:id/timeWidget', (req, res, next)=>{
-  console.log("!!!!!!!id in url for playlist is ", req.params.id);
+  console.log("!!!!!!!Creating timeWidget for playlist id ", req.params.id);
   models.timeWidget.create({id: uuid.v4(), playlistId: req.params.id})
   .then(function(timeWidget){
     console.log(timeWidget);
     res.json(timeWidget);
   });
 });
+
+//Create TrafficWidget to this playlist
+router.post('/:id/trafficWidget', (req, res, next)=>{
+  console.log("!!!!!!!Creating trafficWidget for playlist id ", req.params.id);
+  models.trafficWidget.create({id: uuid.v4(), playlistId: req.params.id})
+  .then(function(trafficWidget){
+    console.log(trafficWidget);
+    res.json(trafficWidget);
+  });
+});
+
+//Create TimeWidget to this playlist
+router.post('/:id/weatherWidget', (req, res, next)=>{
+  console.log("!!!!!!!Creating weatherWidget for playlist id ", req.params.id);
+  models.weatherWidget.create({id: uuid.v4(), playlistId: req.params.id})
+  .then(function(weatherWidget){
+    console.log(weatherWidget);
+    res.json(weatherWidget);
+  });
+});
+
 module.exports = router;
