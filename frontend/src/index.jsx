@@ -13,8 +13,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {cyan500} from 'material-ui/styles/colors';
-
-// MUI requied
 injectTapEventPlugin();
 
 // testing custom theme
