@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import WidgetCard from './WidgetCard';
-import { canMoveKnight, moveKnight } from './Game';
+import WidgetCard from './WidgetCard.jsx';
 import { ItemTypes } from './Constants';
 import { DropTarget } from 'react-dnd';
 
 
 const widgetCardWrapperTarget = {
-  canDrop(props) {
+  canDrop(props, monitor) {
+    console.log("dragging object is", monitor.getItem());
     return true;
   },
   drop(props) {

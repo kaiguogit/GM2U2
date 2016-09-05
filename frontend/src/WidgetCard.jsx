@@ -5,8 +5,8 @@ export default class WidgetCard extends Component {
 
     return (
       <div style={{
-        backgroundColor: green,
-        color: white,
+        backgroundColor: "green",
+        color: "white",
         width: '200px%',
         height: '50px%'
       }}>
