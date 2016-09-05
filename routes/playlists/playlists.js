@@ -1,8 +1,9 @@
 var express = require('express');
-var weather = require('../modules/weather');
-var time = require('../modules/time');
+var weather = require('../../modules/weather');
+var time = require('../../modules/time');
 var router = express.Router();
-var models = require("../models");
+var models = require("../../models/index.js");
+// console.log("../../models");
 var uuid = require('node-uuid');
 //
 //Namespace for /api/playlists
@@ -60,30 +61,6 @@ router.delete('/:id', (req, res, next)=>{
   });
 });
 
-router.get('/timeWidget/:widgetId', (req, res, next)=>{
-  console.log("!!!!!!!id in url for playlist is ", req.params.id);
-
-  //Todo Add more model and change this
-  models.timeWidget.findById(req.params.widgetId)
-  .then(function(timeWidget){
-    console.log(timeWidget);
-    res.json(timeWidget);
-  });
-});
-
-router.delete('/timeWidget/:id', (req, res, next)=>{
-  console.log("!!!!!!!id in url for playlist is ", req.params.id);
-
-  //Todo Add more model and change this
-  models.timeWidget.findById(req.params.id)
-  .then(function(timeWidget){
-    return timeWidget.destroy();
-  })
-  .then(function(){
-    console.log("Deleted a widget, affected rows are");
-    res.json({message: "Deleted"});
-  });
-});
 
 router.post('/:id/timeWidget', (req, res, next)=>{
   console.log("!!!!!!!id in url for playlist is ", req.params.id);
