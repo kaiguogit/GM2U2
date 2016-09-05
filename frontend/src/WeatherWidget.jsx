@@ -1,12 +1,18 @@
 import React, {Component} from 'react';
 
+class WeatherWidget extends Component {
 
-class Widget extends Component {
+  componentDidMount() {
+      console.log('Widget mounted');
+    };
+    
   render() {
     return (
-      <div className="card blue-grey darken-1">
+      <div className="card teal darken-1">
         <div className="card-content white-text">
           <span className="card-title">Card Title</span>
+          <span className="card-type">{this.props.widget.widgetType}</span>
+          <span className="card-type">{this.props.widget.id}</span>
           <p>I am a very simple card. I am good at containing small bits of information.
           I am convenient because I require little markup to use effectively.</p>
         </div>
@@ -19,4 +25,4 @@ class Widget extends Component {
     );
   }
 }
-export default Widget;
+export default WeatherWidget;

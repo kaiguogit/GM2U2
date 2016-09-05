@@ -5,11 +5,22 @@ module.exports = function(sequelize, DataTypes) {
         name: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        widgets:{
+          type: DataTypes.ARRAY(DataTypes.JSON),
+          defaultValue: []
+        },
+        createdAt: {
+          type: DataTypes.DATE
+        },
+        updatedAt: {
+          type: DataTypes.DATE
         }
     },{
       classMethods: {
         associate: function(models) {
           Playlist.belongsTo(models.user);
+          Playlist.hasMany(models.timeWidget);
         }
       }
     });
