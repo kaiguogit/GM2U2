@@ -9,8 +9,9 @@ const widgetCardWrapperTarget = {
     console.log("dragging object is", monitor.getItem());
     return true;
   },
-  drop(props) {
+  drop(props, monitor) {
     console.log("droping here, props is", props);
+    props.onDropWidgetIcon(monitor.getItem().widgetType);
   }
 };
 
@@ -47,6 +48,7 @@ class WidgetCardWrapper extends Component {
         width: '100%',
         height: '100%'
       }}>
+        <h2>Waiting content</h2>
         <WidgetCard >
           {this.props.children}
         </WidgetCard>
