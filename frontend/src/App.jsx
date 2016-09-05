@@ -5,6 +5,10 @@ import SidebarRight from "./sidebar_right.jsx";
 import ActivePlaylist from './active_playlist.jsx';
 import Footer from './footer.jsx';
 
+//Drag and drop
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
 //material
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -41,7 +45,7 @@ class App extends Component {
     this.setState({
       uiState: {
         sidebarRightOpen: !this.state.uiState.sidebarRightOpen,
-        sidebarLeftOpen: false,
+        // sidebarLeftOpen: false,
       }
     })
   }
@@ -126,7 +130,10 @@ class App extends Component {
         />
         <div className="row">
           {/* sidebar left - widgets */}
-          <SidebarLeft open={this.state.uiState.sidebarLeftOpen} />
+          <SidebarLeft 
+            open={this.state.uiState.sidebarLeftOpen} 
+            toggleSidebarLeft={this.toggleSidebarLeft.bind(this)}
+          />
 
           {/*If Playlists is falsy*/}
           {!this.state.playlists &&
@@ -154,6 +161,7 @@ class App extends Component {
           <SidebarRight 
             onAddPlaylist={this.addPlaylist.bind(this)} 
             onDeletePlaylist={this.deletePlaylist.bind(this)} 
+            toggleSidebarRight={this.toggleSidebarRight.bind(this)} 
             open={this.state.uiState.sidebarRightOpen} 
             playlists={this.state.playlists}
             onSelectPlaylist={this.selectPlaylist.bind(this)}
@@ -179,4 +187,4 @@ class App extends Component {
 App.childContextTypes = {
   username: React.PropTypes.string
 };
-export default App;
+export default DragDropContext(HTML5Backend)(App);
