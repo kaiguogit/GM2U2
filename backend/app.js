@@ -7,7 +7,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
-var routesPlaylist = require('./routes/playlists');
+var routesPlaylist = require('./routes/playlists/playlists');
+var routesTimeWidget = require('./routes/playlists/widgets/time');
 var routesWeather = require('./routes/weather');
 var routesTime = require('./routes/time');
 var models = require("./models");
@@ -77,6 +78,7 @@ app.use('/', routes);
 
 app.use(jwt_mw({ secret: process.env.jwt_secret}).unless({path: ['/login']}));
 app.use('/api/playlists', routesPlaylist);
+app.use('/api/playlists/timeWidget', routesTimeWidget);
 app.use('/api/weather', routesWeather);
 app.use('/api/time', routesTime);
 

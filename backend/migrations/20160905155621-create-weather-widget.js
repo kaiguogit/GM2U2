@@ -3,7 +3,7 @@
 module.exports = {
   up: function (queryInterface, DataTypes) {
      queryInterface.createTable(
-    'timeWidgets',
+    'weatherWidgets',
       {
         id: { 
           type: DataTypes.UUID, 
@@ -12,7 +12,7 @@ module.exports = {
         },
         widgetType:{
           type: DataTypes.STRING,
-          defaultValue: "time"
+          defaultValue: "weather"
         },
         createdAt: {
           type: DataTypes.DATE
@@ -41,6 +41,6 @@ module.exports = {
 
   down: function (queryInterface, Sequelize) {
    
-    return queryInterface.dropTable('timeWidgets');
+    return queryInterface.dropTable('weatherWidgets');
   }
 };
