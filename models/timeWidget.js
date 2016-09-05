@@ -1,6 +1,4 @@
 "use strict"
-var addToPlaylistArray = require('./widgetLibrary.js').addToPlaylistArray;
-var removeFromPlaylistArray = require('./widgetLibrary.js').removeFromPlaylistArray;
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -25,12 +23,8 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         TimeWidget.belongsTo(models.playlist);
       }
-    },
-    hooks:{
-      afterCreate: addToPlaylistArray,
-      afterDestroy: removeFromPlaylistArray,
-      afterBulkDestroy: removeFromPlaylistArray
     }
+
   });
 
     return TimeWidget;
