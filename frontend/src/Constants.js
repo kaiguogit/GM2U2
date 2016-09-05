@@ -3,10 +3,10 @@ export const ItemTypes = {
 };
 
 export const WidgetTypes = {
-  time: "Time",
-  traffic: "Traffic",
-  weather: "Weather",
-  calendar: "Calendar"
+  time: "time",
+  traffic: "traffic",
+  weather: "weather",
+  calendar: "calendar"
 }
 
 export const WidgetIconImage = {
