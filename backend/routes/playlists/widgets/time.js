@@ -2,6 +2,11 @@ var express = require('express');
 var router = express.Router();
 var models = require("../../../models/index.js");
 
+//helper methods
+var findPlaylistforWidget = require('../../helper.js').findPlaylistforWidget;
+var deleteFromPlaylistArray = require('../../helper.js').deleteFromPlaylistArray;
+
+
 //////////////////////////////////////////////////////////////////
 //This route servers /api/playlist/:playlistId/timeWidget/
 //////////////////////////////////////////////////////////////////
@@ -23,16 +28,22 @@ router.delete('/:id', (req, res, next)=>{
   var widget = {};
   //Todo Add more model and change this
   models.timeWidget.findById(req.params.id)
-  .then(function(timeWidget){
-    widget = timeWidget;
-    return timeWidget.destroy();
+  .then(function(foundWidget){
+    widget = foundWidget;
+    return foundWidget.destroy();
   })
   .then(function(rows){
-    console.log("\n!!!!!!!Deleted a widget, affected rows are", rows);
-    models.playlist.findById(widget.playlistId).then(function(){
-      res.json({message: "Deleted"});
-    })
-  }).catch(function(err){
+    console.log("deleted number of rows is", rows);
+    return findPlaylistforWidget(widget);
+  })
+  .then(function(playlist){
+    return deleteFromPlaylistArray(playlist, widget);
+  })
+  .then(function(playlist){
+    console.log("\n!!!!!Updated playlist is", playlist);
+    res.json(playlist);
+  })
+  .catch(function(err){
     console.log("\n!!!!!!Failed to delete a widget, error is ", err);
   });
 });

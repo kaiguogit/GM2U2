@@ -2,13 +2,18 @@ var express = require('express');
 var router = express.Router();
 var models = require("../../../models/index.js");
 
+//helper methods
+var findPlaylistforWidget = require('../../helper.js').findPlaylistforWidget;
+var deleteFromPlaylistArray = require('../../helper.js').deleteFromPlaylistArray;
+
+
 //////////////////////////////////////////////////////////////////
 //This route servers /api/playlist/:playlistId/weatherWidget/
 //////////////////////////////////////////////////////////////////
 
 
 router.get('/:id', (req, res, next)=>{
-  console.log("\n!!!!!!Getting weatherWidget, id is", req.params.id);
+  console.log("\n!!!!!Getting weatherWidget id", req.params.id);
 
   //Todo Add more model and change this
   models.weatherWidget.findById(req.params.id)
@@ -19,17 +24,26 @@ router.get('/:id', (req, res, next)=>{
 });
 
 router.delete('/:id', (req, res, next)=>{
-  console.log("\n!!!!!!Deleting weatherWidget, id is", req.params.id);
-
+  console.log("\n!!!!!Deleting weatherWidget id", req.params.id);
+  var widget = {};
   //Todo Add more model and change this
   models.weatherWidget.findById(req.params.id)
-  .then(function(weatherWidget){
-    return weatherWidget.destroy();
+  .then(function(foundWidget){
+    widget = foundWidget;
+    return foundWidget.destroy();
   })
-  .then(function(){
-    console.log("Deleted a widget, affected rows are");
-    res.json({message: "Deleted"});
-  }).catch(function(err){
+  .then(function(rows){
+    console.log("deleted number of rows is", rows);
+    return findPlaylistforWidget(widget);
+  })
+  .then(function(playlist){
+    return deleteFromPlaylistArray(playlist, widget);
+  })
+  .then(function(playlist){
+    console.log("\n!!!!!Updated playlist is", playlist);
+    res.json(playlist);
+  })
+  .catch(function(err){
     console.log("\n!!!!!!Failed to delete a widget, error is ", err);
   });
 });

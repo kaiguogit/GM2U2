@@ -24,7 +24,7 @@ class ActivePlaylist extends Component {
         }
       })
       .then(function(widget) {
-        console.log();
+        console.log("!!!!!response from create widiget is below");
         console.log("created widget", widget);
         console.log("created widget, type is", widget.widgetType);
         this.props.onPlaylistChange();
