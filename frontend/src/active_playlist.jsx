@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import TimeWidget from './TimeWidget.jsx'
-import WeatherWidget from './WeatherWidget.jsx'
+import TimeWidget from './widgets/TimeWidget.jsx'
+import WeatherWidget from './widgets/WeatherWidget.jsx'
+import TrafficWidget from './widgets/TrafficWidget.jsx'
 import WidgetCardWrapper from './WidgetCardWrapper.jsx'
 import { WidgetTypes } from './Constants';
 
@@ -10,6 +11,8 @@ class ActivePlaylist extends Component {
     console.log("Did mount active playlist Playlist is", this.props.playlist);
   };
 
+
+  //Ajax call to Add widget to this playlist
   handleAddWidget(widgetType){
 
     //Post request to add widget
@@ -20,24 +23,10 @@ class ActivePlaylist extends Component {
         'Authorization':  "Bearer " + window.localStorage.token
         }
       })
-      .then(function(timeWidget) {
-        switch(widgetType){
-          case WidgetTypes.time:
-            console.log(`creating  ${widgetType}`);
-            break;
-          case WidgetTypes.traffic:
-            console.log(`creating  ${widgetType}`);
-            break;
-          case WidgetTypes.weather:
-            console.log(`creating  ${widgetType}`);
-          case WidgetTypes.calendar:
-            console.log(`creating  ${widgetType}`);
-            break;
-          default:
-            console.log(`nothing matches${widgetType}`);
-            break;
-        }
-        console.log("timeWidget is", timeWidget);
+      .then(function(widget) {
+        console.log();
+        console.log("created widget", widget);
+        console.log("created widget, type is", widget.widgetType);
         this.props.onPlaylistChange();
         console.log("Inside of active playlist Playlist is", this.props.playlist);
       }.bind(this));
@@ -48,7 +37,9 @@ class ActivePlaylist extends Component {
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
         <WidgetCardWrapper onDropWidgetIcon={this.handleAddWidget.bind(this)}/>
 
-        <button onClick={this.handleAddWidget.bind(this)}>Add Widget</button>
+        <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
+        <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
+        <button onClick={this.handleAddWidget.bind(this, WidgetTypes.traffic)}>Add Traffic</button>
         <h2>{this.props.playlist.name}</h2>
         <h2>Id {this.props.playlist.id}</h2>
         {
@@ -59,6 +50,9 @@ class ActivePlaylist extends Component {
                 break
               case WidgetTypes.weather:
                 return <WeatherWidget widget={widget} onWidgetChange={this.props.onPlaylistChange} key={widget.id}/>
+                break
+              case WidgetTypes.traffic:
+                return <TrafficWidget widget={widget} onWidgetChange={this.props.onPlaylistChange} key={widget.id}/>
                 break
               default:
                 break
