@@ -8,7 +8,7 @@ var models = require("../../../models/index.js");
 
 
 router.get('/:id', (req, res, next)=>{
-  console.log("!!!!!!Getting weatherWidget, id is", req.params.id);
+  console.log("\n!!!!!!Getting weatherWidget, id is", req.params.id);
 
   //Todo Add more model and change this
   models.weatherWidget.findById(req.params.id)
@@ -19,7 +19,7 @@ router.get('/:id', (req, res, next)=>{
 });
 
 router.delete('/:id', (req, res, next)=>{
-  console.log("!!!!!!Deleting weatherWidget, id is", req.params.id);
+  console.log("\n!!!!!!Deleting weatherWidget, id is", req.params.id);
 
   //Todo Add more model and change this
   models.weatherWidget.findById(req.params.id)
@@ -29,6 +29,8 @@ router.delete('/:id', (req, res, next)=>{
   .then(function(){
     console.log("Deleted a widget, affected rows are");
     res.json({message: "Deleted"});
+  }).catch(function(err){
+    console.log("\n!!!!!!Failed to delete a widget, error is ", err);
   });
 });
 

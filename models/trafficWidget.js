@@ -1,6 +1,6 @@
 "use strict"
-var addToPlaylistArray = require('./widget.js').addToPlaylistArray;
-var removeFromPlaylistArray = require('./widget.js').removeFromPlaylistArray;
+var addToPlaylistArray = require('./widgetLibrary.js').addToPlaylistArray;
+var removeFromPlaylistArray = require('./widgetLibrary.js').removeFromPlaylistArray;
 
 module.exports = function(sequelize, DataTypes) {
 

@@ -14,7 +14,6 @@ router.get('/', function(req, res, next) {
     console.log("********************session in request is ", req.session);
     if(req.user){
       console.log("setting uid into session");
-      req.session["uid"] = req.user.id;
       res.render('index', {playlists: playlists, user: req.user});
     }else{
       res.render('index', {playlists: playlists, user: {}});
@@ -23,6 +22,15 @@ router.get('/', function(req, res, next) {
   // send HTML file populated with quotes here
   });
 });
+
+//TESTING PURPOSE
+router.get('/users', function(req, res, next){
+
+  models.user.all().then(function(users){
+    res.json(users);
+  });
+});
+
 
 router.get('/login', function(req, res, next){
   console.log("user in request is ", req.user);
