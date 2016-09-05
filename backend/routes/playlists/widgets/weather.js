@@ -3,28 +3,28 @@ var router = express.Router();
 var models = require("../../../models/index.js");
 
 //////////////////////////////////////////////////////////////////
-//This route servers /api/playlist/:playlistId/timeWidget/
+//This route servers /api/playlist/:playlistId/weatherWidget/
 //////////////////////////////////////////////////////////////////
 
 
 router.get('/:id', (req, res, next)=>{
-  console.log("!!!!!Getting timeWidget id", req.params.id);
+  console.log("!!!!!!Getting weatherWidget, id is", req.params.id);
 
   //Todo Add more model and change this
-  models.timeWidget.findById(req.params.id)
-  .then(function(timeWidget){
-    console.log(timeWidget);
-    res.json(timeWidget);
+  models.weatherWidget.findById(req.params.id)
+  .then(function(weatherWidget){
+    console.log(weatherWidget);
+    res.json(weatherWidget);
   });
 });
 
 router.delete('/:id', (req, res, next)=>{
-  console.log("!!!!!Deleting timeWidget id", req.params.id);
+  console.log("!!!!!!Deleting weatherWidget, id is", req.params.id);
 
   //Todo Add more model and change this
-  models.timeWidget.findById(req.params.id)
-  .then(function(timeWidget){
-    return timeWidget.destroy();
+  models.weatherWidget.findById(req.params.id)
+  .then(function(weatherWidget){
+    return weatherWidget.destroy();
   })
   .then(function(){
     console.log("Deleted a widget, affected rows are");
