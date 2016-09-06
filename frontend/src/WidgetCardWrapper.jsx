@@ -110,7 +110,6 @@ class WidgetCardWrapper extends Component {
         width: '100%',
         height: '100%'
         }}>
-      <h2>Position is {this.props.position}</h2>
       <FloatingActionButton mini={true} style={style} onClick={this.handleMoveUp.bind(this)}>
         <ArrowUp />
       </FloatingActionButton>
