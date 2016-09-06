@@ -14,10 +14,7 @@ class WidgetCardHeader extends Component {
     return (
       <CardHeader
         title={this.props.widget.widgetType}
-        subtitle={this.props.widget.id}
         avatar={WidgetIconImage[this.props.widget.widgetType]}
-        actAsExpander={true}
-        showExpandableButton={true}
       />
     );
   }
