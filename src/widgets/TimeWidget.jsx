@@ -40,7 +40,7 @@ const styles = {
   },
   date:{
     color: '#333',
-    fontSize: '2.5em' 
+    fontSize: '3em' 
   }
 };
 
@@ -54,31 +54,16 @@ class TimeWidget extends Component {
     };
   }
 
-  handleExpandChange = (expanded) => {
-      this.setState({expanded: expanded});
+  handleSetting = () => {
+    this.setState({expanded: !this.state.expanded});
   };
 
-  handleToggle = (event, toggle) => {
-    this.setState({expanded: toggle});
-  };
-
-  handleExpand = () => {
-    this.setState({expanded: true});
-  };
-
-  handleReduce = () => {
-    this.setState({expanded: false});
-  };
-  handleTouchTap() {
-    alert('onTouchTap triggered on the title component');
-  }
   componentWillMount(){
     var clockId = newId();
     this.clockId = clockId;
   }
 
   componentDidMount() {
-  
     var clock =$(`#${this.clockId}`).FlipClock({
         clockFace: 'TwentyFourHourClock'
     });       
@@ -93,76 +78,45 @@ class TimeWidget extends Component {
       <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
         <AppBar
           style={styles.title}
+          title=''
           iconElementLeft={
-              <div>
-                <Avatar src={WidgetIconImage[this.props.widget.widgetType]} />
-                <IconButton >
-                  <NavigationClose color='white'/>
-                </IconButton>
-                <IconButton  tooltip="Setting" touch={true} tooltipPosition="top-center">
-                  <Settings color='white'/>
-                </IconButton>
-              </div>
+            <div>
+            <span style={styles.title}>{this.capitalize(this.props.widget.widgetType)}</span>
+              <IconButton >
+                <NavigationClose color='white'/>
+              </IconButton>
+              <IconButton  onTouchTap={this.handleSetting} tooltip="Setting" touch={true} tooltipPosition="top-center">
+                <Settings color='white'/>
+              </IconButton>
+            </div>
           }
-          title={<span style={styles.title}>{this.capitalize(this.props.widget.widgetType)}</span>}
           
-          iconElementRight={<FlatButton label="Save" />}
-        />
-
-        <CardHeader
-              avatar={WidgetIconImage[this.props.widget.widgetType]}
-              children={
-                <span>
-                <ToolbarSeparator />
-                <IconButton><NavigationClose /></IconButton>
-                
-                </span>
-              }
-        />
-       
-
-          
+          iconElementRight={
+            <FlatButton label="Save" />
             
-      
-        <Toolbar>
-          
+          }
+        />
+    <AudioPlayer widget={this.props.widget}/> 
 
-          <ToolbarGroup firstChild={true}>
-            <Avatar src={WidgetIconImage[this.props.widget.widgetType]} />
-            <ToolbarTitle text={this.props.widget.widgetType}/>
-          </ToolbarGroup>
-          <ToolbarGroup>
-            <ToolbarTitle text="Options" />
-            
-            <ToolbarSeparator />
-            <RaisedButton label="Create Broadcast" primary={true} />
-            <IconMenu
-              iconButtonElement={
-                <IconButton touch={true}>
-                  <NavigationExpandMoreIcon />
-                </IconButton>
-              }
-            >
-              <MenuItem primaryText="Download" />
-              <MenuItem primaryText="More Info" />
-            </IconMenu>
-          </ToolbarGroup>
-        </Toolbar>
-
-        <div className="row">
-          <div className="col s3" style={styles.date}>
-            {moment().format('dddd MMM Do')}
-          </div>
-          <div className="col s6" id={this.clockId}>
-          </div>
+    <CardText expandable={true}>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
+      Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
+      Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+    </CardText>
+    <CardText>
+      <div className="row">
+        <div className="col s12 center-align" style={styles.date}>
+          {moment().format('dddd MMMM Do')}
         </div>
-        <AudioPlayer widget={this.props.widget}/>
-        
+      </div>
+      <div className="row">
+        <div className="col push-s3 s6 center-align" >
+          <div id={this.clockId}></div>
+        </div>
+      </div>
+    </CardText>
       
-        <CardTitle title="Card title" subtitle="Card subtitle" />
-        <CardText >
-            <h3>Settings</h3>
-        </CardText>
         <CardActions>
           <FlatButton label="Expand" onTouchTap={this.handleExpand} />
           <FlatButton label="Reduce" onTouchTap={this.handleReduce} />
