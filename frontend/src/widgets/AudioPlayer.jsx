@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 
 function synthesizeRequest(options) {
     var sessionPermissions = "false";
@@ -91,13 +91,20 @@ class AudioPlayer extends Component {
 
   render() {
     return (
-      <div className="audioParent">
+      <span className="audioParent">
+    {/*
         <FlatButton label="DownloadVoice" onTouchTap={this.handleDownload} />
-        <FlatButton id="speak-button" label="Speak" onTouchTap={this.handleSpeak.bind(this)} />
+    */}
+        <RaisedButton 
+          id="speak-button" 
+          label="Speak" 
+          onTouchTap={this.handleSpeak.bind(this)} 
+          primary={true}
+        />
         <audio id="audio">
         Your browser does not support the audio element.
         </audio>
-      </div>
+      </span>
     )
   }
 }
