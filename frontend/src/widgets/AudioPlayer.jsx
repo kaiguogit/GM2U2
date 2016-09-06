@@ -92,7 +92,6 @@ class AudioPlayer extends Component {
   render() {
     return (
       <div className="audioParent">
-        <p>Player</p>
         <FlatButton label="DownloadVoice" onTouchTap={this.handleDownload} />
         <FlatButton id="speak-button" label="Speak" onTouchTap={this.handleSpeak.bind(this)} />
         <audio id="audio">
