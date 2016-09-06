@@ -15,3 +15,8 @@ export const WidgetIconImage = {
   weather: "./public/weather.png",
   calendar: "./public/calendar.png"
 }
+
+export const ClockFace = {
+  TwentyFourHourClock: "TwentyFourHourClock",
+  TwelveHourClock: "TwelveHourClock"
+}
