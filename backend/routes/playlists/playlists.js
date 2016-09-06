@@ -107,4 +107,18 @@ router.post('/:id/weatherWidget', (req, res, next)=>{
   });
 });
 
+//Update playlist
+router.put('/:id', (req, res, next)=>{
+
+  var newPlaylist = JSON.parse(req.body.playlist);
+  models.playlist.findById(newPlaylist.id)
+  .then(function(playlist){
+    return playlist.updateAttributes(newPlaylist)
+  }).then(function(playlist){
+    res.json(playlist);
+  }).catch(function(err){
+    console.log("\n!!!!!!!!!!!!failed to update playlist, error is ", err);
+  })
+});
+
 module.exports = router;
