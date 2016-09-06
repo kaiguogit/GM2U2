@@ -3,6 +3,7 @@ import WidgetIcon from './widget_icon.jsx'
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
+import { WidgetTypes, WidgetIconImage } from './Constants';
 
 const style = {
   margin: 12,
@@ -16,24 +17,9 @@ class SidebarLeft extends Component {
         <RaisedButton onClick={this.props.toggleSidebarLeft} label="Hide" primary={true} style={style} />
         <p>Your widgets:</p>
         <div id='container_widgets'>    
-          <WidgetIcon>
-            <img style={{
-              width: '100%',
-              height: '100%'
-              }} src="./src/clock-icon.jpg"/>
-          </WidgetIcon>
-          <WidgetIcon>
-            <img style={{
-              width: '100%',
-              height: '100%'
-              }} src="./src/Maps.png"/>
-          </WidgetIcon>
-          <WidgetIcon>
-            <img style={{
-              width: '100%',
-              height: '100%'
-              }} src="./src/calendar.png"/>
-          </WidgetIcon>
+          <WidgetIcon widgetType={WidgetTypes.time} imgsource={WidgetIconImage.time}/>
+          <WidgetIcon widgetType={WidgetTypes.traffic} imgsource={WidgetIconImage.traffic} />
+          <WidgetIcon widgetType={WidgetTypes.weather} imgsource={WidgetIconImage.weather}/>
         </div>
       </Drawer>
     );

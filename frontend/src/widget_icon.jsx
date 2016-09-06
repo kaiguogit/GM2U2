@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from 'react';
-import { ItemTypes } from './Constants';
+import { ItemTypes, WidgetTypes } from './Constants';
 import { DragSource } from 'react-dnd';
 
 const widgetIconSource = {
   beginDrag(props) {
-    return {};
+    console.log("Begin drag, widgettype is", props.widgetType);
+    return {widgetType: props.widgetType};
   }
 };
 
@@ -20,7 +21,7 @@ class WidgetIcon extends Component {
   componentDidMount() {
     const img = new Image();
     img.src = './src/Maps-preview.jpg'
-    img.onload = () => this.props.connectDragPreview(img);
+    // img.onload = () => this.props.connectDragPreview(img);
   }
   render() {
     const { connectDragSource, isDragging, connectDragPreview } = this.props;
@@ -31,9 +32,12 @@ class WidgetIcon extends Component {
         width: '50%',
         height: '50%'
       }}>
-
-      {this.props.children}
-        <small className='icon_name truncate'>Widget Name</small>
+        <img style={{
+                width: '100%',
+                height: '100%'
+                }} src={this.props.imgsource}/>
+        {this.props.children}
+        <small className='icon_name truncate'>{this.props.widgetType}</small>
       </div>
     );
   }

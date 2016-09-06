@@ -1,21 +1,30 @@
 require('dotenv').config();
 
+//server
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var app = express();
+
+//routes
 var routes = require('./routes/index');
-var routesPlaylist = require('./routes/playlists');
+var routesPlaylist = require('./routes/playlists/playlists');
+var routesTimeWidget = require('./routes/playlists/widgets/time');
+var routesWeatherWidget = require('./routes/playlists/widgets/weather');
+var routesTrafficWidget = require('./routes/playlists/widgets/traffic');
 var routesWeather = require('./routes/weather');
 var routesTime = require('./routes/time');
+
+//DB
 var models = require("./models");
-var app = express();
+
 // var session = require('express-session');
 var jwt = require('jsonwebtoken');
 var jwt_mw = require('express-jwt');
-//
+
 //
 //  Waston Developer Cloud
 //
@@ -42,30 +51,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // CORS 
-app.options('/api/playlists', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header('Access-Control-Allow-Methods', 'GET, POST, UPDATE, DELETE, OPTIONS');
+// app.options('/api/playlists', function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, UPDATE, DELETE, OPTIONS');
 
-  res.header("Access-Control-Allow-Headers", "Authorization, authorization, Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+//   res.header("Access-Control-Allow-Headers", "Authorization, authorization, Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
-app.delete('/api/playlists', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header('Access-Control-Allow-Methods', 'GET, POST, UPDATE, DELETE, OPTIONS');
+// app.delete('/api/playlists', function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   res.header('Access-Control-Allow-Methods', 'GET, POST, UPDATE, DELETE, OPTIONS');
 
-  res.header("Access-Control-Allow-Headers", "Authorization, authorization, Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+//   res.header("Access-Control-Allow-Headers", "Authorization, authorization, Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
 
 //CORS 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Credentials", "true");
-  res.header('Access-Control-Allow-Methods', 'GET, POST, UPDATE, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, UPDATE, DELETE, OPTIONS, PUT');
   res.header("Access-Control-Allow-Headers", "Authorization, authorization, Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
@@ -77,6 +86,9 @@ app.use('/', routes);
 
 app.use(jwt_mw({ secret: process.env.jwt_secret}).unless({path: ['/login']}));
 app.use('/api/playlists', routesPlaylist);
+app.use('/api/playlists/timeWidget', routesTimeWidget);
+app.use('/api/playlists/weatherWidget', routesWeatherWidget);
+app.use('/api/playlists/trafficWidget', routesTrafficWidget);
 app.use('/api/weather', routesWeather);
 app.use('/api/time', routesTime);
 
