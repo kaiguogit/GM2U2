@@ -20,7 +20,7 @@ function collect(connect, monitor) {
 class WidgetIcon extends Component {
   componentDidMount() {
     const img = new Image();
-    img.src = './src/Maps-preview.jpg'
+    img.src = './public/Maps-preview.jpg'
     // img.onload = () => this.props.connectDragPreview(img);
   }
   render() {
