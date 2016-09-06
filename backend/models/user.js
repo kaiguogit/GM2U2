@@ -35,6 +35,10 @@ var User = function(sequelize, DataTypes) {
       this.associations.playlists.target.create({name: "Playlist1", userId: user.id});
     })
 
+    User.hook('beforeDestroy', function(user, options) {
+      console.log(`\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nDeleting User Id ${user.id}\d!!!!!!!!!!!!!!!!`);
+    })
+
     return User;
 }
 module.exports = User

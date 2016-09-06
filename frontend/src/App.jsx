@@ -24,7 +24,7 @@ class App extends Component {
       uiState: { sidebarLeftOpen: false, sidebarRightOpen: false },
       username: window.localStorage.username,
       playlists: [],
-      activePlaylistIndex: 0
+      activePlaylist: null
     }
   }
 
@@ -35,8 +35,7 @@ class App extends Component {
   toggleSidebarLeft() {
     this.setState({
       uiState: {
-        sidebarLeftOpen: !this.state.uiState.sidebarLeftOpen,
-        sidebarRightOpen: false,
+        sidebarLeftOpen: !this.state.uiState.sidebarLeftOpen
       }
     })
   }
@@ -45,7 +44,7 @@ class App extends Component {
     console.log('toggleSidebarRight')
     this.setState({
       uiState: {
-        sidebarRightOpen: !this.state.uiState.sidebarRightOpen,
+        sidebarRightOpen: !this.state.uiState.sidebarRightOpen
         // sidebarLeftOpen: false,
       }
     })
@@ -84,6 +83,13 @@ class App extends Component {
       .then(function(playlists) {
         console.log("Playlists is", playlists);
         this.setState({playlists: playlists});
+        //set default active playlist
+        if( !this.state.activePlaylist && this.state.playlists.length > 0 ){
+          this.setState({activePlaylist: this.state.playlists[0]})
+        }
+
+        //update the ActivePlaylist
+        this.selectPlaylist(this.state.activePlaylist.id);
       }.bind(this));
   }
 
@@ -103,11 +109,10 @@ class App extends Component {
   }
 
   selectPlaylist(id){
-    console.log("select");
-    this.state.playlists.forEach(function(playlist, index){
-      console.log("index", index);
+    console.log("select playlist");
+    this.state.playlists.forEach(function(playlist){
       if(playlist.id === id){
-        this.setState({activePlaylistIndex: index})
+        this.setState({activePlaylist: playlist})
       }
     }.bind(this));
   }
@@ -137,7 +142,7 @@ class App extends Component {
           />
 
           {/*If Playlists is falsy*/}
-          {!this.state.playlists &&
+          {this.state.playlists.length === 0 &&
             <div className = 'col s12 m10 offset-m1 l8 offset-l2'>
               <RaisedButton 
                 onClick={this.addPlaylist.bind(this)} 
@@ -170,13 +175,15 @@ class App extends Component {
           }
 
           {/* centered content - active playlist */}
-          {this.state.playlists && this.state.playlists.length > 0 && 
+
+          {this.state.activePlaylist && 
             <ActivePlaylist 
-              playlist={this.state.playlists[this.state.activePlaylistIndex]} 
-              id={this.state.playlists[this.state.activePlaylistIndex].id} 
+              playlist={this.state.activePlaylist} 
+              id={this.state.activePlaylist.id} 
               onPlaylistChange={this.updatePlaylist.bind(this)} 
             />
-          }
+          }          
+          
         </div>
         {/* Footer */}
         <Footer/>
