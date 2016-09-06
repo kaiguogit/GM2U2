@@ -1,48 +1,28 @@
 import React, {Component} from 'react';
 import {handleDeleteWidget} from './widgetLibrary.js';
-import { WidgetTypes, WidgetIconImage } from '../Constants';
+import { WidgetTypes, WidgetIconImage, ClockFace } from '../Constants';
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import Toggle from 'material-ui/Toggle';
 
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import WidgetCardToolbar from './WidgetCardToolbar.jsx'
 
-import FontIcon from 'material-ui/FontIcon';
-import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
-import MenuItem from 'material-ui/MenuItem';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import RaisedButton from 'material-ui/RaisedButton';
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import Avatar from 'material-ui/Avatar';
-import Settings from 'material-ui/svg-icons/action/settings';
-
-
-
-import WidgetCardHeader from './WidgetCardHeader.jsx';
-import AudioPlayer from './AudioPlayer.jsx';
-//id generator
-import newId from '../utils/newid';
-
+//utils
+import newId from '../utils/newid.js'
 //moment
 var moment = require('moment');
 
 const styles = {
-  title: {
-    cursor: 'pointer',
-    // backgroundColor: '#cccccc',
-    backgroundColor: '#333333',
-    color: '#fff'
-  },
   date:{
     color: '#333',
     fontSize: '3em' 
+  },
+  radioButton: {
+    marginBottom: 16,
   }
 };
+
+
 
 class TimeWidget extends Component {
 
@@ -50,7 +30,7 @@ class TimeWidget extends Component {
     super(props);
     this.state = {
       expanded: false,
-      clockId: 'clock'
+      clockId: 'clock',
     };
   }
 
@@ -64,45 +44,45 @@ class TimeWidget extends Component {
   }
 
   componentDidMount() {
-    var clock =$(`#${this.clockId}`).FlipClock({
-        clockFace: 'TwentyFourHourClock'
-    });       
+    console.log("did mount");
+     var clock =$(`#${this.clockId}`).FlipClock({
+        clockFace: ClockFace.TwentyFourHourClock
+    });
+    // this.updateClockFace(null, ClockFace.TwentyFourHourClock);      
   };
 
-  capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+  updateClockFace(event, clockFace){
+    console.log("tragging event", event);
+    console.log("tragging clock", clockFace);
+   var clock =$(`#${this.clockId}`).FlipClock({
+        clockFace: clockFace
+    });
   }
+
+
 
    render() {
     return (
       <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
-        <AppBar
-          style={styles.title}
-          title=''
-          iconElementLeft={
-            <div>
-            <span style={styles.title}>{this.capitalize(this.props.widget.widgetType)}</span>
-              <IconButton >
-                <NavigationClose color='white'/>
-              </IconButton>
-              <IconButton  onTouchTap={this.handleSetting} tooltip="Setting" touch={true} tooltipPosition="top-center">
-                <Settings color='white'/>
-              </IconButton>
-            </div>
-          }
-          
-          iconElementRight={
-            <FlatButton label="Save" />
-            
-          }
-        />
-    <AudioPlayer widget={this.props.widget}/> 
+      <WidgetCardToolbar 
+        widget={this.props.widget}
+        onWidgetChange={this.props.onWidgetChange}
+        handleSetting={this.handleSetting.bind(this)}
+      />
 
     <CardText expandable={true}>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-      Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-      Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+      <RadioButtonGroup onChange={this.updateClockFace.bind(this)} name="clockhour" defaultSelected={ClockFace.TwentyFourHourClock}>
+        <RadioButton
+          value={ClockFace.TwentyFourHourClock}
+          label="24h"
+          style={styles.radioButton}
+        />
+        <RadioButton
+          value={ClockFace.TwelveHourClock}
+          label="12h"
+          style={styles.radioButton}
+        />
+      </RadioButtonGroup>
     </CardText>
     <CardText>
       <div className="row">
@@ -111,19 +91,11 @@ class TimeWidget extends Component {
         </div>
       </div>
       <div className="row">
-        <div className="col push-s3 s6 center-align" >
+        <div className="col push-s3 s7 center-align" >
           <div id={this.clockId}></div>
         </div>
       </div>
     </CardText>
-      
-        <CardActions>
-          <FlatButton label="Expand" onTouchTap={this.handleExpand} />
-          <FlatButton label="Reduce" onTouchTap={this.handleReduce} />
-          <FlatButton label="Delete this widget" onTouchTap={this.handleReduce} 
-            onTouchTap={handleDeleteWidget.bind(this)}
-          />
-        </CardActions>
       </Card>
     );
   }

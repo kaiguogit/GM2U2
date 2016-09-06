@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
+//utils
+import newId from '../utils/newid.js'
+
 function synthesizeRequest(options) {
     var sessionPermissions = "false";
     var downloadURL = 'http://localhost:3000/api/synthesize' +
@@ -14,11 +17,16 @@ function synthesizeRequest(options) {
       return true;
     }
 
-    var audio = $('#audio').get(0);
+    var audio = $(`#${this.audioId}`).get(0);
     audio.pause();
     audio.src = downloadURL;
     // enableButtons(true);
+
+    //Event listener
     audio.addEventListener('canplaythrough', onCanplaythrough);
+    audio.addEventListener('ended', onEnded);
+
+    
     audio.muted = true;
     audio.play();
     $('body').css('cursor', 'wait');
@@ -26,10 +34,15 @@ function synthesizeRequest(options) {
     return true;
 }
 
+function onEnded(){
+  var audio = this;
+  audio.controls = false;
+  $('body').css('cursor', 'auto');
+  $('#speak-button').css('cursor', 'auto');
+}
 
 function onCanplaythrough() {
-  console.log('onCanplaythrough');
-  var audio = $('#audio').get(0);
+  var audio = this;
   audio.removeEventListener('canplaythrough', onCanplaythrough);
   try {
     audio.currentTime = 0;
@@ -56,20 +69,16 @@ function getTimeString(){
 
 class AudioPlayer extends Component {
 
+  componentWillMount(){
+    var audioId = newId();
+    this.audioId = audioId;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       transcript: "",
     };
-  }
-
-  handleDownload(){
-    var utteranceDownloadOptions = {
-      text: "Hello, Ken is awesome",
-      voice: 'en-US_AllisonVoice',
-      download: true
-    };
-    synthesizeRequest(utteranceDownloadOptions);
   }
 
   handleSpeak() {
@@ -84,27 +93,30 @@ class AudioPlayer extends Component {
       //change transcript 
       console.log(timeString);
       //Speak!!!!
-      synthesizeRequest(utteranceOptions);
+      synthesizeRequest.call(this, utteranceOptions);
     return false;
-    });
+    }.bind(this));
   }
 
   render() {
     return (
-      <span className="audioParent">
+      <div className="valign-wrapper">
     {/*
         <FlatButton label="DownloadVoice" onTouchTap={this.handleDownload} />
     */}
         <RaisedButton 
+          className="valign"
           id="speak-button" 
           label="Speak" 
           onTouchTap={this.handleSpeak.bind(this)} 
           primary={true}
         />
-        <audio id="audio">
-        Your browser does not support the audio element.
+        <audio 
+          className="valign"
+          id={this.audioId}>
+          Your browser does not support the audio element.
         </audio>
-      </span>
+      </div>
     )
   }
 }
