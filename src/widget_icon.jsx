@@ -4,7 +4,7 @@ import { DragSource } from 'react-dnd';
 
 const widgetIconSource = {
   beginDrag(props) {
-    console.log("widgettype is", props.widgetType);
+    console.log("Begin drag, widgettype is", props.widgetType);
     return {widgetType: props.widgetType};
   }
 };
@@ -21,7 +21,7 @@ class WidgetIcon extends Component {
   componentDidMount() {
     const img = new Image();
     img.src = './src/Maps-preview.jpg'
-    img.onload = () => this.props.connectDragPreview(img);
+    // img.onload = () => this.props.connectDragPreview(img);
   }
   render() {
     const { connectDragSource, isDragging, connectDragPreview } = this.props;

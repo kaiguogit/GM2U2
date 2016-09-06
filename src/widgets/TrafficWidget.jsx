@@ -9,7 +9,7 @@ class TrafficWidget extends Component {
     
   render() {
     return (
-      <div className="card teal darken-1">
+      <div className="card lime darken-1">
         <div className="card-content white-text">
         <button onClick={handleDeleteWidget.bind(this)}>Delete this widget</button>
 
