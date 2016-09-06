@@ -1,29 +1,75 @@
 import React, {Component} from 'react';
 import {handleDeleteWidget} from './widgetLibrary.js';
+import { WidgetTypes, WidgetIconImage } from '../Constants';
+//material-ui
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import Toggle from 'material-ui/Toggle';
+
+import WidgetCardHeader from './WidgetCardHeader.jsx';
+import AudioPlayer from './AudioPlayer.jsx';
+
 
 class TimeWidget extends Component {
 
-  componentDidMount() {
-      console.log('Widget mounted');
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false,
+    };
+  }
+
+  handleExpandChange = (expanded) => {
+      this.setState({expanded: expanded});
     };
 
-  render() {
+    handleToggle = (event, toggle) => {
+      this.setState({expanded: toggle});
+    };
+
+    handleExpand = () => {
+      this.setState({expanded: true});
+    };
+
+    handleReduce = () => {
+      this.setState({expanded: false});
+    };
+
+  componentDidMount() {
+      console.log('Widget mounted');
+      var clock = $('.your-clock').FlipClock({
+        clockFace: 'TwentyFourHourClock'
+      });
+      clock.start(function() {
+        // Optional callback will fire when the clock starts
+      });
+    };
+
+   render() {
     return (
-      <div className="card blue-grey darken-1">
-        <div className="card-content white-text">
-          <button onClick={handleDeleteWidget.bind(this)}>Delete this widget</button>
-          <span className="card-title">Card Title</span>
-          <span className="card-type">{this.props.widget.widgetType}</span>
-          <span className="card-type">{this.props.widget.id}</span>
-          <p>I am a very simple card. I am good at containing small bits of information.
-          I am convenient because I require little markup to use effectively.</p>
-        </div>
-        <div className="card-action">
-          <a href="#">This is a link</a>
-          <a href="#">This is a link</a>
-        </div>
-      </div>
-      
+      <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
+        <WidgetCardHeader widget={this.props.widget}/>
+        <div className="your-clock"></div>
+        <AudioPlayer widget={this.props.widget}/>
+  
+        <CardMedia
+          expandable={true}
+          overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
+        >
+          <img src="images/nature-600-337.jpg" />
+        </CardMedia>
+        <CardTitle title="Card title" subtitle="Card subtitle" />
+        <CardText >
+          
+        </CardText>
+        <CardActions>
+          <FlatButton label="Expand" onTouchTap={this.handleExpand} />
+          <FlatButton label="Reduce" onTouchTap={this.handleReduce} />
+          <FlatButton label="Delete this widget" onTouchTap={this.handleReduce} 
+            onTouchTap={handleDeleteWidget.bind(this)}
+          />
+        </CardActions>
+      </Card>
     );
   }
 }
