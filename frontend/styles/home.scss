@@ -72,4 +72,6 @@
   min-height: calc(100vh - 64px);
 }
 
-
+.muidocs-icon-custom-github:before {
+    content: "\e625";
+}

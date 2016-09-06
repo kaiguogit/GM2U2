@@ -1,12 +1,27 @@
 import React, {Component} from 'react';
 import {handleDeleteWidget} from './widgetLibrary.js';
-import { WidgetTypes, WidgetIconImage } from '../Constants';
-import WidgetCardHeader from './WidgetCardHeader.jsx';
-
+import { WidgetTypes, WidgetIconImage, ClockFace } from '../Constants';
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import Toggle from 'material-ui/Toggle';
+
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import WidgetCardToolbar from './WidgetCardToolbar.jsx'
+
+//utils
+import newId from '../utils/newid.js'
+//moment
+var moment = require('moment');
+
+const styles = {
+  date:{
+    color: '#333',
+    fontSize: '3em' 
+  },
+  radioButton: {
+    marginBottom: 16,
+  }
+};
+
 
 
 class WeatherWidget extends Component {
@@ -15,61 +30,72 @@ class WeatherWidget extends Component {
     super(props);
     this.state = {
       expanded: false,
+      clockId: 'clock',
     };
   }
 
-  handleExpandChange = (expanded) => {
-      this.setState({expanded: expanded});
-    };
+  handleSetting = () => {
+    this.setState({expanded: !this.state.expanded});
+  };
 
-    handleToggle = (event, toggle) => {
-      this.setState({expanded: toggle});
-    };
-
-    handleExpand = () => {
-      this.setState({expanded: true});
-    };
-
-    handleReduce = () => {
-      this.setState({expanded: false});
-    };
+  componentWillMount(){
+    var clockId = newId();
+    this.clockId = clockId;
+  }
 
   componentDidMount() {
-      console.log('Widget mounted');
-    };
+    console.log("did mount");
+     var clock =$(`#${this.clockId}`).FlipClock({
+        clockFace: ClockFace.TwentyFourHourClock
+    });
+    // this.updateClockFace(null, ClockFace.TwentyFourHourClock);      
+  };
+
+  updateClockFace(event, clockFace){
+    console.log("tragging event", event);
+    console.log("tragging clock", clockFace);
+   var clock =$(`#${this.clockId}`).FlipClock({
+        clockFace: clockFace
+    });
+  }
+
+
 
    render() {
     return (
       <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
-        <WidgetCardHeader widget={this.props.widget}/>
-        <CardText>
-          <Toggle
-            toggled={this.state.expanded}
-            onToggle={this.handleToggle}
-            labelPosition="right"
-            label="This toggle controls the expanded state of the component."
-          />
-        </CardText>
-        <CardMedia
-          expandable={true}
-          overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-        >
-          <img src="images/nature-600-337.jpg" />
-        </CardMedia>
-        <CardTitle title="Card title" subtitle="Card subtitle" expandable={true} />
-        <CardText expandable={true}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-          Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-          Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-        </CardText>
-        <CardActions>
-          <FlatButton label="Expand" onTouchTap={this.handleExpand} />
-          <FlatButton label="Reduce" onTouchTap={this.handleReduce} />
-          <FlatButton label="Delete this widget" onTouchTap={this.handleReduce} 
-            onTouchTap={handleDeleteWidget.bind(this)}
-          />
-        </CardActions>
+      <WidgetCardToolbar 
+        widget={this.props.widget}
+        onWidgetChange={this.props.onWidgetChange}
+        handleSetting={this.handleSetting.bind(this)}
+      />
+
+    <CardText expandable={true}>
+      <RadioButtonGroup onChange={this.updateClockFace.bind(this)} name="clockhour" defaultSelected={ClockFace.TwentyFourHourClock}>
+        <RadioButton
+          value={ClockFace.TwentyFourHourClock}
+          label="24h"
+          style={styles.radioButton}
+        />
+        <RadioButton
+          value={ClockFace.TwelveHourClock}
+          label="12h"
+          style={styles.radioButton}
+        />
+      </RadioButtonGroup>
+    </CardText>
+    <CardText>
+      <div className="row">
+        <div className="col s12 center-align" style={styles.date}>
+          {moment().format('dddd MMMM Do')}
+        </div>
+      </div>
+      <div className="row">
+        <div className="col push-s3 s7 center-align" >
+          <div id={this.clockId}></div>
+        </div>
+      </div>
+    </CardText>
       </Card>
     );
   }

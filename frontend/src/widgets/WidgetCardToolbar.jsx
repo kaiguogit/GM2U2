@@ -1,0 +1,79 @@
+import React, {Component} from 'react';
+import { WidgetIconImage } from '../Constants';
+import AudioPlayer from './AudioPlayer.jsx';
+import {handleDeleteWidget} from './widgetLibrary.js';
+
+//material-ui
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import Avatar from 'material-ui/Avatar';
+import Settings from 'material-ui/svg-icons/action/settings';
+import MenuItem from 'material-ui/MenuItem';
+import DragHandle from 'material-ui/svg-icons/editor/drag-handle';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
+
+//Double check
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+
+const styles = {
+  title:{
+    color: '#000'
+  },
+  toolbar:{
+    backgroundColor: '#333333'
+  },  
+  block: {
+    maxWidth: 250,
+  }
+};
+
+
+class WidgetCardToolbar extends Component {
+  capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  componentDidMount() {
+      console.log('Widget mounted');
+    };
+
+   render() {
+    return (
+      <Toolbar  >
+        <ToolbarGroup firstChild={true} className="valign-wrapper">
+          <Avatar src={WidgetIconImage[this.props.widget.widgetType]}/>
+          <ToolbarTitle style={styles.title} text={this.capitalize(this.props.widget.widgetType)} />
+          <AudioPlayer className="valign" widget={this.props.widget}/> 
+        </ToolbarGroup>
+        <ToolbarGroup>
+          
+          <IconButton>
+            <DragHandle />
+          </IconButton>
+          <IconButton  onTouchTap={this.props.handleSetting} tooltip="Setting" touch={true} tooltipPosition="top-center">
+                <Settings color='grey900'/>
+          </IconButton>
+          <IconMenu
+            iconButtonElement={
+              <IconButton><MoreVertIcon /></IconButton>
+            }
+            anchorOrigin={{"horizontal":"left","vertical":"bottom"}}
+            targetOrigin={{"horizontal":"left","vertical":"top"}}
+          >
+            <MenuItem 
+              primaryText="Delete This Widget" 
+              onTouchTap={handleDeleteWidget.bind(this)}
+            />
+            <MenuItem primaryText="More Info" />
+          </IconMenu>
+        </ToolbarGroup>
+      </Toolbar>
+    );
+  }
+}
+export default WidgetCardToolbar;
+
+
+
+
