@@ -19,7 +19,7 @@ class SidebarLeft extends Component {
         <div id='container_widgets'>    
           <WidgetIcon widgetType={WidgetTypes.time} imgsource={WidgetIconImage.time}/>
           <WidgetIcon widgetType={WidgetTypes.traffic} imgsource={WidgetIconImage.traffic} />
-          <WidgetIcon widgetType={WidgetTypes.calendar} imgsource={WidgetIconImage.calendar}/>
+          <WidgetIcon widgetType={WidgetTypes.weather} imgsource={WidgetIconImage.weather}/>
         </div>
       </Drawer>
     );

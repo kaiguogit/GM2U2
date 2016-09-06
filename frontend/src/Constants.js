@@ -12,6 +12,6 @@ export const WidgetTypes = {
 export const WidgetIconImage = {
   time: "./src/clock-icon.jpg",
   traffic: "./src/Maps.png",
-  weather: "./src/Maps.png",
+  weather: "./src/weather.png",
   calendar: "./src/calendar.png"
 }
