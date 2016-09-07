@@ -56,10 +56,10 @@ function onCanplaythrough() {
   $('#speak-button').css('cursor', 'pointer');
 }
 
-function getTimeString(){
+function getSpeechString(){
   console.log("in gettimestring, this is", this);
   return $.ajax({
-    url: `http://localhost:3000/api/playlists/timeWidget/${this.props.widget.id}/time`,
+    url: `http://localhost:3000/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/speech`,
     method: 'get',
     headers: {
         'Authorization':  "Bearer " + window.localStorage.token
@@ -82,16 +82,16 @@ class AudioPlayer extends Component {
   }
 
   handleSpeak() {
-    getTimeString.call(this).then(function(timeString){
+    getSpeechString.call(this).then(function(speechString){
       
       var utteranceOptions = {
-        text: timeString,
+        text: speechString,
         voice: 'en-US_AllisonVoice',
         sessionPermissions: 1
       };
 
       //change transcript 
-      console.log(timeString);
+      console.log(speechString);
       //Speak!!!!
       synthesizeRequest.call(this, utteranceOptions);
     return false;
