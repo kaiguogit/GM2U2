@@ -26,8 +26,13 @@ const widgetCardWrapperTarget = {
     const widgetType = monitor.getItem().widgetType;
     widgetType && props.onDropWidgetIcon(widgetType);
     // dropping widget, then move widget
-    const old_index = monitor.getItem().old_index;
-    const new_index = props.position-1;
+    var old_index = monitor.getItem().old_index;
+    if(old_index < props.position){
+      var new_index = props.position-1;
+
+    }else{
+      var new_index = props.position;
+    }
     console.log('old_index', old_index);
     console.log('new_index', new_index);
     Number.isInteger(old_index) && Number.isInteger(old_index) && props.onMove(old_index, new_index);
