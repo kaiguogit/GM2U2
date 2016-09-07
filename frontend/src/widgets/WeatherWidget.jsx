@@ -8,10 +8,7 @@ import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import WidgetCardToolbar from './WidgetCardToolbar.jsx'
 import CitySelector from './WeatherWidget/CitySelector.jsx'
 import RaisedButton from 'material-ui/RaisedButton';
-
-//table
-import {Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-
+import LinearProgress from 'material-ui/LinearProgress';
 //utils
 import newId from '../utils/newid.js'
 //moment
@@ -22,12 +19,30 @@ var update = require('react-addons-update');
 
 
 const styles = {
-  date:{
-    color: '#333',
-    fontSize: '3em' 
+  tbody:{
+    height: "15em",
   },
-  radioButton: {
-    marginBottom: 16,
+  container: {
+    position: 'relative',
+  },
+  refresh: {
+    display: 'inline-block',
+    position: 'relative',
+  },
+  moreInfo:{
+    fontSize: '1.3em',
+  },
+  hourlyScroll:{
+    overflow: "auto",
+    overflowY: "hidden",
+  },
+  hourlyRow:{
+    width: "1878px",
+  },
+  hourlyItem:{
+    float: "left",
+    width: "50px",
+    padding: "0 1px",
   }
 };
 
@@ -44,16 +59,31 @@ class WeatherWidget extends Component {
     };
   }
 
-  handleSetting = () => {
+  toggleSettingExpanded = () => {
     this.setState({expanded: !this.state.expanded});
   };
 
   componentDidMount() {
+    console.log("weather widget mounted");
     //save a local copy of widget to state.
     this.setState({widgetLocalCopy: this.props.widget});
-    this.getWeather();
-
+    if(this.props.widget.cityQuery){
+      this.getWeather();
+    }else{
+      console.log("No city selected for this widget yet.");
+    }
   };
+
+  // Get weather when city is changed
+  //http://stackoverflow.com/questions/24842505/reactjs-unexpected-infinite-loop-with-render
+  //https://facebook.github.io/react/docs/component-specs.html
+  componentDidUpdate(prevProps){
+    console.log("Weather widget received update");
+    if(prevProps.widget.cityQuery !== this.props.widget.cityQuery){
+      this.setState({weather: null});
+      this.getWeather();
+    }
+  }
 
   updateWidgetSetting(options){
 
@@ -68,6 +98,7 @@ class WeatherWidget extends Component {
   }
 
   getWeather(){
+    console.log("getting weather");
     $.ajax({
       url: `http://localhost:3000/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/view`,
       method: "get",
@@ -76,35 +107,48 @@ class WeatherWidget extends Component {
       }
     }).done(function(weather){
       console.log("weather obj is", weather);
-      this.setState({weather: weather});
+
+
+      ///Testing purpose, SetTimeout to be removed
+      setTimeout(function(){
+        this.setState({weather: weather});
+      }.bind(this), 2000)
+      
       console.log("this state weather is", this.state.weather);
     }.bind(this)).fail(function(err){
       console.log(err);
     });
   }
 
+  handleSaveSetting(){
+    uploadSetting.call(this);
+    this.toggleSettingExpanded();
+  }
+
    render() {
     var weather = this.state.weather;
-
+    console.log("weather is", weather);
     return (
-      <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
+      <Card 
+        expanded={this.state.expanded} 
+        onExpandChange={this.handleExpandChange}
+      >
 
       //Toolbar
       <WidgetCardToolbar 
         widget={this.props.widget}
         onWidgetChange={this.props.onWidgetChange}
-        handleSetting={this.handleSetting.bind(this)}
+        handleSetting={this.toggleSettingExpanded.bind(this)}
       />
 
     //Setting
     <CardText expandable={true}>
       <CitySelector updateWidgetSetting={this.updateWidgetSetting.bind(this)}/>
-      <RaisedButton onClick={uploadSetting.bind(this)} label="Save Setting" primary={true}/>
+      <RaisedButton onClick={this.handleSaveSetting.bind(this)} label="Save Setting" primary={true}/>
 
     </CardText>
     
     //Main Content
-    <CardText>
     {weather && 
       <div>
         <div className="row">
@@ -117,12 +161,12 @@ class WeatherWidget extends Component {
         </div>
 
         <h5>Today: {weather.forecast.txt_forecast.forecastday[0].fcttext_metric}</h5>
-     
-        <div className="row">
+        <div style={styles.hourlyScroll}>
+        <div style={styles.hourlyRow}>
         {
-          weather.hourly_forecast.splice(0,10).map(function(hour){
+          weather.hourly_forecast.map(function(hour){
             return(
-              <div className="col s1 center-align" key={newId()}>
+              <div style={styles.hourlyItem} className="center-align" key={newId()}>
                 <div>{hour.FCTTIME.hour_padded} {hour.FCTTIME.ampm}</div>
                 <div><img src={hour.icon_url}/></div>
                 <div>{hour.temp.metric}&deg;</div>
@@ -131,38 +175,39 @@ class WeatherWidget extends Component {
           })
         }
         </div>
+        </div>
         <div className="row">
-          <div className="col s6">
-            <Table selectable={false}>
-              <TableHeader displaySelectAll={false} enableSelectAll={false} adjustForCheckbox={false}>
-                <TableRow>
-                  <TableHeaderColumn>WeekDay</TableHeaderColumn>
-                  <TableHeaderColumn>Condition</TableHeaderColumn>
-                  <TableHeaderColumn>High</TableHeaderColumn>
-                  <TableHeaderColumn>Low</TableHeaderColumn>
-                </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>
+          <div className="col s7">
+            <table className="weatherForcast">
+              <thead >
+                <tr>
+                  <th>WeekDay</th>
+                  <th>Condition</th>
+                  <th>High</th>
+                  <th>Low</th>
+                </tr>
+              </thead>
+              <tbody style={styles.tbody}>
             {
               weather.forecast.simpleforecast.forecastday.map(function(day, index){
                 if(index === 0 ){
                   return
                 }else{
                   return (
-                    <TableRow key={newId()}>
-                      <TableRowColumn>{day.date.weekday}</TableRowColumn>
-                      <TableRowColumn><img src={day.icon_url}/></TableRowColumn>
-                      <TableRowColumn>{day.high.celsius}&deg;</TableRowColumn>
-                      <TableRowColumn>{day.low.celsius}&deg;</TableRowColumn>
-                    </TableRow>
+                    <tr key={newId()}>
+                      <td>{day.date.weekday}</td>
+                      <td><img src={day.icon_url}/></td>
+                      <td>{day.high.celsius}&deg;</td>
+                      <td>{day.low.celsius}&deg;</td>
+                    </tr>
                   )
                 }
               })
             }
-              </TableBody>
-            </Table>
+              </tbody>
+            </table>
           </div>
-          <div className="col s6">
+          <div className="col s4" style={styles.moreInfo}>
             <ul>
               <li>Sunrise: {weather.sun_phase.sunrise.hour}:{weather.sun_phase.sunrise.minute}</li>
               <li>Sunset: {weather.sun_phase.sunset.hour}:{weather.sun_phase.sunset.minute}</li>
@@ -171,16 +216,20 @@ class WeatherWidget extends Component {
               <li>Humidity: {weather.current_observation.relative_humidity}</li>
               <li>Feels Like: {weather.current_observation.feelslike_c}&deg;</li>
               <li>Pressure: {weather.current_observation.pressure_mb} mb</li>
-              <li><a href={weather.current_observation.forecast_url}>WUnderground Forecast</a></li>
               <li>Visibility: {weather.current_observation.visibility_km} km</li>
               <li>Wind: {weather.current_observation.wind_string}</li>
+              <li><a href={weather.current_observation.forecast_url}>WUnderground Forecast</a></li>
             </ul>
           </div>
 
         </div>
       </div>
     }
-    </CardText>
+    {!weather &&
+      <div style={styles.container}>
+      <LinearProgress mode="indeterminate" />
+      </div>
+    }
       </Card>
     );
   }
