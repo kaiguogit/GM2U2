@@ -19,8 +19,8 @@ function getTimeString(){
   var day = days[now.getDay()];
   var monthName = monthNames[now.getMonth()];
   var date = getOrdinal(now.getDay());
-  var hour = now.getHours();
-  var minute = now.getMinutes();
+  var hour = now.getHours() + " o'clock";
+  var minute = now.getMinutes() + " minutes";
   var result = "It is " + day + " " + monthName + " " + date + " " + hour + " "+ minute;
   return result;
 }
