@@ -70,18 +70,21 @@ class WidgetCardWrapper extends Component {
     switch(this.props.widget.widgetType){
       case WidgetTypes.time:
         return  <TimeWidget 
+                  ref="widget"
                   widget={this.props.widget} 
                   onWidgetChange={this.props.onWidgetChange}
                 />
         break;
       case WidgetTypes.weather:
         return  <WeatherWidget 
+                  ref="widget"
                   widget={this.props.widget} 
                   onWidgetChange={this.props.onWidgetChange}
                 />
         break;
       case WidgetTypes.traffic:
         return  <TrafficWidget 
+                  ref="widget"
                   widget={this.props.widget} 
                   onWidgetChange={this.props.onWidgetChange}
                 />
