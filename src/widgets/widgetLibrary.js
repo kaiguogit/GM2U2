@@ -5,7 +5,7 @@
 export function handleDeleteWidget(){
     
   $.ajax({
-      url: `http://localhost:3000/api/playlists/${this.props.widget.widgetType}Widget/${this.props.widget.id}`,
+      url: `http://localhost:3000/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}`,
       method: "delete",
       headers: {
       'Authorization':  "Bearer " + window.localStorage.token
@@ -23,7 +23,7 @@ export function handleDeleteWidget(){
 export function uploadSetting(){
 
     $.ajax({
-      url: `http://localhost:3000/api/playlists/${this.props.widget.widgetType}Widget/${this.props.widget.id}`,
+      url: `http://localhost:3000/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}`,
       method: "put",
       data: {widget: JSON.stringify(this.state.widgetLocalCopy)},
       headers: {
