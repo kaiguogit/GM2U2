@@ -64,12 +64,15 @@ class TimeWidget extends Component {
    render() {
     return (
       <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
+
+      //Toolbar
       <WidgetCardToolbar 
         widget={this.props.widget}
         onWidgetChange={this.props.onWidgetChange}
         handleSetting={this.handleSetting.bind(this)}
       />
 
+    //Setting
     <CardText expandable={true}>
       <RadioButtonGroup onChange={this.updateClockFace.bind(this)} name="clockhour" defaultSelected={ClockFace.TwentyFourHourClock}>
         <RadioButton
@@ -84,6 +87,8 @@ class TimeWidget extends Component {
         />
       </RadioButtonGroup>
     </CardText>
+
+    //Main Content
     <CardText>
       <div className="row">
         <div className="col s12 center-align" style={styles.date}>

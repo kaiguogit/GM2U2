@@ -1,16 +1,22 @@
 import React, {Component} from 'react';
-import {handleDeleteWidget} from './widgetLibrary.js';
+import {handleDeleteWidget, uploadSetting} from './widgetLibrary.js';
 import { WidgetTypes, WidgetIconImage, ClockFace } from '../Constants';
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import WidgetCardToolbar from './WidgetCardToolbar.jsx'
+import CitySelector from './WeatherWidget/CitySelector.jsx'
+import RaisedButton from 'material-ui/RaisedButton';
 
 //utils
 import newId from '../utils/newid.js'
 //moment
 var moment = require('moment');
+
+//magical update method
+var update = require('react-addons-update');
+
 
 const styles = {
   date:{
@@ -31,6 +37,7 @@ class WeatherWidget extends Component {
     this.state = {
       expanded: false,
       clockId: 'clock',
+      widgetLocalCopy:{}
     };
   }
 
@@ -38,24 +45,21 @@ class WeatherWidget extends Component {
     this.setState({expanded: !this.state.expanded});
   };
 
-  componentWillMount(){
-    var clockId = newId();
-    this.clockId = clockId;
-  }
-
   componentDidMount() {
-    console.log("did mount");
-     var clock =$(`#${this.clockId}`).FlipClock({
-        clockFace: ClockFace.TwentyFourHourClock
-    });
-    // this.updateClockFace(null, ClockFace.TwentyFourHourClock);      
+    //save a local copy of widget to state.
+    this.setState({widgetLocalCopy: this.props.widget});
+
   };
 
-  updateClockFace(event, clockFace){
-    console.log("tragging event", event);
-    console.log("tragging clock", clockFace);
-   var clock =$(`#${this.clockId}`).FlipClock({
-        clockFace: clockFace
+  updateWidgetSetting(options){
+
+    console.log("options passed in is", options);
+    var updatedWidgetLocalCopy = update(this.state.widgetLocalCopy, options);
+
+    console.log("updatedWidgetLocalCopy is", updatedWidgetLocalCopy);
+
+    this.setState({
+      widgetLocalCopy: updatedWidgetLocalCopy
     });
   }
 
@@ -64,37 +68,26 @@ class WeatherWidget extends Component {
    render() {
     return (
       <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
+
+      //Toolbar
       <WidgetCardToolbar 
         widget={this.props.widget}
         onWidgetChange={this.props.onWidgetChange}
         handleSetting={this.handleSetting.bind(this)}
       />
 
+    //Setting
     <CardText expandable={true}>
-      <RadioButtonGroup onChange={this.updateClockFace.bind(this)} name="clockhour" defaultSelected={ClockFace.TwentyFourHourClock}>
-        <RadioButton
-          value={ClockFace.TwentyFourHourClock}
-          label="24h"
-          style={styles.radioButton}
-        />
-        <RadioButton
-          value={ClockFace.TwelveHourClock}
-          label="12h"
-          style={styles.radioButton}
-        />
-      </RadioButtonGroup>
+      <CitySelector updateWidgetSetting={this.updateWidgetSetting.bind(this)}/>
+      <RaisedButton onClick={uploadSetting.bind(this)} label="Save Setting" primary={true}/>
+
     </CardText>
+      <p>{this.state.widgetLocalCopy.cityName}</p>
+      <p>{this.state.widgetLocalCopy.cityQuery}</p>
+    
+    //Main Content
     <CardText>
-      <div className="row">
-        <div className="col s12 center-align" style={styles.date}>
-          {moment().format('dddd MMMM Do')}
-        </div>
-      </div>
-      <div className="row">
-        <div className="col push-s3 s7 center-align" >
-          <div id={this.clockId}></div>
-        </div>
-      </div>
+      
     </CardText>
       </Card>
     );
