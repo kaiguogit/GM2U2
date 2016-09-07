@@ -21,8 +21,8 @@ export function handleDeleteWidget(){
   //AJAX CALL!!!!!update widget 
   //////////////////////////////
 export function uploadSetting(){
-
-    $.ajax({
+    console.log("uploading setting");
+    return $.ajax({
       url: `http://localhost:3000/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}`,
       method: "put",
       data: {widget: JSON.stringify(this.state.widgetLocalCopy)},
@@ -31,7 +31,7 @@ export function uploadSetting(){
       }
     }).done(function(playlist){
       console.log("updated playlist is", playlist);
-      this.props.onWidgetChange();
+        this.props.onWidgetChange();
     }.bind(this))
     .fail(function(err){
       console.log("request failed", err);

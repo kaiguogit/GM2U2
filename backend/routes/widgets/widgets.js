@@ -95,7 +95,7 @@ router.get('/:type/:id/speech', (req, res, next) => {
           return weather.currentWeather(widget.cityQuery, viewOrSpeech);
         }else{
           return new Promise(function(resolve, reject){
-            resolve("There is no city selected. Please click the setting button to select a city.");
+            reject("There is no city selected. Please click the setting button to select a city.");
           });
         }
       }).then(function(speech){
@@ -130,7 +130,13 @@ router.get('/:type/:id/view', (req, res, next) => {
       var viewOrSpeech = true;
       models[widgetType].findById(req.params.id)
       .then(function(widget){
-        return weather.currentWeather(widget.cityQuery, viewOrSpeech);
+        if(widget.cityQuery){
+          return weather.currentWeather(widget.cityQuery, viewOrSpeech);
+        }else{
+          return new Promise(function(resolve, reject){
+            reject("There is no city selected. Please click the setting button to select a city.");
+          });
+        }
       }).then(function(weatherObj){
         res.json(weatherObj);
       }).catch(function(err){
