@@ -75,3 +75,7 @@
 .muidocs-icon-custom-github:before {
     content: "\e625";
 }
+
+input[type=text]:focus:not([readonly]){
+  box-shadow: 0 0px 0 0;
+}
