@@ -39,6 +39,8 @@ function onEnded(){
   audio.controls = false;
   $('body').css('cursor', 'auto');
   $('#speak-button').css('cursor', 'auto');
+
+  playNextWidget();
 }
 
 function onCanplaythrough() {
@@ -57,7 +59,7 @@ function onCanplaythrough() {
 }
 
 function getSpeechString(){
-  console.log("in gettimestring, this is", this);
+  console.log("in getSpeechString");
   return $.ajax({
     url: `http://localhost:3000/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/speech`,
     method: 'get',
@@ -67,11 +69,17 @@ function getSpeechString(){
   });
 }
 
+var playNextWidget;
+
 class AudioPlayer extends Component {
 
   componentWillMount(){
     var audioId = newId();
     this.audioId = audioId;
+  }
+
+  componentDidMount(){
+    playNextWidget = this.context.playNextWidget;
   }
 
   constructor(props) {
@@ -98,6 +106,8 @@ class AudioPlayer extends Component {
     }.bind(this));
   }
 
+
+
   render() {
     return (
       <div className="valign-wrapper">
@@ -113,11 +123,17 @@ class AudioPlayer extends Component {
         />
         <audio 
           className="valign"
-          id={this.audioId}>
+          id={this.audioId}
+        >
+
           Your browser does not support the audio element.
         </audio>
       </div>
     )
   }
 }
+
+AudioPlayer.contextTypes = {
+  playNextWidget: React.PropTypes.func
+};
 export default AudioPlayer;

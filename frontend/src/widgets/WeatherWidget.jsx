@@ -107,14 +107,10 @@ class WeatherWidget extends Component {
       }
     }).done(function(weather){
       console.log("weather obj is", weather);
-
-
       ///Testing purpose, SetTimeout to be removed
       setTimeout(function(){
         this.setState({weather: weather});
       }.bind(this), 2000)
-      
-      console.log("this state weather is", this.state.weather);
     }.bind(this)).fail(function(err){
       console.log(err);
     });
@@ -136,6 +132,7 @@ class WeatherWidget extends Component {
 
       //Toolbar
       <WidgetCardToolbar 
+        ref="toolbar" 
         widget={this.props.widget}
         onWidgetChange={this.props.onWidgetChange}
         handleSetting={this.toggleSettingExpanded.bind(this)}

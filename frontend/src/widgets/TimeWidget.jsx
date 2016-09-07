@@ -66,7 +66,8 @@ class TimeWidget extends Component {
       <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
 
       //Toolbar
-      <WidgetCardToolbar 
+      <WidgetCardToolbar
+        ref="toolbar" 
         widget={this.props.widget}
         onWidgetChange={this.props.onWidgetChange}
         handleSetting={this.handleSetting.bind(this)}
