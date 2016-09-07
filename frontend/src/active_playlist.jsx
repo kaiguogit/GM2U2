@@ -4,10 +4,19 @@ import WeatherWidget from './widgets/WeatherWidget.jsx'
 import TrafficWidget from './widgets/TrafficWidget.jsx'
 import WidgetCardWrapper from './WidgetCardWrapper.jsx'
 import { WidgetTypes } from './Constants';
-
+//utils
+import newId from './utils/newid.js'
 
 
 class ActivePlaylist extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      playingWidgetIndex: null
+    }
+  }
+
   componentDidMount() {
     console.log("Did mount active playlist Playlist is", this.props.playlist);
   };
@@ -74,19 +83,55 @@ class ActivePlaylist extends Component {
     });
   }
 
+  playNextWidget(){
+    if(Number.isInteger(this.state.playingWidgetIndex) && this.state.playingWidgetIndex < Object.keys(this.refs).length){
+      //Play next widget
+      console.log("Setting playingWidgetIndex to", this.state.playingWidgetIndex + 1);
+      this.setState({playingWidgetIndex: this.state.playingWidgetIndex + 1});
+    }else{
+      //Stop
+      console.log("Setting playingWidgetIndex to null");
+      this.setState({playingWidgetIndex: null});
+    }
+  }
+
+  playWidget(){
+    var id = Object.keys(this.refs)[this.state.playingWidgetIndex];
+    var playingWidget = this.refs[id]
+    console.log("playingWidget is", playingWidget);
+    playingWidget.decoratedComponentInstance.refs["widget"].refs["toolbar"].refs["audioPlayer"].handleSpeak();
+  }
+
+  playAllWidget(){
+    console.log("Setting playingWidgetIndex to 0 ");
+    this.setState({playingWidgetIndex: 0});
+  }
+
+  getChildContext(){
+    return {playNextWidget: this.playNextWidget.bind(this)};
+  }
+  
+  componentDidUpdate(){
+    if(Number.isInteger(this.state.playingWidgetIndex)&& this.state.playingWidgetIndex < Object.keys(this.refs).length){
+      console.log(`Playing ${this.state.playingWidgetIndex}th widget`);
+      this.playWidget();
+    }
+  }
   render() {
     return (
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
-
+        <button onClick={this.playAllWidget.bind(this)}>Play All</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.traffic)}>Add Traffic</button>
         <p>{this.props.playlist.name}</p>
         <p>Id {this.props.playlist.id}</p>
+        <p>playing widget index is  {this.state.playingWidgetIndex}</p>
         {
           this.props.playlist.widgets.map(function(widget, index){
             console.log("creating cards");
             return <WidgetCardWrapper 
+              ref={newId()}
               position={index}
               onDropWidgetIcon={this.handleAddWidget.bind(this)} 
               widget={widget} 
@@ -100,4 +145,8 @@ class ActivePlaylist extends Component {
     );
   }
 }
+
+ActivePlaylist.childContextTypes = {
+  playNextWidget: React.PropTypes.func
+};
 export default ActivePlaylist;
