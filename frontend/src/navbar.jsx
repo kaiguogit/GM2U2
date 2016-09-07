@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import $ from 'jquery';
+
 import Login from './Login.jsx';
 
 class Navbar extends Component {

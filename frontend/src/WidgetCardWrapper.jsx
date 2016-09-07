@@ -123,6 +123,7 @@ class WidgetCardWrapper extends Component {
   }
 
   render() {
+
     const { connectDropTarget, connectDragPreview, connectDragSource, isOver, canDrop, isDragging } = this.props;
     if (isDragging) {
       return null;

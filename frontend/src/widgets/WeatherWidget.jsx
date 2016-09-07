@@ -1,30 +1,95 @@
 import React, {Component} from 'react';
-import {handleDeleteWidget} from './widgetLibrary.js';
+import {handleDeleteWidget, uploadSetting} from './widgetLibrary.js';
+import { WidgetTypes, WidgetIconImage, ClockFace } from '../Constants';
+//material-ui
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import WidgetCardToolbar from './WidgetCardToolbar.jsx'
+import CitySelector from './WeatherWidget/CitySelector.jsx'
+import RaisedButton from 'material-ui/RaisedButton';
+
+//utils
+import newId from '../utils/newid.js'
+//moment
+var moment = require('moment');
+
+//magical update method
+var update = require('react-addons-update');
+
+
+const styles = {
+  date:{
+    color: '#333',
+    fontSize: '3em' 
+  },
+  radioButton: {
+    marginBottom: 16,
+  }
+};
+
+
 
 class WeatherWidget extends Component {
 
-  componentDidMount() {
-      console.log('Widget mounted');
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false,
+      clockId: 'clock',
+      widgetLocalCopy:{}
     };
-    
-  render() {
-    return (
-      <div className="card teal darken-1">
-        <div className="card-content white-text">
-          <button onClick={handleDeleteWidget.bind(this)}>Delete this widget</button>
+  }
 
-          <span className="card-title">Card Title</span>
-          <span className="card-type">{this.props.widget.widgetType}</span>
-          <span className="card-type">{this.props.widget.id}</span>
-          <p>I am a very simple card. I am good at containing small bits of information.
-          I am convenient because I require little markup to use effectively.</p>
-        </div>
-        <div className="card-action">
-          <a href="#">This is a link</a>
-          <a href="#">This is a link</a>
-        </div>
-      </div>
+  handleSetting = () => {
+    this.setState({expanded: !this.state.expanded});
+  };
+
+  componentDidMount() {
+    //save a local copy of widget to state.
+    this.setState({widgetLocalCopy: this.props.widget});
+
+  };
+
+  updateWidgetSetting(options){
+
+    console.log("options passed in is", options);
+    var updatedWidgetLocalCopy = update(this.state.widgetLocalCopy, options);
+
+    console.log("updatedWidgetLocalCopy is", updatedWidgetLocalCopy);
+
+    this.setState({
+      widgetLocalCopy: updatedWidgetLocalCopy
+    });
+  }
+
+
+
+   render() {
+    return (
+      <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
+
+      //Toolbar
+      <WidgetCardToolbar 
+        widget={this.props.widget}
+        onWidgetChange={this.props.onWidgetChange}
+        handleSetting={this.handleSetting.bind(this)}
+      />
+
+    //Setting
+    <CardText expandable={true}>
+      <CitySelector updateWidgetSetting={this.updateWidgetSetting.bind(this)}/>
+      <RaisedButton onClick={uploadSetting.bind(this)} label="Save Setting" primary={true}/>
+
+    </CardText>
+      <p>{this.state.widgetLocalCopy.cityName}</p>
+      <p>{this.state.widgetLocalCopy.cityQuery}</p>
+    
+    //Main Content
+    <CardText>
       
+    </CardText>
+      </Card>
     );
   }
 }

@@ -16,7 +16,6 @@ var routesTimeWidget = require('./routes/playlists/widgets/time');
 var routesWeatherWidget = require('./routes/playlists/widgets/weather');
 var routesTrafficWidget = require('./routes/playlists/widgets/traffic');
 var routesWeather = require('./routes/weather');
-var routesTime = require('./routes/time');
 
 //DB
 var models = require("./models");
@@ -84,14 +83,6 @@ app.use(function(req, res, next) {
 //Define routers path
 app.use('/', routes);
 
-app.use(jwt_mw({ secret: process.env.jwt_secret}).unless({path: ['/login']}));
-app.use('/api/playlists', routesPlaylist);
-app.use('/api/playlists/timeWidget', routesTimeWidget);
-app.use('/api/playlists/weatherWidget', routesWeatherWidget);
-app.use('/api/playlists/trafficWidget', routesTrafficWidget);
-app.use('/api/weather', routesWeather);
-app.use('/api/time', routesTime);
-
 //
 //IBM Waston Developer Cloud Synthesize
 //
@@ -107,6 +98,14 @@ app.get('/api/synthesize', function(req, res, next) {
   });
   transcript.pipe(res);
 });
+
+app.use(jwt_mw({ secret: process.env.jwt_secret}).unless({path: ['/login']}));
+app.use('/api/playlists', routesPlaylist);
+app.use('/api/playlists/timeWidget', routesTimeWidget);
+app.use('/api/playlists/weatherWidget', routesWeatherWidget);
+app.use('/api/playlists/trafficWidget', routesTrafficWidget);
+app.use('/api/weather', routesWeather);
+
 
 
 // catch 404 and forward to error handler

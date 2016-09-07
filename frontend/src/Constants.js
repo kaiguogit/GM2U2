@@ -10,8 +10,13 @@ export const WidgetTypes = {
 }
 
 export const WidgetIconImage = {
-  time: "./src/clock-icon.jpg",
-  traffic: "./src/Maps.png",
-  weather: "./src/weather.png",
-  calendar: "./src/calendar.png"
+  time: "./public/clock-icon.jpg",
+  traffic: "./public/Maps.png",
+  weather: "./public/weather.png",
+  calendar: "./public/calendar.png"
+}
+
+export const ClockFace = {
+  TwentyFourHourClock: "TwentyFourHourClock",
+  TwelveHourClock: "TwelveHourClock"
 }

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var models = require("../../../models/index.js");
+var time = require('../../../modules/time');
 
 //helper methods
 var findPlaylistforWidget = require('../../helper.js').findPlaylistforWidget;
@@ -12,6 +13,7 @@ var deleteFromPlaylistArray = require('../../helper.js').deleteFromPlaylistArray
 //////////////////////////////////////////////////////////////////
 
 
+//get widget
 router.get('/:id', (req, res, next)=>{
   console.log("\n!!!!!Getting timeWidget id", req.params.id);
 
@@ -23,6 +25,7 @@ router.get('/:id', (req, res, next)=>{
   });
 });
 
+//delete widget
 router.delete('/:id', (req, res, next)=>{
   console.log("\n!!!!!Deleting timeWidget id", req.params.id);
   var widget = {};
@@ -46,6 +49,12 @@ router.delete('/:id', (req, res, next)=>{
   .catch(function(err){
     console.log("\n!!!!!!Failed to delete a widget, error is ", err);
   });
+});
+
+//get time string
+//Get Time
+router.get('/:id/time', (req, res, next) => {
+  res.json(time.getTimeString());
 });
 
 module.exports = router;
