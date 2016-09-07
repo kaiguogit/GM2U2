@@ -96,7 +96,7 @@ class TimeWidget extends Component {
         </div>
       </div>
       <div className="row">
-        <div className="col push-s3 s7 center-align" >
+        <div className="col push-s3 s9 center-align" >
           <div id={this.clockId}></div>
         </div>
       </div>
