@@ -2,14 +2,17 @@ import React, { Component, PropTypes } from 'react';
 import TimeWidget from './widgets/TimeWidget.jsx';
 import TrafficWidget from './widgets/TrafficWidget.jsx';
 import WeatherWidget from './widgets/WeatherWidget.jsx';
+
+// dnd
 import { ItemTypes } from './Constants';
-import { DropTarget } from 'react-dnd';
+import { DropTarget, DragSource } from 'react-dnd';
 import { WidgetTypes } from './Constants';
 
 //material-ui
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ArrowUp from 'material-ui/svg-icons/navigation/arrow-upward';
 import ArrowDown from 'material-ui/svg-icons/navigation/arrow-downward';
+import DragHandle from 'material-ui/svg-icons/editor/drag-handle';
 
 
 const widgetCardWrapperTarget = {
@@ -19,17 +22,35 @@ const widgetCardWrapperTarget = {
   },
   drop(props, monitor) {
     console.log("droping here, props is", props);
-    props.onDropWidgetIcon(monitor.getItem().widgetType);
+    // dropping icon, then add widget
+    const widgetType = monitor.getItem().widgetType;
+    widgetType && props.onDropWidgetIcon(widgetType);
+    // dropping widget, then move widget
+    const old_index = monitor.getItem().old_index;
+    const new_index = props.position-1;
+    console.log('old_index', old_index);
+    console.log('new_index', new_index);
+    Number.isInteger(old_index) && Number.isInteger(old_index) && props.onMove(old_index, new_index);
   }
 };
 
-function collect(connect, monitor) {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
-  };
-}
+const widgetCardSource = {
+  beginDrag(props, monitor){
+    console.log('beginDrag, props are', props)
+    return {old_index: props.position}
+  },
+  endDrag(props, monitor){
+    console.log('endDrag props:', props)
+  }
+};
+
+// function collect(connect, monitor) {
+//   return {
+//     connectDropTarget: connect.dropTarget(),
+//     isOver: monitor.isOver(),
+//     canDrop: monitor.canDrop()
+//   };
+// }
 
 //material-ui for button
 const style = {
@@ -102,33 +123,42 @@ class WidgetCardWrapper extends Component {
   }
 
   render() {
-    const { connectDropTarget, isOver, canDrop } = this.props;
+    const { connectDropTarget, connectDragPreview, connectDragSource, isOver, canDrop, isDragging } = this.props;
+    if (isDragging) {
+      return null;
+    }
 
-    return connectDropTarget(
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%'
-        }}>
-      <h2>Position is {this.props.position}</h2>
-      <FloatingActionButton mini={true} style={style} onClick={this.handleMoveUp.bind(this)}>
-        <ArrowUp />
-      </FloatingActionButton>
-      <FloatingActionButton mini={true} style={style} onClick={this.handleMoveDown.bind(this)}>
-        <ArrowDown />
-      </FloatingActionButton>
-
-
+    return connectDropTarget(connectDragPreview(
+      <div>
         {isOver && canDrop && this.renderGreyBox()}
-        {
-          this.renderWidgets()
-        }
-        {/*!isOver && canDrop && this.renderOverlay('yellow')*/}
-        {/*isOver && canDrop && this.renderOverlay('green')*/}
-        
-        
+        {!this.props.widget && <div style={{minHeight:"150px", width:"100%"}}/>}     
+        {this.props.widget && 
+          <div style={{
+          position: 'relative',
+          width: '100%'
+        }}>
+          <FloatingActionButton mini={true} style={style} onClick={this.handleMoveUp.bind(this)}>
+            <ArrowUp />
+          </FloatingActionButton>
+          <FloatingActionButton mini={true} style={style} onClick={this.handleMoveDown.bind(this)}>
+            <ArrowDown />
+          </FloatingActionButton>
+          {connectDragSource(
+            <div>           
+              <FloatingActionButton mini={true} style={style} onClick={this.handleMoveDown.bind(this)}>
+                <DragHandle />
+              </FloatingActionButton>
+            </div>
+          )}      
+          {
+            this.renderWidgets()
+          }
+          {/*!isOver && canDrop && this.renderOverlay('yellow')*/}
+          {/*isOver && canDrop && this.renderOverlay('green')*/}
+          
+        </div>}
       </div>
-    );
+    ));
   }
 }
 
@@ -136,4 +166,15 @@ WidgetCardWrapper.propTypes = {
   isOver: PropTypes.bool.isRequired
 };
 
-export default DropTarget(ItemTypes.WIDGETICON, widgetCardWrapperTarget, collect)(WidgetCardWrapper);
+export default DropTarget(ItemTypes.WIDGETICON, widgetCardWrapperTarget, (connect, monitor)=>({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+}))
+  (DragSource(ItemTypes.WIDGETICON, widgetCardSource, (connect, monitor)=>({
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
+    isDragging: monitor.isDragging()
+  }))
+    (WidgetCardWrapper)
+);
