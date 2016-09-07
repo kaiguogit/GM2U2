@@ -14,6 +14,12 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         defaultValue: "weather"
       },
+      cityName:{
+        type: DataTypes.STRING,
+      },
+      cityQuery:{
+        type: DataTypes.STRING,
+      },
       createdAt: {
         type: DataTypes.DATE
       },

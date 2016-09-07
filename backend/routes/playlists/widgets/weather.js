@@ -5,6 +5,7 @@ var models = require("../../../models/index.js");
 //helper methods
 var findPlaylistforWidget = require('../../helper.js').findPlaylistforWidget;
 var deleteFromPlaylistArray = require('../../helper.js').deleteFromPlaylistArray;
+var updatePlaylistArray = require('../../helper.js').updatePlaylistArray;
 
 
 //////////////////////////////////////////////////////////////////
@@ -12,6 +13,7 @@ var deleteFromPlaylistArray = require('../../helper.js').deleteFromPlaylistArray
 //////////////////////////////////////////////////////////////////
 
 
+//Get widget
 router.get('/:id', (req, res, next)=>{
   console.log("\n!!!!!Getting weatherWidget id", req.params.id);
 
@@ -23,6 +25,7 @@ router.get('/:id', (req, res, next)=>{
   });
 });
 
+//Delete widget
 router.delete('/:id', (req, res, next)=>{
   console.log("\n!!!!!Deleting weatherWidget id", req.params.id);
   var widget = {};
@@ -47,5 +50,25 @@ router.delete('/:id', (req, res, next)=>{
     console.log("\n!!!!!!Failed to delete a widget, error is ", err);
   });
 });
+
+//Update widget
+router.put('/:id', (req, res, next)=>{
+  console.log("\n!!!!!!!!!!!!Updating weatherWidget");
+  var newWidget = JSON.parse(req.body.widget);
+
+  models.weatherWidget.findById(newWidget.id)
+  .then(function(widget){
+    return widget.updateAttributes(newWidget)
+  }).then(function(widget){
+    return findPlaylistforWidget(widget);
+  }).then(function(playlist){
+    return updatePlaylistArray(playlist, newWidget);
+  }).then(function(playlist){
+    res.json(playlist);
+  }).catch(function(err){
+    console.log("\n!!!!!!!!!!!!failed to update widget, error is ", err);
+  })
+});
+
 
 module.exports = router;
