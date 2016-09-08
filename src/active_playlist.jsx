@@ -1,19 +1,34 @@
 import React, {Component} from 'react';
+
+//Material-ui
+import RaisedButton from 'material-ui/RaisedButton';
+import ActionAlarm from 'material-ui/svg-icons/action/alarm';
+import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
+
+//Components
 import TimeWidget from './widgets/TimeWidget.jsx'
 import WeatherWidget from './widgets/WeatherWidget.jsx'
 import TrafficWidget from './widgets/TrafficWidget.jsx'
 import WidgetCardWrapper from './WidgetCardWrapper.jsx'
 import { WidgetTypes } from './Constants';
+import Alarm from './Alarm.jsx';
 //utils
 import newId from './utils/newid.js'
 
 
+const styles = {
+  button: {
+    margin: 12,
+  },
+}
 class ActivePlaylist extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      playingWidgetIndex: null
+      playingWidgetIndex: null,
+      alarmDialogOpen: false
     }
   }
   
@@ -81,6 +96,17 @@ class ActivePlaylist extends Component {
 
     });
   }
+  
+  //Open alarm dialog
+  handleAlarmDialogOpen(){
+    console.log("in dialogopen this is", this);
+    this.setState({alarmDialogOpen: true});
+  }
+
+  //Open alarm dialog
+  handleAlarmDialogClose(){
+    this.setState({alarmDialogOpen: false});
+  }
 
   //Change playingWidgetIndex to play next widget;
   playNextWidget(){
@@ -142,8 +168,43 @@ class ActivePlaylist extends Component {
   }
 
   render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleAlarmDialogClose.bind(this)}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        disabled={true}
+        onTouchTap={this.handleAlarmDialogClose.bind(this)}
+      />,
+    ];
+
     return (
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
+        
+        <RaisedButton
+          label="Set Alarm"
+          labelPosition="after"
+          primary={true}
+          icon={<ActionAlarm />}
+          style={styles.button}
+          onTouchTap={this.handleAlarmDialogOpen.bind(this)}
+        />
+
+        <Dialog
+          title="Dialog With Actions"
+          actions={actions}
+          modal={false}
+          open={this.state.alarmDialogOpen}
+          autoDetectWindowHeight={false}
+
+        >
+          <Alarm onRing={this.playAllWidgets.bind(this)}/>
+        </Dialog>
+
         <button onClick={this.playAllWidgets.bind(this)}>Play All</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
