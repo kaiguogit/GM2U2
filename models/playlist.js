@@ -10,6 +10,10 @@ module.exports = function(sequelize, DataTypes) {
           type: DataTypes.ARRAY(DataTypes.JSON),
           defaultValue: []
         },
+        alarms:{
+          type: DataTypes.ARRAY(DataTypes.JSON),
+          defaultValue: []
+        },
         createdAt: {
           type: DataTypes.DATE
         },
