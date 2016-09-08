@@ -2,18 +2,21 @@ import React, { Component, PropTypes } from 'react';
 import TimeWidget from './widgets/TimeWidget.jsx';
 import TrafficWidget from './widgets/TrafficWidget.jsx';
 import WeatherWidget from './widgets/WeatherWidget.jsx';
+import WidgetCardToolbar from './widgets/WidgetCardToolbar.jsx'
+
 
 // dnd
-import { ItemTypes } from './Constants';
+
 import { DropTarget, DragSource } from 'react-dnd';
-import { WidgetTypes } from './Constants';
 
 //material-ui
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ArrowUp from 'material-ui/svg-icons/navigation/arrow-upward';
 import ArrowDown from 'material-ui/svg-icons/navigation/arrow-downward';
 import DragHandle from 'material-ui/svg-icons/editor/drag-handle';
-
+import IconButton from 'material-ui/IconButton';
+import Settings from 'material-ui/svg-icons/action/settings';
+import { ItemTypes, WidgetTypes, WidgetIconImage } from './Constants.js';
 
 const widgetCardWrapperTarget = {
   canDrop(props, monitor) {
@@ -41,7 +44,7 @@ const widgetCardWrapperTarget = {
 
 const widgetCardSource = {
   beginDrag(props, monitor){
-    console.log('beginDrag, props are', props)
+    console.log('beginDrag, props are', props);
     return {old_index: props.position}
   },
   endDrag(props, monitor){
@@ -63,20 +66,18 @@ const style = {
   };
 
 class WidgetCardWrapper extends Component {
-  renderOverlay(color) {
-    return (
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        height: '100%',
-        width: '100%',
-        zIndex: 1,
-        opacity: 0.5,
-        backgroundColor: color,
-      }} />
-    );
+  constructor(props){
+    super(props);
+    this.state={
+      WidgetIconImage: WidgetIconImage,
+      expanded: false
+    }
   }
+
+  handleSetting = () => {
+    this.setState({expanded: !this.state.expanded});
+  };
+
   renderGreyBox(){
     return(
       <div style={{
@@ -92,30 +93,6 @@ class WidgetCardWrapper extends Component {
       />
     );
   }
-  renderWidgets(){
-    switch(this.props.widget.widgetType){
-      case WidgetTypes.time:
-        return  <TimeWidget 
-                  widget={this.props.widget} 
-                  onWidgetChange={this.props.onWidgetChange}
-                />
-        break;
-      case WidgetTypes.weather:
-        return  <WeatherWidget 
-                  widget={this.props.widget} 
-                  onWidgetChange={this.props.onWidgetChange}
-                />
-        break;
-      case WidgetTypes.traffic:
-        return  <TrafficWidget 
-                  widget={this.props.widget} 
-                  onWidgetChange={this.props.onWidgetChange}
-                />
-        break;
-      default:
-        break;  
-    }
-  }
 
   handleMoveUp(){
     if(this.props.position !== 0){
@@ -127,6 +104,12 @@ class WidgetCardWrapper extends Component {
     this.props.onMove(this.props.position, this.props.position+1);
   }
 
+  componentDidMount() {
+    const img = new Image();
+    console.log('component did mount, widget type is ', this.props.widget.widgetType)
+    img.src = this.state.WidgetIconImage[this.props.widget.widgetType];
+    img.onload = () => this.props.connectDragPreview(img);
+  }
   render() {
 
     const { connectDropTarget, connectDragPreview, connectDragSource, isOver, canDrop, isDragging } = this.props;
@@ -134,42 +117,118 @@ class WidgetCardWrapper extends Component {
       return null;
     }
 
-    return connectDropTarget(connectDragPreview(
-      <div>
+    return connectDropTarget(
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        height: '100%'
+      }}>
+        {/* Drop target grey box*/}
         {isOver && canDrop && this.renderGreyBox()}
-        {!this.props.widget && <div style={{minHeight:"150px", width:"100%"}}/>}     
+        {/* Widget wrapped in a div */}
         {this.props.widget && 
-          <div style={{
-          position: 'relative',
-          width: '100%'
-        }}>
-          <FloatingActionButton mini={true} style={style} onClick={this.handleMoveUp.bind(this)}>
-            <ArrowUp />
-          </FloatingActionButton>
-          <FloatingActionButton mini={true} style={style} onClick={this.handleMoveDown.bind(this)}>
-            <ArrowDown />
-          </FloatingActionButton>
-          {connectDragSource(
-            <div>           
-              <FloatingActionButton mini={true} style={style} onClick={this.handleMoveDown.bind(this)}>
-                <DragHandle />
-              </FloatingActionButton>
-            </div>
-          )}      
-          {
-            this.renderWidgets()
-          }
-          {/*!isOver && canDrop && this.renderOverlay('yellow')*/}
-          {/*isOver && canDrop && this.renderOverlay('green')*/}
           
-        </div>}
+          <div style={{
+            position: 'relative',
+            width: '100%'
+            }}
+          >
+            { console.log("before switch",this.props.widget.widgetType)}
+            {(() => { 
+              switch(this.props.widget.widgetType){
+                case WidgetTypes.time:
+                  return (
+                    <div>
+                      <WidgetCardToolbar 
+                        widget={this.props.widget}
+                        onWidgetChange={this.props.onWidgetChange}
+                        handleSetting={this.handleSetting.bind(this)}
+                      >
+                      {connectDragSource(
+                        <div>
+                          <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
+                            <DragHandle/>
+                          </IconButton>
+                        </div>
+                      )}
+                      </WidgetCardToolbar>
+                      <TimeWidget 
+                        widget={this.props.widget} 
+                        onWidgetChange={this.props.onWidgetChange}
+                        expanded={this.state.expanded}
+                      />                      
+                    </div>
+                    )
+                  break;
+                case WidgetTypes.weather:
+                  return  (
+                    <div>
+                      <WidgetCardToolbar 
+                        widget={this.props.widget}
+                        onWidgetChange={this.props.onWidgetChange}
+                        handleSetting={this.handleSetting.bind(this)}
+                      >
+                      {connectDragSource(
+                        <div>
+                          <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
+                            <DragHandle/>
+                          </IconButton>
+                        </div>
+                      )}
+                      </WidgetCardToolbar>
+                      <WeatherWidget 
+                        widget={this.props.widget} 
+                        onWidgetChange={this.props.onWidgetChange}
+                        expanded={this.state.expanded}
+                      />
+                    </div>      
+                    )
+                  break;
+                case WidgetTypes.traffic:
+                  return (  
+                    <div>
+                      <WidgetCardToolbar 
+                        widget={this.props.widget}
+                        onWidgetChange={this.props.onWidgetChange}
+                        handleSetting={this.handleSetting.bind(this)}
+                      >
+                      {connectDragSource(
+                        <div>
+                          <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
+                            <DragHandle/>
+                          </IconButton>
+                        </div>
+                      )}
+                      </WidgetCardToolbar>
+                      <TrafficWidget 
+                        widget={this.props.widget} 
+                        onWidgetChange={this.props.onWidgetChange}
+                        expanded={this.state.expanded}
+                      />
+                    </div>
+                   ) 
+                  break;
+                default:
+                  return <div style={{minHeight:"150px", width:"100%"}}/> 
+                  break;  
+              }
+            })()}
+          </div>
+          
+        }
+
       </div>
-    ));
+    ); 
   }
 }
 
 WidgetCardWrapper.propTypes = {
-  isOver: PropTypes.bool.isRequired
+  isOver: PropTypes.bool.isRequired,
+  canDrop: PropTypes.bool.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  connectDragSource: PropTypes.func.isRequired,
+  connectDragPreview: PropTypes.func.isRequired,
+  connectDropTarget: PropTypes.func.isRequired,
 };
 
 export default DropTarget(ItemTypes.WIDGETICON, widgetCardWrapperTarget, (connect, monitor)=>({
