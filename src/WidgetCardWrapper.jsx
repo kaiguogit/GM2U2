@@ -16,7 +16,7 @@ import ArrowDown from 'material-ui/svg-icons/navigation/arrow-downward';
 import DragHandle from 'material-ui/svg-icons/editor/drag-handle';
 import IconButton from 'material-ui/IconButton';
 import Settings from 'material-ui/svg-icons/action/settings';
-import { ItemTypes, WidgetTypes, WidgetIconImage } from './Constants.js';
+import { ItemTypes, WidgetTypes, WidgetIconImage, WidgetIconImageX96 } from './Constants.js';
 
 const widgetCardWrapperTarget = {
   canDrop(props, monitor) {
@@ -70,6 +70,7 @@ class WidgetCardWrapper extends Component {
     super(props);
     this.state={
       WidgetIconImage: WidgetIconImage,
+      WidgetIconImageX96: WidgetIconImageX96,
       expanded: false
     }
   }
@@ -107,9 +108,13 @@ class WidgetCardWrapper extends Component {
   componentDidMount() {
     const img = new Image();
     console.log('component did mount, widget type is ', this.props.widget.widgetType)
-    img.src = this.state.WidgetIconImage[this.props.widget.widgetType];
-    img.onload = () => this.props.connectDragPreview(img);
+    console.log('component did mount, widget image is ', img)
+    img.src = this.state.WidgetIconImageX96[this.props.widget.widgetType];
+    img.onload = () => {
+      this.props.connectDragPreview(img)
+    };
   }
+
   render() {
 
     const { connectDropTarget, connectDragPreview, connectDragSource, isOver, canDrop, isDragging } = this.props;
@@ -122,7 +127,7 @@ class WidgetCardWrapper extends Component {
         position: 'relative',
         width: '100%',
         height: '100%'
-      }}>
+      }}>        
         {/* Drop target grey box*/}
         {isOver && canDrop && this.renderGreyBox()}
         {/* Widget wrapped in a div */}
