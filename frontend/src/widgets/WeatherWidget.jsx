@@ -70,6 +70,7 @@ class WeatherWidget extends Component {
     if(this.props.widget.cityQuery){
       this.getWeather();
     }else{
+      this.setState({expanded: true});
       console.log("No city selected for this widget yet.");
     }
   };
@@ -80,7 +81,7 @@ class WeatherWidget extends Component {
   componentDidUpdate(prevProps){
     console.log("Weather widget received update");
     if(prevProps.widget.cityQuery !== this.props.widget.cityQuery){
-      this.setState({weather: null});
+      this.setState({refreshing: true});
       this.getWeather();
     }
   }
@@ -110,9 +111,11 @@ class WeatherWidget extends Component {
       ///Testing purpose, SetTimeout to be removed
       setTimeout(function(){
         this.setState({weather: weather});
+        this.setState({refreshing: false});
       }.bind(this), 2000)
     }.bind(this)).fail(function(err){
       console.log(err);
+      this.setState({refreshing: false});
     });
   }
 
@@ -121,112 +124,118 @@ class WeatherWidget extends Component {
     this.toggleSettingExpanded();
   }
 
+  
    render() {
+
     var weather = this.state.weather;
-    console.log("weather is", weather);
+    var refreshing = this.state.refreshing;
+
     return (
       <Card 
         expanded={this.state.expanded} 
         onExpandChange={this.handleExpandChange}
       >
 
-      //Toolbar
-      <WidgetCardToolbar 
-        ref="toolbar" 
-        widget={this.props.widget}
-        onWidgetChange={this.props.onWidgetChange}
-        handleSetting={this.toggleSettingExpanded.bind(this)}
-      />
+        //Toolbar
+        <WidgetCardToolbar 
+          ref="toolbar" 
+          widget={this.props.widget}
+          onWidgetChange={this.props.onWidgetChange}
+          handleSetting={this.toggleSettingExpanded.bind(this)}
+        />
 
-    //Setting
-    <CardText expandable={true}>
-      <CitySelector updateWidgetSetting={this.updateWidgetSetting.bind(this)}/>
-      <RaisedButton onClick={this.handleSaveSetting.bind(this)} label="Save Setting" primary={true}/>
+        //Setting
+        <CardText expandable={true}>
+          <CitySelector updateWidgetSetting={this.updateWidgetSetting.bind(this)}/>
+          <RaisedButton onClick={this.handleSaveSetting.bind(this)} label="Save Setting" primary={true}/>
 
-    </CardText>
-    
-    //Main Content
-    {weather && 
-      <div>
-        <div className="row">
-          <div className="col s4">
-            <h3>{weather.current_observation.display_location.city}</h3>
-          </div>
-          <div className="col s8">
-            <h3><img src={weather.current_observation.icon_url}/> {weather.current_observation.temp_c}&deg; {weather.current_observation.weather}</h3>
-          </div>
-        </div>
+        </CardText>
 
-        <h5>Today: {weather.forecast.txt_forecast.forecastday[0].fcttext_metric}</h5>
-        <div style={styles.hourlyScroll}>
-        <div style={styles.hourlyRow}>
-        {
-          weather.hourly_forecast.map(function(hour){
-            return(
-              <div style={styles.hourlyItem} className="center-align" key={newId()}>
-                <div>{hour.FCTTIME.hour_padded} {hour.FCTTIME.ampm}</div>
-                <div><img src={hour.icon_url}/></div>
-                <div>{hour.temp.metric}&deg;</div>
-              </div>
-            );
-          })
+        {!weather &&
+          <h4>No City selected. Please select a city in setting </h4>
         }
-        </div>
-        </div>
-        <div className="row">
-          <div className="col s7">
-            <table className="weatherForcast">
-              <thead >
-                <tr>
-                  <th>WeekDay</th>
-                  <th>Condition</th>
-                  <th>High</th>
-                  <th>Low</th>
-                </tr>
-              </thead>
-              <tbody style={styles.tbody}>
+        {refreshing &&
+          <div style={styles.container}>
+            <LinearProgress mode="indeterminate" />
+          </div>
+        }
+        //Main Content
+        {weather && 
+          <div>
+            <div className="row">
+              <div className="col s4">
+                <h3>{weather.current_observation.display_location.city}</h3>
+              </div>
+              <div className="col s8">
+                <h3><img src={weather.current_observation.icon_url}/> {weather.current_observation.temp_c}&deg; {weather.current_observation.weather}</h3>
+              </div>
+            </div>
+
+            <h5>Today: {weather.forecast.txt_forecast.forecastday[0].fcttext_metric}</h5>
+            <div style={styles.hourlyScroll}>
+            <div style={styles.hourlyRow}>
             {
-              weather.forecast.simpleforecast.forecastday.map(function(day, index){
-                if(index === 0 ){
-                  return
-                }else{
-                  return (
-                    <tr key={newId()}>
-                      <td>{day.date.weekday}</td>
-                      <td><img src={day.icon_url}/></td>
-                      <td>{day.high.celsius}&deg;</td>
-                      <td>{day.low.celsius}&deg;</td>
-                    </tr>
-                  )
-                }
+              weather.hourly_forecast.map(function(hour){
+                return(
+                  <div style={styles.hourlyItem} className="center-align" key={newId()}>
+                    <div>{hour.FCTTIME.hour_padded} {hour.FCTTIME.ampm}</div>
+                    <div><img src={hour.icon_url}/></div>
+                    <div>{hour.temp.metric}&deg;</div>
+                  </div>
+                );
               })
             }
-              </tbody>
-            </table>
-          </div>
-          <div className="col s4" style={styles.moreInfo}>
-            <ul>
-              <li>Sunrise: {weather.sun_phase.sunrise.hour}:{weather.sun_phase.sunrise.minute}</li>
-              <li>Sunset: {weather.sun_phase.sunset.hour}:{weather.sun_phase.sunset.minute}</li>
-              <li>Moonrise: {weather.moon_phase.moonrise.hour}:{weather.moon_phase.moonrise.minute}</li>
-              <li>Moonset: {weather.moon_phase.moonset.hour}:{weather.moon_phase.moonset.minute}</li>
-              <li>Humidity: {weather.current_observation.relative_humidity}</li>
-              <li>Feels Like: {weather.current_observation.feelslike_c}&deg;</li>
-              <li>Pressure: {weather.current_observation.pressure_mb} mb</li>
-              <li>Visibility: {weather.current_observation.visibility_km} km</li>
-              <li>Wind: {weather.current_observation.wind_string}</li>
-              <li><a href={weather.current_observation.forecast_url}>WUnderground Forecast</a></li>
-            </ul>
-          </div>
+            </div>
+            </div>
+            <div className="row">
+              <div className="col s7">
+                <table className="weatherForcast">
+                  <thead >
+                    <tr>
+                      <th>WeekDay</th>
+                      <th>Condition</th>
+                      <th>High</th>
+                      <th>Low</th>
+                    </tr>
+                  </thead>
+                  <tbody style={styles.tbody}>
+                {
+                  weather.forecast.simpleforecast.forecastday.map(function(day, index){
+                    if(index === 0 ){
+                      return
+                    }else{
+                      return (
+                        <tr key={newId()}>
+                          <td>{day.date.weekday}</td>
+                          <td><img src={day.icon_url}/></td>
+                          <td>{day.high.celsius}&deg;</td>
+                          <td>{day.low.celsius}&deg;</td>
+                        </tr>
+                      )
+                    }
+                  })
+                }
+                  </tbody>
+                </table>
+              </div>
+              <div className="col s4" style={styles.moreInfo}>
+                <ul>
+                  <li>Sunrise: {weather.sun_phase.sunrise.hour}:{weather.sun_phase.sunrise.minute}</li>
+                  <li>Sunset: {weather.sun_phase.sunset.hour}:{weather.sun_phase.sunset.minute}</li>
+                  <li>Moonrise: {weather.moon_phase.moonrise.hour}:{weather.moon_phase.moonrise.minute}</li>
+                  <li>Moonset: {weather.moon_phase.moonset.hour}:{weather.moon_phase.moonset.minute}</li>
+                  <li>Humidity: {weather.current_observation.relative_humidity}</li>
+                  <li>Feels Like: {weather.current_observation.feelslike_c}&deg;</li>
+                  <li>Pressure: {weather.current_observation.pressure_mb} mb</li>
+                  <li>Visibility: {weather.current_observation.visibility_km} km</li>
+                  <li>Wind: {weather.current_observation.wind_string}</li>
+                  <li><a href={weather.current_observation.forecast_url}>WUnderground Forecast</a></li>
+                </ul>
+              </div>
 
-        </div>
-      </div>
-    }
-    {!weather &&
-      <div style={styles.container}>
-      <LinearProgress mode="indeterminate" />
-      </div>
-    }
+            </div>
+          </div>
+        }
       </Card>
     );
   }
