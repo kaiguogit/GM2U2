@@ -63,14 +63,7 @@ class TimeWidget extends Component {
 
    render() {
     return (
-      <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
-
-      //Toolbar
-      <WidgetCardToolbar 
-        widget={this.props.widget}
-        onWidgetChange={this.props.onWidgetChange}
-        handleSetting={this.handleSetting.bind(this)}
-      />
+      <Card expanded={this.props.expanded} onExpandChange={this.handleExpandChange}>
 
     //Setting
     <CardText expandable={true}>

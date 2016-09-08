@@ -35,15 +35,10 @@ class WeatherWidget extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
       clockId: 'clock',
       widgetLocalCopy:{}
     };
   }
-
-  handleSetting = () => {
-    this.setState({expanded: !this.state.expanded});
-  };
 
   componentDidMount() {
     //save a local copy of widget to state.
@@ -67,28 +62,21 @@ class WeatherWidget extends Component {
 
    render() {
     return (
-      <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
+      <Card expanded={this.props.expanded} onExpandChange={this.handleExpandChange}>
 
-      //Toolbar
-      <WidgetCardToolbar 
-        widget={this.props.widget}
-        onWidgetChange={this.props.onWidgetChange}
-        handleSetting={this.handleSetting.bind(this)}
-      />
+        //Setting
+        <CardText expandable={true}>
+          <CitySelector updateWidgetSetting={this.updateWidgetSetting.bind(this)}/>
+          <RaisedButton onClick={uploadSetting.bind(this)} label="Save Setting" primary={true}/>
+        </CardText>
 
-    //Setting
-    <CardText expandable={true}>
-      <CitySelector updateWidgetSetting={this.updateWidgetSetting.bind(this)}/>
-      <RaisedButton onClick={uploadSetting.bind(this)} label="Save Setting" primary={true}/>
-
-    </CardText>
-      <p>{this.state.widgetLocalCopy.cityName}</p>
-      <p>{this.state.widgetLocalCopy.cityQuery}</p>
-    
-    //Main Content
-    <CardText>
-      
-    </CardText>
+          <p>{this.state.widgetLocalCopy.cityName}</p>
+          <p>{this.state.widgetLocalCopy.cityQuery}</p>
+        
+        //Main Content
+        <CardText>
+          <p>content</p>
+        </CardText>
       </Card>
     );
   }
