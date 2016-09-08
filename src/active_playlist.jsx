@@ -16,30 +16,25 @@ class ActivePlaylist extends Component {
       playingWidgetIndex: null
     }
   }
-
-  componentDidMount() {
-    console.log("Did mount active playlist Playlist is", this.props.playlist);
-  };
-
   
   //Ajax call to Add widget to this playlist
   handleAddWidget(widgetType){
 
     //Post request to add widget
     $.ajax({
-        url: `http://localhost:3000/api/playlists/${this.props.playlist.id}/${widgetType}Widget`,
-        method: "post",
-        headers: {
-        'Authorization':  "Bearer " + window.localStorage.token
-        }
-      })
-      .then(function(widget) {
-        console.log("!!!!!response from create widiget is below");
-        console.log("created widget", widget);
-        console.log("created widget, type is", widget.widgetType);
-        this.props.onPlaylistChange();
-        console.log("Inside of active playlist Playlist is", this.props.playlist);
-      }.bind(this));
+      url: `http://localhost:3000/api/playlists/${this.props.playlist.id}/${widgetType}Widget`,
+      method: "post",
+      headers: {
+      'Authorization':  "Bearer " + window.localStorage.token
+      }
+    })
+    .then(function(widget) {
+      console.log("!!!!!response from create widiget is below");
+      console.log("created widget", widget);
+      console.log("created widget, type is", widget.widgetType);
+      this.props.onPlaylistChange();
+      console.log("Inside of active playlist Playlist is", this.props.playlist);
+    }.bind(this));
   }
 
   //Move item in array
@@ -75,26 +70,32 @@ class ActivePlaylist extends Component {
       'Authorization':  "Bearer " + window.localStorage.token
       }
     }).done(function(playlist){
+
       console.log("new Playlist is", playlist);
       this.props.onPlaylistChange();
+
     }.bind(this))
-    .fail(function(err){
+
+      .fail(function(err){
       console.log("request failed", err);
+
     });
   }
 
+  //Change playingWidgetIndex to play next widget;
   playNextWidget(){
-    if(Number.isInteger(this.state.playingWidgetIndex) && this.state.playingWidgetIndex < Object.keys(this.refs).length){
-      //Play next widget
-      console.log("Setting playingWidgetIndex to", this.state.playingWidgetIndex + 1);
-      this.setState({playingWidgetIndex: this.state.playingWidgetIndex + 1});
-    }else{
+    if(this.isPlayingDone()){
       //Stop
       console.log("Setting playingWidgetIndex to null");
       this.setState({playingWidgetIndex: null});
+    }else{
+      //Play next widget
+      console.log("Setting playingWidgetIndex to", this.state.playingWidgetIndex + 1);
+      this.setState({playingWidgetIndex: this.state.playingWidgetIndex + 1});
     }
   }
 
+  //Call audio player of each widget to play
   playWidget(){
     var id = Object.keys(this.refs)[this.state.playingWidgetIndex];
     var playingWidget = this.refs[id]
@@ -102,25 +103,48 @@ class ActivePlaylist extends Component {
     playingWidget.decoratedComponentInstance.refs["widget"].refs["toolbar"].refs["audioPlayer"].handleSpeak();
   }
 
-  playAllWidget(){
-    console.log("Setting playingWidgetIndex to 0 ");
-    this.setState({playingWidgetIndex: 0});
+  //Start to play all widget
+  playAllWidgets(){
+    if(Object.keys(this.refs).length > 0 ){
+      console.log("Setting playingWidgetIndex to 0 ");
+      this.setState({playingWidgetIndex: 0});
+    }else{
+      console.log("No widget to play");
+    }
   }
 
   getChildContext(){
     return {playNextWidget: this.playNextWidget.bind(this)};
   }
   
+  //If playingWidgetIndex is validated, play widget
   componentDidUpdate(){
-    if(Number.isInteger(this.state.playingWidgetIndex)&& this.state.playingWidgetIndex < Object.keys(this.refs).length){
-      console.log(`Playing ${this.state.playingWidgetIndex}th widget`);
-      this.playWidget();
+    if(this.isPlaying()){
+      if(!this.isPlayingDone()){
+        console.log(`Playing ${this.state.playingWidgetIndex}th widget`);
+        this.playWidget();      
+      }else{
+        console.log("Setting playingWidgetIndex to null ");
+        this.setState({playingWidgetIndex: null})
+      }
     }
   }
+
+  //Index is a number
+  isPlaying(){
+    return Number.isInteger(this.state.playingWidgetIndex);
+  }
+
+  //Index is not a number or out of range of widgets count
+  //It means the playing is done. 
+  isPlayingDone(){
+    return !(Number.isInteger(this.state.playingWidgetIndex) && this.state.playingWidgetIndex < Object.keys(this.refs).length)
+  }
+
   render() {
     return (
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
-        <button onClick={this.playAllWidget.bind(this)}>Play All</button>
+        <button onClick={this.playAllWidgets.bind(this)}>Play All</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.traffic)}>Add Traffic</button>

@@ -44,11 +44,9 @@ class TimeWidget extends Component {
   }
 
   componentDidMount() {
-    console.log("did mount");
      var clock =$(`#${this.clockId}`).FlipClock({
         clockFace: ClockFace.TwentyFourHourClock
     });
-    // this.updateClockFace(null, ClockFace.TwentyFourHourClock);      
   };
 
   updateClockFace(event, clockFace){
