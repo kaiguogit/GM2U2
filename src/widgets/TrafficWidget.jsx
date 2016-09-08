@@ -29,14 +29,9 @@ class TrafficWidget extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
       clockId: 'clock',
     };
   }
-
-  handleSetting = () => {
-    this.setState({expanded: !this.state.expanded});
-  };
 
   componentWillMount(){
     var clockId = newId();
@@ -63,39 +58,36 @@ class TrafficWidget extends Component {
 
    render() {
     return (
-      <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
-      <WidgetCardToolbar 
-        widget={this.props.widget}
-        onWidgetChange={this.props.onWidgetChange}
-        handleSetting={this.handleSetting.bind(this)}
-      />
+      <Card expanded={this.props.expanded} onExpandChange={this.handleExpandChange}>
 
-    <CardText expandable={true}>
-      <RadioButtonGroup onChange={this.updateClockFace.bind(this)} name="clockhour" defaultSelected={ClockFace.TwentyFourHourClock}>
-        <RadioButton
-          value={ClockFace.TwentyFourHourClock}
-          label="24h"
-          style={styles.radioButton}
-        />
-        <RadioButton
-          value={ClockFace.TwelveHourClock}
-          label="12h"
-          style={styles.radioButton}
-        />
-      </RadioButtonGroup>
-    </CardText>
-    <CardText>
-      <div className="row">
-        <div className="col s12 center-align" style={styles.date}>
-          {moment().format('dddd MMMM Do')}
-        </div>
-      </div>
-      <div className="row">
-        <div className="col push-s3 s7 center-align" >
-          <div id={this.clockId}></div>
-        </div>
-      </div>
-    </CardText>
+        <CardText expandable={true}>
+          <RadioButtonGroup onChange={this.updateClockFace.bind(this)} name="clockhour" defaultSelected={ClockFace.TwentyFourHourClock}>
+            <RadioButton
+              value={ClockFace.TwentyFourHourClock}
+              label="24h"
+              style={styles.radioButton}
+            />
+            <RadioButton
+              value={ClockFace.TwelveHourClock}
+              label="12h"
+              style={styles.radioButton}
+            />
+          </RadioButtonGroup>
+        </CardText>
+
+        <CardText>
+          <div className="row">
+            <div className="col s12 center-align" style={styles.date}>
+              {moment().format('dddd MMMM Do')}
+            </div>
+          </div>
+          <div className="row">
+            <div className="col push-s3 s7 center-align" >
+              <div id={this.clockId}></div>
+            </div>
+          </div>
+        </CardText>
+        
       </Card>
     );
   }

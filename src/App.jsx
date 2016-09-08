@@ -13,7 +13,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import RaisedButton from 'material-ui/RaisedButton';
 
 //For raise button
-const style = {
+const raisedButtonStyle = {
   margin: 12,
 };
 
@@ -139,6 +139,7 @@ class App extends Component {
           <SidebarLeft 
             open={this.state.uiState.sidebarLeftOpen} 
             toggleSidebarLeft={this.toggleSidebarLeft.bind(this)}
+            className='customSidebarLeft'
           />
 
           {/*If Playlists is falsy*/}
@@ -148,7 +149,7 @@ class App extends Component {
                 onClick={this.addPlaylist.bind(this)} 
                 label="Add playlist" 
                 primary={true} 
-                style={style} />
+                style={raisedButtonStyle} />
             </div>
           }
 
@@ -158,7 +159,7 @@ class App extends Component {
               <RaisedButton 
                 onClick={this.addPlaylist.bind(this)} 
                 label="Add playlist" primary={true} 
-                style={style} />
+                style={raisedButtonStyle} />
             </div>
           }
 

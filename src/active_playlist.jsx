@@ -61,11 +61,11 @@ class ActivePlaylist extends Component {
   render() {
     return (
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
-        {/*
+        
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.traffic)}>Add Traffic</button>
-        */}
+        
 
         <p>{this.props.playlist.name}</p>
         <p>Id {this.props.playlist.id}</p>
@@ -73,7 +73,7 @@ class ActivePlaylist extends Component {
         {console.log("the widget array is", this.props.playlist.widgets)}
         
         {this.props.playlist.widgets.map(function(widget, index){
-          console.log("creating cards", widget)
+          console.log("rendering cards", widget)
           return( 
             <WidgetCardWrapper 
               position={index}
@@ -90,6 +90,7 @@ class ActivePlaylist extends Component {
           position={this.props.playlist.widgets.length}
           onMove={this.handleMove.bind(this)}
           onDropWidgetIcon={this.handleAddWidget.bind(this)}
+          widget={{widgetType: null}}
         />
       </div>  
     );
