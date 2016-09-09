@@ -22,8 +22,8 @@ weather.currentWeather = (function(wunderground){
           }
 
           try{
-            console.log("WU's response is ", response);
-            console.log("WU's response result is is ", response.response.results);
+            // console.log("WU's response is ", response);
+            // console.log("WU's response r
             
             //if viewOrSpeech is truthy, return the response directly
             if(viewOrSpeech){
@@ -38,9 +38,18 @@ weather.currentWeather = (function(wunderground){
                   temp_c: current.temp_c,
                   feelslike: current.feelslike_c,
               };
+
               var forecast = {
                 today: response.forecast.txt_forecast.forecastday[0].fcttext_metric
               }
+              //convert Low 5C to Low 5 degree
+              var lowC = forecast.today.match(/Low\s[\d]+C/g);
+              if (lowC){
+                var re = new RegExp(lowC,"g");
+                forecast.today = forecast.today.replace(re, lowC[0].replace(/C/, " degree"));
+              }
+
+              console.log("!!!!!forecast today is", forecast.today);
               var speachInfo = {
                 name: info.name + "'s ",
                 weather: "Current weather is " + info.weather + ". ",
@@ -52,6 +61,7 @@ weather.currentWeather = (function(wunderground){
               resolve(str);
             }
           }catch(err){
+            console.log("error is", err);
             reject(err);
           }
 

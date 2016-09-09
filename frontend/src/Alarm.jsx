@@ -15,10 +15,6 @@ var paddy = function(n, p, c){
     return (pad + n).slice(-pad.length);
 };
 
-/* the default alarm list */
-var data = [
-];
-
 /* the default sounds for selection */
 var bells = [
 //    {type: 'audio/mpeg', path: 'mp3/ru-zhen-qu'},
@@ -109,7 +105,7 @@ var AlarmEntry = React.createClass({
         if(interval < 0)
             interval += 86000 * 1000;
 
-        var id = setTimeout(function() {
+        var id = window.setTimeout(function() {
             this.setState($.extend(this.state, {enable: false}));
             this.props.onRing();
             this.disable();
@@ -117,11 +113,13 @@ var AlarmEntry = React.createClass({
 
         var state = this.state;
         state.intervalId = id;
+        console.log("Set alarm at", this.props.time);
+        console.log("interval id is", id);
         this.setState(state);
     },
     disable: function(){
         var state = this.state;
-        clearTimeout(state.intervalId);
+        window.clearTimeout(state.intervalId);
         state.intervalId = 0;
         this.setState(state);
     },
@@ -178,28 +176,29 @@ var AlarmEntry = React.createClass({
 /* Alarm list */
 var AlarmList = React.createClass({
     getInitialState: function(){
-        return {data: this.props.data};
+        return {alarms: this.props.alarms};
     },
     handleEntryClose: function(index){
         var state = this.state;
-        state.data.splice(index, 1);
+        state.alarms.splice(index, 1);
         this.setState(state);
     },
     handleAddEntry: function(entry){
         var state = this.state;
-        state.data.push(entry);
+        state.alarms.push(entry);
         this.setState(state);
     },
     render: function () {
-        var alarmNodes = this.state.data.map(function(alarm, i){
+        var alarmNodes = this.state.alarms.map(function(alarm, i){
+            var time = new Date(alarm.time)
             if(alarm === undefined) return undefined;
             return (
-                <AlarmEntry time={alarm.time} comment={alarm.comment} onClose={this.handleEntryClose.bind(this, i)} key={i} onRing={this.props.onRing} />
+                <AlarmEntry time={time} comment={alarm.comment} onClose={this.handleEntryClose.bind(this, i)} key={i} onRing={this.props.onRing} />
             );
         }.bind(this));
 
         var list = function(){
-            if(this.state.data.length == 0) {
+            if(this.state.alarms.length == 0) {
                 return (<span className="list-group-item">None</span>);
             }
             else
@@ -317,6 +316,7 @@ var AlarmDigit = React.createClass({
         }
     },
     render: function(){
+        console.log("Rendering Alarms.");
         var value = paddy(this.state.value, 2);
         return (
             <div className="col s4 alarmDigit alarm-digit">
@@ -365,7 +365,7 @@ var Alarm = React.createClass({
                         </FloatingActionButton>
                     </div>
                     <p>Alarms</p>
-                    <AlarmList data={data} ref="alarmList" onRing={this.handleRing}/>
+                    <AlarmList alarms={this.props.alarms} ref="alarmList" onRing={this.handleRing}/>
                 </div>
             </div>
         );
