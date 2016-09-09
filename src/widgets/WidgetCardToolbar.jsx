@@ -43,13 +43,10 @@ class WidgetCardToolbar extends Component {
         <ToolbarGroup firstChild={true} className="valign-wrapper">
           <Avatar src={WidgetIconImage[this.props.widget.widgetType]}/>
           <ToolbarTitle style={styles.title} text={this.capitalize(this.props.widget.widgetType)} />
-          <AudioPlayer className="valign" widget={this.props.widget}/> 
+          <AudioPlayer ref="audioPlayer" className="valign" widget={this.props.widget}/> 
         </ToolbarGroup>
         <ToolbarGroup>
           {this.props.children}
-          <IconButton  onTouchTap={this.props.handleSetting} tooltip="Setting" touch={true} tooltipPosition="top-center">
-                <Settings color='grey900'/>
-          </IconButton>
           <IconMenu
             iconButtonElement={
               <IconButton><MoreVertIcon /></IconButton>
