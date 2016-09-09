@@ -1,19 +1,34 @@
 import React, {Component} from 'react';
+
+//Material-ui
+import RaisedButton from 'material-ui/RaisedButton';
+import ActionAlarm from 'material-ui/svg-icons/action/alarm';
+import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
+
+//Components
 import TimeWidget from './widgets/TimeWidget.jsx'
 import WeatherWidget from './widgets/WeatherWidget.jsx'
 import TrafficWidget from './widgets/TrafficWidget.jsx'
 import WidgetCardWrapper from './WidgetCardWrapper.jsx'
 import { WidgetTypes } from './Constants';
+import Alarm from './Alarm.jsx';
 //utils
 import newId from './utils/newid.js'
 
 
+const styles = {
+  button: {
+    margin: 12,
+  },
+}
 class ActivePlaylist extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      playingWidgetIndex: null
+      playingWidgetIndex: null,
+      alarmDialogOpen: false
     }
   }
   
@@ -61,6 +76,13 @@ class ActivePlaylist extends Component {
     var newPlaylist = this.props.playlist;
     newPlaylist.widgets = newArray;
 
+    this.uploadPlaylist(newPlaylist);
+  }
+
+  //////////////////////////////
+  //AJAX CALL!!!!!update playlist 
+  //////////////////////////////
+  uploadPlaylist(newPlaylist){
     $.ajax({
       url: `http://localhost:3000/api/playlists/${this.props.playlist.id}`,
       method: "put",
@@ -82,6 +104,26 @@ class ActivePlaylist extends Component {
     });
   }
 
+  //Open alarm dialog
+  handleAlarmDialogOpen(){
+    console.log("in dialogopen this is", this);
+    this.setState({alarmDialogOpen: true});
+  }
+
+  //Open alarm dialog
+  handleAlarmDialogClose(){
+
+    //Alarms is an array
+    var newPlaylist = this.props.playlist;
+
+    newPlaylist.alarms = this.refs.alarm.refs.alarmList.state.alarms;
+
+
+    this.uploadPlaylist(newPlaylist);
+
+    this.setState({alarmDialogOpen: false});
+  }
+
   //Change playingWidgetIndex to play next widget;
   playNextWidget(){
     if(this.isPlayingDone()){
@@ -97,7 +139,7 @@ class ActivePlaylist extends Component {
 
   //Call audio player of each widget to play
   playWidget(){
-    var id = Object.keys(this.refs)[this.state.playingWidgetIndex];
+    var id = this.props.playlist.widgets[this.state.playingWidgetIndex].id;
     var playingWidget = this.refs[id]
     console.log("playingWidget is", playingWidget);
     playingWidget.decoratedComponentInstance.refs["widget"].refs["toolbar"].refs["audioPlayer"].handleSpeak();
@@ -105,7 +147,7 @@ class ActivePlaylist extends Component {
 
   //Start to play all widget
   playAllWidgets(){
-    if(Object.keys(this.refs).length > 0 ){
+    if(this.props.playlist.widgets.length > 0 ){
       console.log("Setting playingWidgetIndex to 0 ");
       this.setState({playingWidgetIndex: 0});
     }else{
@@ -138,12 +180,50 @@ class ActivePlaylist extends Component {
   //Index is not a number or out of range of widgets count
   //It means the playing is done. 
   isPlayingDone(){
-    return !(Number.isInteger(this.state.playingWidgetIndex) && this.state.playingWidgetIndex < Object.keys(this.refs).length)
+    return !(Number.isInteger(this.state.playingWidgetIndex) && this.state.playingWidgetIndex < this.props.playlist.widgets.length)
   }
 
   render() {
+    const AlarmDialogActions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={this.handleAlarmDialogClose.bind(this)}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        onTouchTap={this.handleAlarmDialogClose.bind(this)}
+      />,
+    ];
+
     return (
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
+        
+        <RaisedButton
+          label="Set Alarm"
+          labelPosition="after"
+          primary={true}
+          icon={<ActionAlarm />}
+          style={styles.button}
+          onTouchTap={this.handleAlarmDialogOpen.bind(this)}
+        />
+
+        <Dialog
+          title="Dialog With Actions"
+          actions={AlarmDialogActions}
+          modal={false}
+          open={this.state.alarmDialogOpen}
+          autoDetectWindowHeight={false}
+
+        >
+          <Alarm 
+            onRing={this.playAllWidgets.bind(this)}
+            alarms={this.props.playlist.alarms}
+            ref="alarm"
+          />
+        </Dialog>
+        
         <button onClick={this.playAllWidgets.bind(this)}>Play All</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
@@ -155,7 +235,7 @@ class ActivePlaylist extends Component {
           this.props.playlist.widgets.map(function(widget, index){
             console.log("creating cards");
             return <WidgetCardWrapper 
-              ref={newId()}
+              ref={widget.id}
               position={index}
               onDropWidgetIcon={this.handleAddWidget.bind(this)} 
               widget={widget} 
