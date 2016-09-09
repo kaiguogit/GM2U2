@@ -88,14 +88,23 @@ router.get('/:type/:id/speech', (req, res, next) => {
     case "weather":
 
       //find the widget, get weather by City Name
+      var viewOrSpeech = false;
       models[widgetType].findById(req.params.id)
       .then(function(widget){
-        return weather.currentWeather(widget.cityQuery);
+        if(widget.cityQuery){
+          return weather.currentWeather(widget.cityQuery, viewOrSpeech);
+        }else{
+          return new Promise(function(resolve, reject){
+            reject("There is no city selected. Please click the setting button to select a city.");
+          });
+        }
       }).then(function(speech){
         res.json(speech);
       }).catch(function(err){
         res.json(err);
       });
+         
+      
       break;
 
     default:
@@ -108,8 +117,37 @@ router.get('/:type/:id/speech', (req, res, next) => {
 router.get('/:type/:id/view', (req, res, next) => {
 
   var widgetType = req.params.type + "Widget";
-  console.log("To be built");
-  res.json({message: "this route is to be built"});
+
+  switch(req.params.type){
+    case "time":
+
+      res.json(time.getTimeString());
+      break;
+
+    case "weather":
+
+      //find the widget, get weather by City Name
+      var viewOrSpeech = true;
+      models[widgetType].findById(req.params.id)
+      .then(function(widget){
+        if(widget.cityQuery){
+          return weather.currentWeather(widget.cityQuery, viewOrSpeech);
+        }else{
+          return new Promise(function(resolve, reject){
+            reject("There is no city selected. Please click the setting button to select a city.");
+          });
+        }
+      }).then(function(weatherObj){
+        res.json(weatherObj);
+      }).catch(function(err){
+        res.json(err);
+      });
+      break;
+
+    default:
+      break;
+
+  }
   
 });
 

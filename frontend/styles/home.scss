@@ -69,3 +69,33 @@
 input[type=text]:focus:not([readonly]){
   box-shadow: 0 0px 0 0;
 }
+
+//Scroll inside of table
+//http://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
+.weatherForcast{
+  table {
+    width: 716px; /* 140px * 5 column + 16px scrollbar width */
+    border-spacing: 0;
+
+  }
+
+  tbody, thead tr { display: block; }
+
+  tbody {
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 1.2em;
+    line-height: 0px;
+  }
+
+  tbody td, thead th {
+      width: 140px;
+      padding: 0px 5px;
+  }
+
+  thead th:last-child {
+      width: 156px; /* 140px + 16px scrollbar width */
+  }
+}
+
+
