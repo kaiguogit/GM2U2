@@ -8,7 +8,6 @@ import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui
 import Avatar from 'material-ui/Avatar';
 import Settings from 'material-ui/svg-icons/action/settings';
 import MenuItem from 'material-ui/MenuItem';
-import DragHandle from 'material-ui/svg-icons/editor/drag-handle';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
@@ -47,13 +46,7 @@ class WidgetCardToolbar extends Component {
           <AudioPlayer ref="audioPlayer" className="valign" widget={this.props.widget}/> 
         </ToolbarGroup>
         <ToolbarGroup>
-          
-          <IconButton>
-            <DragHandle />
-          </IconButton>
-          <IconButton  onTouchTap={this.props.handleSetting} tooltip="Setting" touch={true} tooltipPosition="top-center">
-                <Settings color='grey900'/>
-          </IconButton>
+          {this.props.children}
           <IconMenu
             iconButtonElement={
               <IconButton><MoreVertIcon /></IconButton>

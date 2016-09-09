@@ -24,6 +24,7 @@ const styles = {
 }
 class ActivePlaylist extends Component {
 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -34,7 +35,6 @@ class ActivePlaylist extends Component {
   
   //Ajax call to Add widget to this playlist
   handleAddWidget(widgetType){
-
     //Post request to add widget
     $.ajax({
       url: `http://localhost:3000/api/playlists/${this.props.playlist.id}/${widgetType}Widget`,
@@ -54,25 +54,11 @@ class ActivePlaylist extends Component {
 
   //Move item in array
   //http://stackoverflow.com/questions/5306680/move-an-array-element-from-one-array-position-to-another
-
   handleMove(old_index, new_index){
-
+    console.log('widgets moved')
     var newArray = this.props.playlist.widgets
-
-    console.log("before change array", newArray);
-
     var moveItem = newArray.splice(old_index, 1)[0];
-
-    console.log("removed item, then array is", newArray);
-
     newArray.splice(new_index, 0, moveItem);
-
-
-    console.log("put item back to new index, then array is", newArray);
-
-    
-    // console.log("order changed", newArray);
-
     var newPlaylist = this.props.playlist;
     newPlaylist.widgets = newArray;
 
@@ -138,11 +124,11 @@ class ActivePlaylist extends Component {
   }
 
   //Call audio player of each widget to play
-  playWidget(){
+  playWidget(){    
     var id = this.props.playlist.widgets[this.state.playingWidgetIndex].id;
     var playingWidget = this.refs[id]
     console.log("playingWidget is", playingWidget);
-    playingWidget.decoratedComponentInstance.refs["widget"].refs["toolbar"].refs["audioPlayer"].handleSpeak();
+    playingWidget.decoratedComponentInstance.decoratedComponentInstance.refs["toolbar"].refs["audioPlayer"].handleSpeak();
   }
 
   //Start to play all widget
@@ -200,6 +186,7 @@ class ActivePlaylist extends Component {
     return (
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
         
+
         <RaisedButton
           label="Set Alarm"
           labelPosition="after"
@@ -228,23 +215,33 @@ class ActivePlaylist extends Component {
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.traffic)}>Add Traffic</button>
+        
+
         <p>{this.props.playlist.name}</p>
         <p>Id {this.props.playlist.id}</p>
         <p>playing widget index is  {this.state.playingWidgetIndex}</p>
         {
           this.props.playlist.widgets.map(function(widget, index){
             console.log("creating cards");
-            return <WidgetCardWrapper 
-              ref={widget.id}
-              position={index}
-              onDropWidgetIcon={this.handleAddWidget.bind(this)} 
-              widget={widget} 
-              onWidgetChange={this.props.onPlaylistChange} 
-              key={widget.id}
-              onMove={this.handleMove.bind(this)}
-            />
-          }.bind(this)) 
-        }
+            return (
+              <WidgetCardWrapper 
+                ref={widget.id}
+                position={index}
+                onDropWidgetIcon={this.handleAddWidget.bind(this)} 
+                widget={widget} 
+                onWidgetChange={this.props.onPlaylistChange} 
+                key={widget.id}
+                onMove={this.handleMove.bind(this)}
+              />
+            )
+        }.bind(this)) }
+        {/* place holder div with min height but no widget type */}
+        <WidgetCardWrapper 
+          position={this.props.playlist.widgets.length}
+          onMove={this.handleMove.bind(this)}
+          onDropWidgetIcon={this.handleAddWidget.bind(this)}
+          widget={{widgetType: null}}
+        />
       </div>  
     );
   }

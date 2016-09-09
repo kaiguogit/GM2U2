@@ -23,6 +23,7 @@ class Navbar extends Component {
             <li><a href="#" onClick={this.props.toggleSidebarLeft}><i className="material-icons">library_add</i></a></li>      
             <li><a href="#"><i className="material-icons">shop</i></a></li>      
           </ul>
+          {/*  align-right items*/} 
             {this.context.username &&
               <div>
                 <ul className="right hide-on-small-only"> {/* on regular screens */}

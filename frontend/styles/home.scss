@@ -2,16 +2,6 @@
 
 
 /*sidebar left*/
-#sidebar_left{
-  border-color: black;
-  position: fixed;
-  height: calc(100vh - 64px);
-  background-color: #999;
-}
-
-#sidebar_left.hidden{
-  display: none;
-}
 
 #container_widgets{
   display: flex;

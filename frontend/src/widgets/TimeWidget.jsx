@@ -34,7 +34,7 @@ class TimeWidget extends Component {
     };
   }
 
-  handleSetting = () => {
+  toggleSettingExpanded = () => {
     this.setState({expanded: !this.state.expanded});
   };
 
@@ -62,14 +62,6 @@ class TimeWidget extends Component {
    render() {
     return (
       <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
-
-      //Toolbar
-      <WidgetCardToolbar
-        ref="toolbar" 
-        widget={this.props.widget}
-        onWidgetChange={this.props.onWidgetChange}
-        handleSetting={this.handleSetting.bind(this)}
-      />
 
     //Setting
     <CardText expandable={true}>

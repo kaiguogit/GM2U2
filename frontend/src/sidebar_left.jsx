@@ -9,7 +9,9 @@ const style = {
   margin: 12,
 };
 
+
 class SidebarLeft extends Component {
+
   render() {
     return (
 

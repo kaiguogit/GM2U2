@@ -53,15 +53,16 @@ class WeatherWidget extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
       clockId: 'clock',
       widgetLocalCopy:{}
     };
   }
 
+
   toggleSettingExpanded = () => {
     this.setState({expanded: !this.state.expanded});
   };
+
 
   componentDidMount() {
     console.log("weather widget mounted");
@@ -131,19 +132,11 @@ class WeatherWidget extends Component {
     var refreshing = this.state.refreshing;
 
     return (
+
       <Card 
         expanded={this.state.expanded} 
         onExpandChange={this.handleExpandChange}
       >
-
-        //Toolbar
-        <WidgetCardToolbar 
-          ref="toolbar" 
-          widget={this.props.widget}
-          onWidgetChange={this.props.onWidgetChange}
-          handleSetting={this.toggleSettingExpanded.bind(this)}
-        />
-
         //Setting
         <CardText expandable={true}>
           <CitySelector updateWidgetSetting={this.updateWidgetSetting.bind(this)}/>
