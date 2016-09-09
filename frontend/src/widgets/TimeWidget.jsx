@@ -34,7 +34,7 @@ class TimeWidget extends Component {
     };
   }
 
-  handleSetting = () => {
+  toggleSettingExpanded = () => {
     this.setState({expanded: !this.state.expanded});
   };
 
@@ -44,11 +44,9 @@ class TimeWidget extends Component {
   }
 
   componentDidMount() {
-    console.log("did mount");
      var clock =$(`#${this.clockId}`).FlipClock({
         clockFace: ClockFace.TwentyFourHourClock
     });
-    // this.updateClockFace(null, ClockFace.TwentyFourHourClock);      
   };
 
   updateClockFace(event, clockFace){
@@ -63,7 +61,7 @@ class TimeWidget extends Component {
 
    render() {
     return (
-      <Card expanded={this.props.expanded} onExpandChange={this.handleExpandChange}>
+      <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
 
     //Setting
     <CardText expandable={true}>
@@ -89,7 +87,7 @@ class TimeWidget extends Component {
         </div>
       </div>
       <div className="row">
-        <div className="col push-s3 s7 center-align" >
+        <div className="col push-s3 s9 center-align" >
           <div id={this.clockId}></div>
         </div>
       </div>

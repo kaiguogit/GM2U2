@@ -71,12 +71,11 @@ class WidgetCardWrapper extends Component {
     this.state={
       WidgetIconImage: WidgetIconImage,
       WidgetIconImageX96: WidgetIconImageX96,
-      expanded: false
     }
   }
 
-  handleSetting = () => {
-    this.setState({expanded: !this.state.expanded});
+  toggleSettingExpanded = () => {
+    this.refs.widget.toggleSettingExpanded();
   };
 
   renderGreyBox(){
@@ -94,6 +93,7 @@ class WidgetCardWrapper extends Component {
       />
     );
   }
+
 
   handleMoveUp(){
     if(this.props.position !== 0){
@@ -114,6 +114,19 @@ class WidgetCardWrapper extends Component {
       this.props.connectDragPreview(img)
     };
   }
+
+renderSettingButton(){
+  return (
+    <IconButton  
+      onTouchTap={this.toggleSettingExpanded.bind(this)} 
+      tooltip="Setting" 
+      touch={true} 
+      tooltipPosition="top-center"
+    >
+      <Settings color='grey900'/>
+    </IconButton>
+  )
+}
 
   render() {
 
@@ -146,8 +159,8 @@ class WidgetCardWrapper extends Component {
                     <div>
                       <WidgetCardToolbar 
                         widget={this.props.widget}
-                        onWidgetChange={this.props.onWidgetChange}
-                        handleSetting={this.handleSetting.bind(this)}
+                        onWidgetChange={this.props.onWidgetChange} 
+                        ref='toolbar'                       
                       >
                       {connectDragSource(
                         <div>
@@ -155,12 +168,13 @@ class WidgetCardWrapper extends Component {
                             <DragHandle/>
                           </IconButton>
                         </div>
-                      )}
+                        )}
+                      {this.renderSettingButton()}
                       </WidgetCardToolbar>
                       <TimeWidget 
                         widget={this.props.widget} 
                         onWidgetChange={this.props.onWidgetChange}
-                        expanded={this.state.expanded}
+                        ref = 'widget'
                       />                      
                     </div>
                     )
@@ -171,7 +185,7 @@ class WidgetCardWrapper extends Component {
                       <WidgetCardToolbar 
                         widget={this.props.widget}
                         onWidgetChange={this.props.onWidgetChange}
-                        handleSetting={this.handleSetting.bind(this)}
+                        ref='toolbar'
                       >
                       {connectDragSource(
                         <div>
@@ -180,11 +194,12 @@ class WidgetCardWrapper extends Component {
                           </IconButton>
                         </div>
                       )}
+                      {this.renderSettingButton()}
                       </WidgetCardToolbar>
                       <WeatherWidget 
                         widget={this.props.widget} 
                         onWidgetChange={this.props.onWidgetChange}
-                        expanded={this.state.expanded}
+                        ref = 'widget'
                       />
                     </div>      
                     )
@@ -195,7 +210,7 @@ class WidgetCardWrapper extends Component {
                       <WidgetCardToolbar 
                         widget={this.props.widget}
                         onWidgetChange={this.props.onWidgetChange}
-                        handleSetting={this.handleSetting.bind(this)}
+                        ref='toolbar'
                       >
                       {connectDragSource(
                         <div>
@@ -204,11 +219,12 @@ class WidgetCardWrapper extends Component {
                           </IconButton>
                         </div>
                       )}
+                      {this.renderSettingButton()}
                       </WidgetCardToolbar>
                       <TrafficWidget 
                         widget={this.props.widget} 
                         onWidgetChange={this.props.onWidgetChange}
-                        expanded={this.state.expanded}
+                        ref = 'widget'
                       />
                     </div>
                    ) 

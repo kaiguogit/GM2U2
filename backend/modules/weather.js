@@ -12,36 +12,64 @@ if(key){
 var weather = {};
 
 weather.currentWeather = (function(wunderground){
-  return function(city){
+  return function(city, viewOrSpeech){
     return new Promise(function(resolve, reject){
       console.log("passing city is", city);
-      wunderground.conditions().forecast().request(city, function(err, response){
-        if(err){
-          reject(err);
-        }
-
-        try{
-          console.log("WU's response is ", response);
-          console.log("WU's response result is is ", response.response.results);
-          var current = response.current_observation;
-          var info = {
-              name: current.display_location.full,
-              icon_url: current.icon_url,
-              weather: current.weather,
-              temp_c: current.temp_c,
-          };
-          var speachInfo = {
-            name: "City is " + info.name + ". ",
-            weather: "Current weather is " + info.weather + ". ",
-            temp_c: "Temperature is " + info.temp_c + "degrees. "
+      if(city){
+        wunderground.conditions().forecastTenDay().astronomy().hourlyForecast().request(city, function(err, response){
+          if(err){
+            reject(err);
           }
-          var str = Object.keys(speachInfo).reduce(function(pre, cur){return pre + speachInfo[cur]}, "");            
-          resolve(str);
-        }catch(err){
-          reject(err);
-        }
 
-      });
+          try{
+            // console.log("WU's response is ", response);
+            // console.log("WU's response r
+            
+            //if viewOrSpeech is truthy, return the response directly
+            if(viewOrSpeech){
+              resolve(response);
+            }else{
+             
+              var current = response.current_observation;
+              var info = {
+                  name: current.display_location.full,
+                  icon_url: current.icon_url,
+                  weather: current.weather,
+                  temp_c: current.temp_c,
+                  feelslike: current.feelslike_c,
+              };
+
+              var forecast = {
+                today: response.forecast.txt_forecast.forecastday[0].fcttext_metric
+              }
+              //convert Low 5C to Low 5 degree
+              var lowC = forecast.today.match(/Low\s[\d]+C/g);
+              if (lowC){
+                var re = new RegExp(lowC,"g");
+                forecast.today = forecast.today.replace(re, lowC[0].replace(/C/, " degree"));
+              }
+
+              console.log("!!!!!forecast today is", forecast.today);
+              var speachInfo = {
+                name: info.name + "'s ",
+                weather: "Current weather is " + info.weather + ". ",
+                temp_c: "Temperature is " + info.temp_c + "degrees. ",
+                // feelslike: "Feels like " + info.feelslike + "degrees."
+                today: "Today's forecast is " + forecast.today
+              }
+              var str = Object.keys(speachInfo).reduce(function(pre, cur){return pre + speachInfo[cur]}, "");            
+              resolve(str);
+            }
+          }catch(err){
+            console.log("error is", err);
+            reject(err);
+          }
+
+        });
+      }else{
+        reject({message: "city is empty"});
+      }
+
     });
   }
 }

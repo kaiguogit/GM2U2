@@ -13,7 +13,6 @@ var app = express();
 var routes = require('./routes/index');
 var routesPlaylist = require('./routes/playlists/playlists');
 var routesWidget = require('./routes/widgets/widgets');
-var routesWeather = require('./routes/weather');
 
 //DB
 var models = require("./models");
@@ -100,7 +99,6 @@ app.get('/api/synthesize', function(req, res, next) {
 app.use(jwt_mw({ secret: process.env.jwt_secret}).unless({path: ['/login']}));
 app.use('/api/playlists', routesPlaylist);
 app.use('/api/widgets/', routesWidget);
-app.use('/api/weather', routesWeather);
 
 
 
