@@ -1,10 +1,16 @@
 var express = require('express');
+
+var playlistController = require('../controller/playlist.js');
+
 var weather = require('../modules/weather');
 var time = require('../modules/time');
+
 var router = express.Router();
 var models = require("../models");
 var jwt = require('jsonwebtoken');
 var jwt_mw = require('express-jwt');
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   console.log("user in request is ", req.user);
@@ -23,13 +29,46 @@ router.get('/', function(req, res, next) {
   });
 });
 
-//TESTING PURPOSE
-router.get('/users', function(req, res, next){
 
-  models.user.all().then(function(users){
-    res.json(users);
+// Return TwiML instuctions for the outbound call
+// The TwiMl instruction is from playlist controller
+// The /api/playlist/:id/call route in /routes/playlists/playlists.js will call user
+// Once call is established, twilio will send a post request to this route /outbound with plyastlist Id
+// for instruction of response in the phone.
+router.post('/outbound', function(request, response) {
+  console.log("In outbound route, playlistId in request is", request.query.playlistId);
+  console.log("request query is", request.query);
+
+  var playlistId = request.query.playlistId
+  playlistController.ring(playlistId, function(twiml){
+    console.log("Twiml is", twiml);
+    response.type('text/xml');
+    response.end(twiml.toString(), function (err) {
+      if (err) {
+        console.log(err);
+        response.status(err.status).end();
+      }
+      else {
+        console.log("send instruction to Twilio server");
+      }
+    });
   });
 });
+
+//update user phone number
+router.post('/phone', function(req, res, next){
+  console.log("Updating user phone number, user is", req.user);
+  console.log("Phone number is ", req.body.phoneNumber);
+
+  models.user.findById(req.user.userId).then(function(user){
+    return user.updateAttributes({phoneNumber: req.body.phoneNumber});
+  }).then(function(user){
+    res.json({success: true, user: user});
+  }).catch(function(err){
+    res.json({success: false, err: err});
+    console.log(err);
+  });
+})
 
 
 router.get('/login', function(req, res, next){

@@ -141,6 +141,37 @@ class ActivePlaylist extends Component {
     }
   }
 
+  //Call User's phone number and play all widgets
+  ring(){
+    $.ajax({
+      url: `http://localhost:3000/api/playlists/${this.props.playlist.id}/call`,
+      method: 'get',
+      headers: {
+      'Authorization':  "Bearer " + window.localStorage.token
+      }
+    }).done(function(response){
+      console.log(response);
+      Materialize.toast(response.message, 4000,'',function(){})
+    }).fail(function(err){
+      console.log(err);
+    })
+  }
+
+  uploadPhoneNumber(){
+    $.ajax({
+      url: `http://localhost:3000/phone`,
+      method: "post",
+      headers: {
+      'Authorization':  "Bearer " + window.localStorage.token
+      },
+      data: {phoneNumber: $("input[name='phoneNumber']").val()}
+    }).done(function(response){
+      console.log("uploadedPhoneNumber, response is", response);
+    }).fail(function(err){
+      console.log("failed to uploadPhoneNumber, error is", err);
+    });
+  }
+
   getChildContext(){
     return {playNextWidget: this.playNextWidget.bind(this)};
   }
@@ -212,10 +243,13 @@ class ActivePlaylist extends Component {
         </Dialog>
         
         <button onClick={this.playAllWidgets.bind(this)}>Play All</button>
+        <button onClick={this.ring.bind(this)}>Play All on phone</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.traffic)}>Add Traffic</button>
-        
+        <input type="text" name="phoneNumber"/>
+        <button onClick={this.uploadPhoneNumber.bind(this)}>Enter Phone Number</button>
+        <button onClick={this.ring.bind(this)}>Call</button>
 
         <p>{this.props.playlist.name}</p>
         <p>Id {this.props.playlist.id}</p>
