@@ -75,11 +75,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-
-
-//Define routers path
-app.use('/', routes);
-
 //
 //IBM Waston Developer Cloud Synthesize
 //
@@ -96,7 +91,13 @@ app.get('/api/synthesize', function(req, res, next) {
   transcript.pipe(res);
 });
 
-app.use(jwt_mw({ secret: process.env.jwt_secret}).unless({path: ['/login']}));
+//Check authentication token, put user info in req.user
+app.use(jwt_mw({ secret: process.env.jwt_secret})
+  .unless({
+    path: ['/', '/login', '/outbound']
+  }));
+//Define routers path
+app.use('/', routes);
 app.use('/api/playlists', routesPlaylist);
 app.use('/api/widgets/', routesWidget);
 

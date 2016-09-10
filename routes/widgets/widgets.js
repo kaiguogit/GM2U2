@@ -3,6 +3,7 @@ var router = express.Router();
 var models = require("../../models/index.js");
 var time = require('../../modules/time');
 var weather = require('../../modules/weather');
+var weatherController = require('../../controller/weatherWidget');
 
 //helper methods
 var findPlaylistforWidget = require('../helper.js').findPlaylistforWidget;
@@ -88,22 +89,13 @@ router.get('/:type/:id/speech', (req, res, next) => {
     case "weather":
 
       //find the widget, get weather by City Name
-      var viewOrSpeech = false;
-      models[widgetType].findById(req.params.id)
-      .then(function(widget){
-        if(widget.cityQuery){
-          return weather.currentWeather(widget.cityQuery, viewOrSpeech);
-        }else{
-          return new Promise(function(resolve, reject){
-            reject("There is no city selected. Please click the setting button to select a city.");
-          });
-        }
-      }).then(function(speech){
+      weatherController.getSpeechString(req.params.id)
+      .then(function(speech){
         res.json(speech);
       }).catch(function(err){
+        console.log("Error occured when getting weather speech", err);
         res.json(err);
-      });
-         
+      })
       
       break;
 
