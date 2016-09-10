@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {handleDeleteWidget} from './widgetLibrary.js';
 import { WidgetTypes, WidgetIconImage, ClockFace } from '../Constants';
+
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-
+import AutoComplete from 'material-ui/AutoComplete';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import WidgetCardToolbar from './WidgetCardToolbar.jsx'
 
@@ -13,13 +14,7 @@ import newId from '../utils/newid.js'
 var moment = require('moment');
 
 const styles = {
-  date:{
-    color: '#333',
-    fontSize: '3em' 
-  },
-  radioButton: {
-    marginBottom: 16,
-  }
+
 };
 
 
@@ -28,64 +23,70 @@ class TrafficWidget extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      clockId: 'clock',
+    this.state = {      
+      expanded: true,
+      widgetLocalCopy:{},
+      dataSource: [],      
     };
-  }
-
-  componentWillMount(){
-    var clockId = newId();
-    this.clockId = clockId;
-  }
-
-  componentDidMount() {
-    console.log("did mount");
-     var clock =$(`#${this.clockId}`).FlipClock({
-        clockFace: ClockFace.TwentyFourHourClock
-    });
-    // this.updateClockFace(null, ClockFace.TwentyFourHourClock);      
   };
 
-  updateClockFace(event, clockFace){
-    console.log("tragging event", event);
-    console.log("tragging clock", clockFace);
-   var clock =$(`#${this.clockId}`).FlipClock({
-        clockFace: clockFace
-    });
+  toggleSettingExpanded = () => {
+    this.setState({expanded: !this.state.expanded});
+  };
+  
+
+  componentDidMount() {
+    console.log("traffic widget mounted");
+    this.setState({widgetLocalCopy: this.props.widget});      
+    this.setState({AutocompleteService: new google.maps.places.AutocompleteService()});
+    console.log('google maps AutocompleteService constructor:', new google.maps.places.AutocompleteService())    
+    console.log('google maps AutocompleteService state:', this.state.AutocompleteService)
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('google maps AutocompleteService state:', this.state.AutocompleteService)
+  };
+
+  displaySuggestions(predictions, status) {
+    /*
+    if (status != google.maps.places.PlacesServiceStatus.OK) {
+      alert(status);
+      return;
+    }
+    */
+    var suggestions = predictions.map((prediction,index,array)=>{return prediction.description})
+    console.log('suggestions',suggestions)
+    this.setState({dataSource: suggestions})
+    console.log('dataSource:',this.state.dataSource)
+  };
+
+  updateOrigin(input){
+    console.log('origin input changed, input is:', input)
+    this.state.AutocompleteService.getQueryPredictions(
+      { input: `${input}` }, 
+      this.displaySuggestions.bind(this)
+    )
   }
-
-
 
    render() {
     return (
-      <Card expanded={this.props.expanded} onExpandChange={this.handleExpandChange}>
+      <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
 
         <CardText expandable={true}>
-          <RadioButtonGroup onChange={this.updateClockFace.bind(this)} name="clockhour" defaultSelected={ClockFace.TwentyFourHourClock}>
-            <RadioButton
-              value={ClockFace.TwentyFourHourClock}
-              label="24h"
-              style={styles.radioButton}
-            />
-            <RadioButton
-              value={ClockFace.TwelveHourClock}
-              label="12h"
-              style={styles.radioButton}
-            />
-          </RadioButtonGroup>
+          <h1>Settings:</h1>
+          <AutoComplete hintText='Route Origin' onUpdateInput={this.updateOrigin.bind(this)} dataSource={this.state.dataSource}/>
+          <p>destination auto complete
+          mode of transportation autocomplete drop down
+          auto save so no submit button</p>
         </CardText>
 
         <CardText>
-          <div className="row">
-            <div className="col s12 center-align" style={styles.date}>
-              {moment().format('dddd MMMM Do')}
-            </div>
-          </div>
-          <div className="row">
-            <div className="col push-s3 s7 center-align" >
-              <div id={this.clockId}></div>
-            </div>
-          </div>
+          <h1>google maps with route to destination</h1>
+          <h1>estimated time to destination</h1>
+          <iframe width="100%" height="500" frameBorder="0" style={{border:0}} allowFullScreen
+            src="https://www.google.com/maps/embed/v1/directions?mode=walking&origin=place_id:ChIJVVVFhnlxhlQRVqDISA_7Lc8&destination=place_id:ChIJofc2FJt0hlQRb64ACVph3Gk&key=AIzaSyDuX8bDIG5SH98UqlVdrVyTH6K5G-pZoHY">
+          </iframe>
+          
         </CardText>
         
       </Card>
