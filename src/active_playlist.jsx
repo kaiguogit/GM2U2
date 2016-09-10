@@ -18,18 +18,12 @@ import newId from './utils/newid.js'
 
 
 const styles = {
-<<<<<<< HEAD
-  button: {
-    margin: 12,
-  },
-=======
   AlarmButton: {
     margin: 12,
   },
   AlarmActionButton:{
     float: 'right'
   }
->>>>>>> f7ff8cb866f0cb8903f6f9da4d4515df368f8747
 }
 class ActivePlaylist extends Component {
 
@@ -38,12 +32,6 @@ class ActivePlaylist extends Component {
     super(props);
     this.state = {
       playingWidgetIndex: null,
-<<<<<<< HEAD
-      alarmDialogOpen: false
-    }
-  }
-  
-=======
     }
   }
 
@@ -59,7 +47,6 @@ class ActivePlaylist extends Component {
       }
     }
   }
->>>>>>> f7ff8cb866f0cb8903f6f9da4d4515df368f8747
   //Ajax call to Add widget to this playlist
   handleAddWidget(widgetType){
     //Post request to add widget
