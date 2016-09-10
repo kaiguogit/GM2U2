@@ -48,8 +48,9 @@ app.use(function(req, res, next) {
 //Check authentication token, put user info in req.user
 app.use(jwt_mw({ secret: process.env.jwt_secret})
   .unless({
-    path: ['/', '/login', '/outbound', '/api/synthesize']
+    path: ['/', '/login', '/outbound', '/api/synthesize', '/api/cron/ringOnAlarm']
   }));
+
 //Define routers path
 app.use('/', routes);
 app.use('/api/playlists', routesPlaylist);
