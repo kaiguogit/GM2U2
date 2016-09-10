@@ -4,6 +4,7 @@ var playlistController = require('../controller/playlist.js');
 
 var weather = require('../modules/weather');
 var time = require('../modules/time');
+var textToSpeech = require('../modules/textToSpeech');
 
 var router = express.Router();
 var models = require("../models");
@@ -29,6 +30,21 @@ router.get('/', function(req, res, next) {
   });
 });
 
+//
+//IBM Waston Developer Cloud Synthesize
+//
+router.get('/api/synthesize', function(req, res, next) {
+  var transcript = textToSpeech.synthesize(req.query);
+  transcript.on('response', function(response) {
+    if (req.query.download) {
+      response.headers['content-disposition'] = 'attachment; filename=transcript.ogg';
+    }
+  });
+  transcript.on('error', function(error) {
+    next(error);
+  });
+  transcript.pipe(res);
+});
 
 // Return TwiML instuctions for the outbound call
 // The TwiMl instruction is from playlist controller
@@ -40,7 +56,7 @@ router.post('/outbound', function(request, response) {
   console.log("request query is", request.query);
 
   var playlistId = request.query.playlistId
-  playlistController.ring(playlistId, function(twiml){
+  playlistController.twilioSpeech(playlistId, function(twiml){
     console.log("Twiml is", twiml);
     response.type('text/xml');
     response.end(twiml.toString(), function (err) {
@@ -52,6 +68,16 @@ router.post('/outbound', function(request, response) {
         console.log("send instruction to Twilio server");
       }
     });
+  });
+});
+
+
+///Create Cron job to trigger this to call user when playlist's alarm is time up
+//* * * * * /usr/bin/curl "http://localhost:3000/api/cron/ringOnAlarm"
+//
+router.get('/api/cron/ringOnAlarm', function(request, response){
+  playlistController.ringOnAlarm(function(message){
+    response.json(message);
   });
 });
 
