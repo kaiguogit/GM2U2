@@ -21,17 +21,6 @@ var models = require("./models");
 var jwt = require('jsonwebtoken');
 var jwt_mw = require('express-jwt');
 
-//
-//  Waston Developer Cloud
-//
-var watson       = require('watson-developer-cloud');
-// 
-var textToSpeech = watson.text_to_speech({
-  version: 'v1',
-  username: process.env.waston_api_username,
-  password: process.env.waston_api_password
-});
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -46,26 +35,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// CORS 
-// app.options('/api/playlists', function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, UPDATE, DELETE, OPTIONS');
-
-//   res.header("Access-Control-Allow-Headers", "Authorization, authorization, Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
-
-// app.delete('/api/playlists', function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, UPDATE, DELETE, OPTIONS');
-
-//   res.header("Access-Control-Allow-Headers", "Authorization, authorization, Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
-
-
 //CORS 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -75,26 +44,11 @@ app.use(function(req, res, next) {
   next();
 });
 
-//
-//IBM Waston Developer Cloud Synthesize
-//
-app.get('/api/synthesize', function(req, res, next) {
-  var transcript = textToSpeech.synthesize(req.query);
-  transcript.on('response', function(response) {
-    if (req.query.download) {
-      response.headers['content-disposition'] = 'attachment; filename=transcript.ogg';
-    }
-  });
-  transcript.on('error', function(error) {
-    next(error);
-  });
-  transcript.pipe(res);
-});
 
 //Check authentication token, put user info in req.user
 app.use(jwt_mw({ secret: process.env.jwt_secret})
   .unless({
-    path: ['/', '/login', '/outbound']
+    path: ['/', '/login', '/outbound', '/api/synthesize']
   }));
 //Define routers path
 app.use('/', routes);

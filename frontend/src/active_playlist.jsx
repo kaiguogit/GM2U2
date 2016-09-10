@@ -18,9 +18,12 @@ import newId from './utils/newid.js'
 
 
 const styles = {
-  button: {
+  AlarmButton: {
     margin: 12,
   },
+  AlarmActionButton:{
+    float: 'right'
+  }
 }
 class ActivePlaylist extends Component {
 
@@ -29,10 +32,21 @@ class ActivePlaylist extends Component {
     super(props);
     this.state = {
       playingWidgetIndex: null,
-      alarmDialogOpen: false
     }
   }
-  
+
+  //If playingWidgetIndex is validated, play widget
+  componentDidUpdate(){
+    if(this.isPlaying()){
+      if(!this.isPlayingDone()){
+        console.log(`Playing ${this.state.playingWidgetIndex}th widget`);
+        this.playWidget();      
+      }else{
+        console.log("Setting playingWidgetIndex to null ");
+        this.setState({playingWidgetIndex: null})
+      }
+    }
+  }
   //Ajax call to Add widget to this playlist
   handleAddWidget(widgetType){
     //Post request to add widget
@@ -93,21 +107,31 @@ class ActivePlaylist extends Component {
   //Open alarm dialog
   handleAlarmDialogOpen(){
     console.log("in dialogopen this is", this);
-    this.setState({alarmDialogOpen: true});
+    // this.setState({alarmDialogOpen: true});
+    $('#alarm').openModal();
   }
 
   //Open alarm dialog
-  handleAlarmDialogClose(){
+  handleAlarmDialogSubmit(){
 
     //Alarms is an array
     var newPlaylist = this.props.playlist;
 
     newPlaylist.alarms = this.refs.alarm.refs.alarmList.state.alarms;
 
-
     this.uploadPlaylist(newPlaylist);
+    $('#alarm').closeModal();
+  }
 
-    this.setState({alarmDialogOpen: false});
+  //Open alarm dialog
+  handleAlarmDialogCancel(){
+
+    // findDOMNode(this.refs.alarm).reset();
+    console.log("alarm dialog cancel, alarm is", this.refs.alarm);
+    console.log("Alarms passed from active playlist to alarm is", this.state.alarms);
+    this.refs.alarm.refs.alarmList.updateState();
+
+    $('#alarm').closeModal();
   }
 
   //Change playingWidgetIndex to play next widget;
@@ -176,18 +200,7 @@ class ActivePlaylist extends Component {
     return {playNextWidget: this.playNextWidget.bind(this)};
   }
   
-  //If playingWidgetIndex is validated, play widget
-  componentDidUpdate(){
-    if(this.isPlaying()){
-      if(!this.isPlayingDone()){
-        console.log(`Playing ${this.state.playingWidgetIndex}th widget`);
-        this.playWidget();      
-      }else{
-        console.log("Setting playingWidgetIndex to null ");
-        this.setState({playingWidgetIndex: null})
-      }
-    }
-  }
+
 
   //Index is a number
   isPlaying(){
@@ -201,18 +214,6 @@ class ActivePlaylist extends Component {
   }
 
   render() {
-    const AlarmDialogActions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onTouchTap={this.handleAlarmDialogClose.bind(this)}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        onTouchTap={this.handleAlarmDialogClose.bind(this)}
-      />,
-    ];
 
     return (
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
@@ -223,24 +224,34 @@ class ActivePlaylist extends Component {
           labelPosition="after"
           primary={true}
           icon={<ActionAlarm />}
-          style={styles.button}
+          style={styles.AlarmButton}
           onTouchTap={this.handleAlarmDialogOpen.bind(this)}
         />
+        <a className="waves-effect waves-light btn modal-trigger" href="#alarm">Modal</a>
 
-        <Dialog
-          title="Dialog With Actions"
-          actions={AlarmDialogActions}
-          modal={false}
-          open={this.state.alarmDialogOpen}
-          autoDetectWindowHeight={false}
-
-        >
-          <Alarm 
-            onRing={this.playAllWidgets.bind(this)}
-            alarms={this.props.playlist.alarms}
-            ref="alarm"
-          />
-        </Dialog>
+        <div id="alarm" className="modal">
+          <div className="modal-content">
+            <Alarm 
+              onRing={this.playAllWidgets.bind(this)}
+              alarms={this.props.playlist.alarms}
+              ref="alarm"
+            />
+          </div>
+          <div className="modal-footer">
+            <FlatButton
+              label="Submit"
+              primary={true}
+              onTouchTap={this.handleAlarmDialogSubmit.bind(this)}
+              style={styles.AlarmActionButton}
+            />
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              style={styles.AlarmActionButton}
+              onTouchTap={this.handleAlarmDialogCancel.bind(this)}
+            />
+          </div>
+        </div>
         
         <button onClick={this.playAllWidgets.bind(this)}>Play All</button>
         <button onClick={this.ring.bind(this)}>Play All on phone</button>
