@@ -4,6 +4,7 @@ var playlistController = require('../controller/playlist.js');
 
 var weather = require('../modules/weather');
 var time = require('../modules/time');
+var textToSpeech = require('../modules/textToSpeech');
 
 var router = express.Router();
 var models = require("../models");
@@ -29,6 +30,21 @@ router.get('/', function(req, res, next) {
   });
 });
 
+//
+//IBM Waston Developer Cloud Synthesize
+//
+router.get('/api/synthesize', function(req, res, next) {
+  var transcript = textToSpeech.synthesize(req.query);
+  transcript.on('response', function(response) {
+    if (req.query.download) {
+      response.headers['content-disposition'] = 'attachment; filename=transcript.ogg';
+    }
+  });
+  transcript.on('error', function(error) {
+    next(error);
+  });
+  transcript.pipe(res);
+});
 
 // Return TwiML instuctions for the outbound call
 // The TwiMl instruction is from playlist controller

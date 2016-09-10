@@ -3,12 +3,15 @@ var twilio = require('../modules/twilio.js').twilio;
 var weatherController = require('./weatherWidget.js');
 var time = require('../modules/time');
 
+function ringOnAlarm(){
+  models.playlist.all(function(playlists){
+    console.log("ringOnAlarm", playlists);
+  })
+}
+
 function ring(playlistId, fn){
 
- console.log("In PlaylistController, call method, playlistId is", playlistId);
-
-
-
+  console.log("In PlaylistController, call method, playlistId is", playlistId);
   models.playlist.findById(playlistId)
   .then(function(playlist){
     var speechPromises = [];
@@ -62,7 +65,6 @@ function ring(playlistId, fn){
       fn(twiml);
     });
   });
-  
 }
 
 
