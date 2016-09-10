@@ -54,7 +54,8 @@ class WeatherWidget extends Component {
     super(props);
     this.state = {
       clockId: 'clock',
-      widgetLocalCopy:{}
+      widgetLocalCopy:{},
+      expanded: false
     };
   }
 

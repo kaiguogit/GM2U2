@@ -10,8 +10,6 @@ var router = express.Router();
 var models = require("../models");
 var jwt = require('jsonwebtoken');
 var jwt_mw = require('express-jwt');
-
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
   console.log("user in request is ", req.user);

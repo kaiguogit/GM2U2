@@ -343,7 +343,6 @@ var AlarmDigit = React.createClass({
 
 /* main component */
 var Alarm = React.createClass({
-
     handleCarry: function(digit){
         this.refs[digit].handleCarry();
     },
