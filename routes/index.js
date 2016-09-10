@@ -71,8 +71,14 @@ router.post('/outbound', function(request, response) {
   });
 });
 
-router.get('/api/cron/ringOnAlarm', function(){
-  playlistController.ringOnAlarm();
+
+///Create Cron job to trigger this to call user when playlist's alarm is time up
+//* * * * * /usr/bin/curl "http://localhost:3000/api/cron/ringOnAlarm"
+//
+router.get('/api/cron/ringOnAlarm', function(request, response){
+  playlistController.ringOnAlarm(function(message){
+    response.json(message);
+  });
 });
 
 //update user phone number
