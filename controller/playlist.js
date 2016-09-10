@@ -121,6 +121,8 @@ function twilioSpeech(playlistId, fn){
         // .pause({length: 2});
         // console.log("speech is",speech)
       });
+      var url =  process.env.proxy + "/outbound?playlistId=" + playlistId;
+      twiml.redirect(url);
       fn(twiml);
     });
   });
