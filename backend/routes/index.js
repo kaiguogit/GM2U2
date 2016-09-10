@@ -56,7 +56,7 @@ router.post('/outbound', function(request, response) {
   console.log("request query is", request.query);
 
   var playlistId = request.query.playlistId
-  playlistController.ring(playlistId, function(twiml){
+  playlistController.twilioSpeech(playlistId, function(twiml){
     console.log("Twiml is", twiml);
     response.type('text/xml');
     response.end(twiml.toString(), function (err) {
@@ -69,6 +69,10 @@ router.post('/outbound', function(request, response) {
       }
     });
   });
+});
+
+router.get('/api/cron/ringOnAlarm', function(){
+  playlistController.ringOnAlarm();
 });
 
 //update user phone number

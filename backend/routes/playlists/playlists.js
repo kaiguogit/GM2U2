@@ -4,7 +4,8 @@ var time = require('../../modules/time');
 var router = express.Router();
 var models = require("../../models/index.js");
 var uuid = require('node-uuid');
-var twilioClient = require('../../modules/twilio.js').client;
+var playlistController = require('../../controller/playlist.js');
+
 //helper methods
 var findPlaylistforWidget = require('../helper.js').findPlaylistforWidget;
 var addToPlaylistArray = require('../helper.js').addToPlaylistArray;
@@ -33,40 +34,20 @@ router.get('/:id',(req, res, next) =>{
   });
 });
 
+// Call user and play the playlist
 // Handle an AJAX POST request to place an outbound call
-router.get('/:id/call', function(req, res, next) {
-  // This should be the publicly accessible URL for your application
-  // Here, we just use the host for the application making the request,
-  // but you can hard code it or use something different if need be
-  // var url = 'http://' + request.headers.host + '/outbound';
-  // var url = 'https://gmtestdesploy.herokuapp.com/outbound';
-  var url = "http://b6992d66.ngrok.io/outbound?playlistId=" + req.params.id;
-  
-  // models.playlist.findById(request.params.id).then(function(){
-    
-  // })
-  console.log('user phoneNumber is', req.user);
-  models.user.findById(req.user.userId)
-  .then(function(user){
-    // Place an outbound call to the user, using the TwiML instructions
-    // from the /outbound route
-    twilioClient.makeCall({
-        to: user.dataValues.phoneNumber,
-        from: process.env.TWILIO_NUMBER,
-        url: url
-    }, function(err, message) {
-        console.log(err);
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.send({
-                message: 'Thank you! We will be calling you shortly.'
-            });
-        }
-    });
-  })
+router.get('/:playlistId/call', function(req, res, next) {
 
-
+  playlistController.ring(req.params.playlistId, function(err, message){
+    console.log(err);
+    if (err) {
+        res.status(500).send(err);
+    } else {
+        res.send({
+            message: 'Thank you! We will be calling you shortly.'
+        });
+    }
+  });
 });
 
 //Create Board
