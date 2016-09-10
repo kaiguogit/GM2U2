@@ -4,6 +4,7 @@ var time = require('../../modules/time');
 var router = express.Router();
 var models = require("../../models/index.js");
 var uuid = require('node-uuid');
+var playlistController = require('../../controller/playlist.js');
 
 //helper methods
 var findPlaylistforWidget = require('../helper.js').findPlaylistforWidget;
@@ -30,6 +31,22 @@ router.get('/:id',(req, res, next) =>{
   console.log(`\n!!!!get /api/playlists ${req.params.id}`);
   models.playlist.findById(req.params.id).then(function(playlist){
     res.json(playlist.dataValues);
+  });
+});
+
+// Call user and play the playlist
+// Handle an AJAX POST request to place an outbound call
+router.get('/:playlistId/call', function(req, res, next) {
+
+  playlistController.ring(req.params.playlistId, function(err, message){
+    console.log(err);
+    if (err) {
+        res.status(500).send(err);
+    } else {
+        res.send({
+            message: 'Thank you! We will be calling you shortly.'
+        });
+    }
   });
 });
 
