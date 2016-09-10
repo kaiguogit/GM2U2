@@ -18,9 +18,18 @@ import newId from './utils/newid.js'
 
 
 const styles = {
+<<<<<<< HEAD
   button: {
     margin: 12,
   },
+=======
+  AlarmButton: {
+    margin: 12,
+  },
+  AlarmActionButton:{
+    float: 'right'
+  }
+>>>>>>> f7ff8cb866f0cb8903f6f9da4d4515df368f8747
 }
 class ActivePlaylist extends Component {
 
@@ -29,10 +38,28 @@ class ActivePlaylist extends Component {
     super(props);
     this.state = {
       playingWidgetIndex: null,
+<<<<<<< HEAD
       alarmDialogOpen: false
     }
   }
   
+=======
+    }
+  }
+
+  //If playingWidgetIndex is validated, play widget
+  componentDidUpdate(){
+    if(this.isPlaying()){
+      if(!this.isPlayingDone()){
+        console.log(`Playing ${this.state.playingWidgetIndex}th widget`);
+        this.playWidget();      
+      }else{
+        console.log("Setting playingWidgetIndex to null ");
+        this.setState({playingWidgetIndex: null})
+      }
+    }
+  }
+>>>>>>> f7ff8cb866f0cb8903f6f9da4d4515df368f8747
   //Ajax call to Add widget to this playlist
   handleAddWidget(widgetType){
     //Post request to add widget
@@ -93,21 +120,32 @@ class ActivePlaylist extends Component {
   //Open alarm dialog
   handleAlarmDialogOpen(){
     console.log("in dialogopen this is", this);
-    this.setState({alarmDialogOpen: true});
+
+    // this.setState({alarmDialogOpen: true});
+    $('#alarm').openModal();
   }
 
   //Open alarm dialog
-  handleAlarmDialogClose(){
+  handleAlarmDialogSubmit(){
 
     //Alarms is an array
     var newPlaylist = this.props.playlist;
 
     newPlaylist.alarms = this.refs.alarm.refs.alarmList.state.alarms;
 
-
     this.uploadPlaylist(newPlaylist);
+    $('#alarm').closeModal();
+  }
 
-    this.setState({alarmDialogOpen: false});
+  //Open alarm dialog
+  handleAlarmDialogCancel(){
+
+    // findDOMNode(this.refs.alarm).reset();
+    console.log("alarm dialog cancel, alarm is", this.refs.alarm);
+    console.log("Alarms passed from active playlist to alarm is", this.state.alarms);
+    this.refs.alarm.refs.alarmList.updateState();
+
+    $('#alarm').closeModal();
   }
 
   //Change playingWidgetIndex to play next widget;
@@ -141,22 +179,41 @@ class ActivePlaylist extends Component {
     }
   }
 
+  //Call User's phone number and play all widgets
+  ring(){
+    $.ajax({
+      url: `http://localhost:3000/api/playlists/${this.props.playlist.id}/call`,
+      method: 'get',
+      headers: {
+      'Authorization':  "Bearer " + window.localStorage.token
+      }
+    }).done(function(response){
+      console.log(response);
+      Materialize.toast(response.message, 4000,'',function(){})
+    }).fail(function(err){
+      console.log(err);
+    })
+  }
+
+  uploadPhoneNumber(){
+    $.ajax({
+      url: `http://localhost:3000/phone`,
+      method: "post",
+      headers: {
+      'Authorization':  "Bearer " + window.localStorage.token
+      },
+      data: {phoneNumber: $("input[name='phoneNumber']").val()}
+    }).done(function(response){
+      console.log("uploadedPhoneNumber, response is", response);
+    }).fail(function(err){
+      console.log("failed to uploadPhoneNumber, error is", err);
+    });
+  }
+
   getChildContext(){
     return {playNextWidget: this.playNextWidget.bind(this)};
   }
   
-  //If playingWidgetIndex is validated, play widget
-  componentDidUpdate(){
-    if(this.isPlaying()){
-      if(!this.isPlayingDone()){
-        console.log(`Playing ${this.state.playingWidgetIndex}th widget`);
-        this.playWidget();      
-      }else{
-        console.log("Setting playingWidgetIndex to null ");
-        this.setState({playingWidgetIndex: null})
-      }
-    }
-  }
 
   //Index is a number
   isPlaying(){
@@ -170,18 +227,6 @@ class ActivePlaylist extends Component {
   }
 
   render() {
-    const AlarmDialogActions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onTouchTap={this.handleAlarmDialogClose.bind(this)}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        onTouchTap={this.handleAlarmDialogClose.bind(this)}
-      />,
-    ];
 
     return (
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
@@ -192,30 +237,43 @@ class ActivePlaylist extends Component {
           labelPosition="after"
           primary={true}
           icon={<ActionAlarm />}
-          style={styles.button}
+          style={styles.AlarmButton}
           onTouchTap={this.handleAlarmDialogOpen.bind(this)}
         />
+        <a className="waves-effect waves-light btn modal-trigger" href="#alarm">Modal</a>
 
-        <Dialog
-          title="Dialog With Actions"
-          actions={AlarmDialogActions}
-          modal={false}
-          open={this.state.alarmDialogOpen}
-          autoDetectWindowHeight={false}
-
-        >
-          <Alarm 
-            onRing={this.playAllWidgets.bind(this)}
-            alarms={this.props.playlist.alarms}
-            ref="alarm"
-          />
-        </Dialog>
+        <div id="alarm" className="modal">
+          <div className="modal-content">
+            <Alarm 
+              onRing={this.playAllWidgets.bind(this)}
+              alarms={this.props.playlist.alarms}
+              ref="alarm"
+            />
+          </div>
+          <div className="modal-footer">
+            <FlatButton
+              label="Submit"
+              primary={true}
+              onTouchTap={this.handleAlarmDialogSubmit.bind(this)}
+              style={styles.AlarmActionButton}
+            />
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              style={styles.AlarmActionButton}
+              onTouchTap={this.handleAlarmDialogCancel.bind(this)}
+            />
+          </div>
+        </div>
         
         <button onClick={this.playAllWidgets.bind(this)}>Play All</button>
+        <button onClick={this.ring.bind(this)}>Play All on phone</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.traffic)}>Add Traffic</button>
-        
+        <input type="text" name="phoneNumber"/>
+        <button onClick={this.uploadPhoneNumber.bind(this)}>Enter Phone Number</button>
+        <button onClick={this.ring.bind(this)}>Call</button>
 
         <p>{this.props.playlist.name}</p>
         <p>Id {this.props.playlist.id}</p>

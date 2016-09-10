@@ -11,19 +11,18 @@ var User = function(sequelize, DataTypes) {
         googleId:{
           type: DataTypes.STRING,
           allowNull: true    
-        }, 
-        createdAt: {
-          type: DataTypes.DATE
         },
-        updatedAt: {
-          type: DataTypes.DATE
-        },
+        phoneNumber:{
+          type: DataTypes.STRING,
+          allowNull: true    
+        }
     },{
       classMethods: {
         associate: function(models) {
           User.hasMany(models.playlist);
         }
-      }
+      },
+      timestamps: false
     });
 
     //create playlist when user is created
@@ -32,7 +31,7 @@ var User = function(sequelize, DataTypes) {
     //Use models.user.associations['playlists'].target
     //
     User.hook('afterCreate', function(user, options) {
-      this.associations.playlists.target.create({name: "Playlist1", userId: user.id});
+      this.associations.playlists.target.create({name: "Playlist1", userId: user.id, widgets: []});
     })
 
     User.hook('beforeDestroy', function(user, options) {

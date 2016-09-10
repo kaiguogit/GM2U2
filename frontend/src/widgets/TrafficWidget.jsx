@@ -5,6 +5,7 @@ import { WidgetTypes, WidgetIconImage, ClockFace } from '../Constants';
 //material-ui
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import AutoComplete from 'material-ui/AutoComplete';
+
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import WidgetCardToolbar from './WidgetCardToolbar.jsx'
 
@@ -14,7 +15,6 @@ import newId from '../utils/newid.js'
 var moment = require('moment');
 
 const styles = {
-
 };
 
 
@@ -87,7 +87,6 @@ class TrafficWidget extends Component {
             src="https://www.google.com/maps/embed/v1/directions?mode=walking&origin=place_id:ChIJVVVFhnlxhlQRVqDISA_7Lc8&destination=place_id:ChIJofc2FJt0hlQRb64ACVph3Gk&key=AIzaSyDuX8bDIG5SH98UqlVdrVyTH6K5G-pZoHY">
           </iframe>
           
-        </CardText>
         
       </Card>
     );

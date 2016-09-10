@@ -3,13 +3,11 @@
 /**
  * Module dependencies.
  */
-
 var app = require('../app');
 var debug = require('debug')('gm2u2:server');
 var http = require('http');
 //http://programminglife.io/nodejs-sequelize-postgresql-tutorial/
 var models = require("../models");
-
 /**
  * Get port from environment and store in Express.
  */

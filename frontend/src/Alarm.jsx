@@ -176,8 +176,16 @@ var AlarmEntry = React.createClass({
 /* Alarm list */
 var AlarmList = React.createClass({
     getInitialState: function(){
-        return {alarms: this.props.alarms};
+
+        //Use slice() here to create a new array with same data, new pointer
+        //This acheived to save a local copy of props.alarms array
+        return {alarms: this.props.alarms.slice()};
     },
+
+    updateState: function(){
+        this.setState({alarms: this.props.alarms.slice()});
+    },
+    
     handleEntryClose: function(index){
         var state = this.state;
         state.alarms.splice(index, 1);
@@ -189,6 +197,11 @@ var AlarmList = React.createClass({
         this.setState(state);
     },
     render: function () {
+        console.log("rendering alarm list");
+        console.log("Alarm list updated state");
+        console.log("Alarm list updated state, this is", this);
+        console.log("Alarm list alarms is", this.state.alarms);
+        console.log("Alarm list props alarms is", this.props.alarms);
         var alarmNodes = this.state.alarms.map(function(alarm, i){
             var time = new Date(alarm.time)
             if(alarm === undefined) return undefined;
@@ -347,8 +360,12 @@ var Alarm = React.createClass({
         date.setSeconds(this.refs.secondDigit.state.value);
         this.refs.alarmList.handleAddEntry({time: date, comment: this.refs.comment.value });
     },
-    render: function(){
+    render: function(){ 
         var date = new Date();
+        console.log("rendering alarm");
+        console.log("Alarm updated state");
+        console.log("Alarm updated state, this is", this);
+        console.log("Alarm props alarms is", this.props.alarms);
         return (
             <div className="alarm">
                 <Clock />
