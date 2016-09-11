@@ -33,6 +33,36 @@ export default class SourceSelector extends React.Component {
                 label="ESPN"
                 style={styles.radioButton}
               />
+              <RadioButton
+                value="ign"
+                label="IGN"
+                style={styles.radioButton}
+              />
+              <RadioButton
+                value="google-news"
+                label="Google News"
+                style={styles.radioButton}
+              />
+              <RadioButton
+                value="reddit-r-all"
+                label="Reddit"
+                style={styles.radioButton}
+              />
+              <RadioButton
+                value="new-scientist"
+                label="New Scientist"
+                style={styles.radioButton}
+              />
+              <RadioButton
+                value="fox-sports"
+                label="Fox Sports"
+                style={styles.radioButton}
+              />
+              <RadioButton
+                value="nfl-news"
+                label="NFL News"
+                style={styles.radioButton}
+              />
         </RadioButtonGroup>
       </div>
     );

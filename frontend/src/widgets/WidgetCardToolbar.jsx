@@ -29,8 +29,16 @@ const styles = {
 
 
 class WidgetCardToolbar extends Component {
-  capitalize(str) {
+  capitalizeWord(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  capitalizeTitle(){
+    if(this.props.widget.widgetType === "news"){
+      return this.props.widget.source.name.split("-").map(this.capitalizeWord).join(" ");
+    }else{
+      return this.capitalizeWord(this.props.widget.widgetType);
+    }
   }
 
   componentDidMount() {
@@ -42,7 +50,7 @@ class WidgetCardToolbar extends Component {
       <Toolbar  >
         <ToolbarGroup firstChild={true} className="valign-wrapper">
           <Avatar src={WidgetIconImage[this.props.widget.widgetType]}/>
-          <ToolbarTitle style={styles.title} text={this.capitalize(this.props.widget.widgetType)} />
+          <ToolbarTitle style={styles.title} text={this.capitalizeTitle()} />
           <AudioPlayer ref="audioPlayer" className="valign" widget={this.props.widget}/> 
         </ToolbarGroup>
         <ToolbarGroup>
