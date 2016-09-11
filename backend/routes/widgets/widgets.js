@@ -4,6 +4,7 @@ var models = require("../../models/index.js");
 var time = require('../../modules/time');
 var weather = require('../../modules/weather');
 var weatherController = require('../../controller/weatherWidget');
+var newsController = require('../../controller/newsWidget');
 
 //helper methods
 var findPlaylistforWidget = require('../helper.js').findPlaylistforWidget;
@@ -98,7 +99,11 @@ router.get('/:type/:id/speech', (req, res, next) => {
       })
       
       break;
-
+    case "news":
+      newsController.getSpeechString(req.params.id, function(speech){
+        res.json(speech);
+      })
+      break;
     default:
       break;
 
@@ -135,7 +140,11 @@ router.get('/:type/:id/view', (req, res, next) => {
         res.json(err);
       });
       break;
-
+    case "news":
+      newsController.getNews(req.params.id, function(news){
+        res.json(JSON.stringify(news));
+      })
+      break;
     default:
       break;
 

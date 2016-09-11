@@ -19,6 +19,7 @@ function getSpeechString(widgetId){
     })
 }
 
+
 var weatherWidget = {};
 
 weatherWidget.getSpeechString = getSpeechString;

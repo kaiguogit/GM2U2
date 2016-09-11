@@ -5,7 +5,6 @@ import { WidgetTypes, WidgetIconImage, ClockFace } from '../Constants';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import WidgetCardToolbar from './WidgetCardToolbar.jsx'
 import CitySelector from './WeatherWidget/CitySelector.jsx'
 import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
@@ -30,7 +29,9 @@ const styles = {
     position: 'relative',
   },
   moreInfo:{
-    fontSize: '1.3em',
+    fontSize: '1em',
+    overflow: 'auto',
+    height: '20em'
   },
   hourlyScroll:{
     overflow: "auto",
@@ -82,7 +83,10 @@ class WeatherWidget extends Component {
   //https://facebook.github.io/react/docs/component-specs.html
   componentDidUpdate(prevProps){
     console.log("Weather widget received update");
+    console.log("Previous props ", prevProps.widget.cityQuery);
+    console.log("Current props ", this.props.widget.cityQuery);
     if(prevProps.widget.cityQuery !== this.props.widget.cityQuery){
+      console.log("City changed, getting weather");
       this.setState({refreshing: true});
       this.getWeather();
     }
@@ -114,7 +118,7 @@ class WeatherWidget extends Component {
       setTimeout(function(){
         this.setState({weather: weather});
         this.setState({refreshing: false});
-      }.bind(this), 2000)
+      }.bind(this), 50)
     }.bind(this)).fail(function(err){
       console.log(err);
       this.setState({refreshing: false});

@@ -15,10 +15,13 @@ var moment = require('moment');
 const styles = {
   date:{
     color: '#333',
-    fontSize: '3em' 
+    fontSize: '2.5em' 
   },
   radioButton: {
     marginBottom: 16,
+  },
+  clock:{
+    margin:'auto'
   }
 };
 
@@ -81,16 +84,12 @@ class TimeWidget extends Component {
 
     //Main Content
     <CardText>
-      <div className="row">
-        <div className="col s12 center-align" style={styles.date}>
-          {moment().format('dddd MMMM Do')}
-        </div>
+      <div className="col s12 center-align" style={styles.date}>
+        {moment().format('dddd MMMM Do')}
       </div>
-      <div className="row">
-        <div className="col push-s3 s9 center-align" >
+        <div className="row" style={styles.clock}>
           <div id={this.clockId}></div>
         </div>
-      </div>
     </CardText>
       </Card>
     );

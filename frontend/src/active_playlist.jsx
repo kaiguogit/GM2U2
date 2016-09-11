@@ -258,6 +258,7 @@ class ActivePlaylist extends Component {
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.traffic)}>Add Traffic</button>
+        <button onClick={this.handleAddWidget.bind(this, WidgetTypes.news)}>Add News</button>
         <input type="text" name="phoneNumber"/>
         <button onClick={this.uploadPhoneNumber.bind(this)}>Enter Phone Number</button>
         <button onClick={this.ring.bind(this)}>Call</button>
