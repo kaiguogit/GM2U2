@@ -3,6 +3,7 @@ var router = express.Router();
 var models = require("../../models/index.js");
 var time = require('../../modules/time');
 var weather = require('../../modules/weather');
+var traffic = require('../../modules/traffic');
 var weatherController = require('../../controller/weatherWidget');
 
 //helper methods
@@ -99,6 +100,10 @@ router.get('/:type/:id/speech', (req, res, next) => {
       
       break;
 
+    case "traffic":
+      var speech = 'requesting traffic speech';
+      console.log(speech);
+      res.json(speech);
     default:
       break;
 
