@@ -2,7 +2,7 @@ var models = require("../models/index.js");
 var request = require('request');
 
 function getSpeechString(widgetId, fn){
-  var url = `https://newsapi.org/v1/articles?source=time&sortBy=top&apiKey=${process.env.newsapi}`
+  var url = `https://newsapi.org/v1/articles?source=the-new-york-time&sortBy=popular&apiKey=${process.env.newsapi}`
 
   request(url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
@@ -30,7 +30,7 @@ function getSpeechString(widgetId, fn){
 
 function getNews(widgetId, fn){
   
-  var url = `https://newsapi.org/v1/articles?source=time&sortBy=top&apiKey=${process.env.newsapi}`
+  var url = `https://newsapi.org/v1/articles?source=the-new-york-times&sortBy=popular&apiKey=${process.env.newsapi}`
 
   request(url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
