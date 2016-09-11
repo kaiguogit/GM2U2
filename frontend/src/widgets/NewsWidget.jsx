@@ -5,7 +5,7 @@ import { WidgetTypes, WidgetIconImage, ClockFace } from '../Constants';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
-import CitySelector from './WeatherWidget/CitySelector.jsx'
+import SourceSelector from './NewsWidget/SourceSelector.jsx'
 import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
 //utils
@@ -68,6 +68,19 @@ class NewsWidget extends Component {
   
   };
 
+  componentDidUpdate(prevProps){
+    console.log("News widget received update");
+    console.log("Previous props ", prevProps.widget);
+    console.log("Current props ", this.props.widget);
+    if(prevProps.widget.source.name !== this.props.widget.source.name){
+      console.log("News source changed, getting news");
+      this.setState({refreshing: true});
+      this.getNews();
+    }else{
+      console.log("News source did not changed, won't update news");
+    }
+  }
+
   updateWidgetSetting(options){
 
     console.log("options passed in is", options);
@@ -123,7 +136,7 @@ class NewsWidget extends Component {
       >
         //Setting
         <CardText expandable={true}>
-          <CitySelector updateWidgetSetting={this.updateWidgetSetting.bind(this)}/>
+          <SourceSelector source={this.props.widget.source} updateWidgetSetting={this.updateWidgetSetting.bind(this)}/>
           <RaisedButton onClick={this.handleSaveSetting.bind(this)} label="Save Setting" primary={true}/>
 
         </CardText>

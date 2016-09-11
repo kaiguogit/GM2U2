@@ -165,7 +165,7 @@ renderSettingButton(){
                       {connectDragSource(
                         <div>
                           <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
-                            <DragHandle/>
+                            <DragHandle className="dragHandle"/>
                           </IconButton>
                         </div>
                         )}
@@ -190,7 +190,7 @@ renderSettingButton(){
                       {connectDragSource(
                         <div>
                           <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
-                            <DragHandle/>
+                            <DragHandle className="dragHandle"/>
                           </IconButton>
                         </div>
                       )}
@@ -215,7 +215,7 @@ renderSettingButton(){
                       {connectDragSource(
                         <div>
                           <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
-                            <DragHandle/>
+                            <DragHandle className="dragHandle"/>
                           </IconButton>
                         </div>
                       )}
@@ -240,7 +240,7 @@ renderSettingButton(){
                       {connectDragSource(
                         <div>
                           <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
-                            <DragHandle/>
+                            <DragHandle className="dragHandle"/>
                           </IconButton>
                         </div>
                       )}

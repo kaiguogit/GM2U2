@@ -1,27 +1,30 @@
 "use strict"
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function(sequelize, Sequelize) {
 
   var NewsWidget = sequelize.define("newsWidget", {
       id: { 
-        type: DataTypes.UUID, 
+        type: Sequelize.UUID, 
         primaryKey: true, 
-        defaultValue: DataTypes.UUIDV4, 
+        defaultValue: Sequelize.UUIDV4, 
       },
       widgetType:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         defaultValue: "news"
       },
       source:{
-        type: DataTypes.STRING,
+        type: Sequelize.JSON,
         allowNull: true,
-        defaultValue: "the-new-york-times"
+        defaultValue: {
+          name:"the-new-york-times",
+          sortBy: "popular"
+        }
       },
       createdAt: {
-        type: DataTypes.DATE
+        type: Sequelize.DATE
       },
       updatedAt: {
-        type: DataTypes.DATE
+        type: Sequelize.DATE
       },
   },{
     classMethods: {

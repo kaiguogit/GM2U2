@@ -57,10 +57,9 @@ class ActivePlaylist extends Component {
       'Authorization':  "Bearer " + window.localStorage.token
       }
     })
-    .then(function(widget) {
+    .then(function(playlist) {
       console.log("!!!!!response from create widiget is below");
-      console.log("created widget", widget);
-      console.log("created widget, type is", widget.widgetType);
+      console.log("created widget, new playlist is", playlist);
       this.props.onPlaylistChange();
       console.log("Inside of active playlist Playlist is", this.props.playlist);
     }.bind(this));
