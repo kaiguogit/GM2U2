@@ -227,8 +227,6 @@ class ActivePlaylist extends Component {
           style={styles.AlarmButton}
           onTouchTap={this.handleAlarmDialogOpen.bind(this)}
         />
-        <a className="waves-effect waves-light btn modal-trigger" href="#alarm">Modal</a>
-
         <div id="alarm" className="modal">
           <div className="modal-content">
             <Alarm 
