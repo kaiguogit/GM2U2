@@ -55,7 +55,6 @@ router.post('/outbound', function(request, response) {
 
   var playlistId = request.query.playlistId
   playlistController.twilioSpeech(playlistId, function(twiml){
-    console.log("Twiml is", twiml);
     response.type('text/xml');
     response.end(twiml.toString(), function (err) {
       if (err) {
@@ -71,8 +70,9 @@ router.post('/outbound', function(request, response) {
 
 
 ///Create Cron job to trigger this to call user when playlist's alarm is time up
+// env EDITOR=nano crontab -e
 //* * * * * /usr/bin/curl "http://localhost:3000/api/cron/ringOnAlarm"
-//
+//   
 router.get('/api/cron/ringOnAlarm', function(request, response){
   playlistController.ringOnAlarm(function(message){
     response.json(message);
