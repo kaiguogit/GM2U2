@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import TimeWidget from './widgets/TimeWidget.jsx';
 import TrafficWidget from './widgets/TrafficWidget.jsx';
 import WeatherWidget from './widgets/WeatherWidget.jsx';
+import NewsWidget from './widgets/NewsWidget.jsx';
 import WidgetCardToolbar from './widgets/WidgetCardToolbar.jsx'
 
 
@@ -151,7 +152,6 @@ renderSettingButton(){
             width: '100%'
             }}
           >
-            { console.log("before switch",this.props.widget.widgetType)}
             {(() => { 
               switch(this.props.widget.widgetType){
                 case WidgetTypes.time:
@@ -222,6 +222,31 @@ renderSettingButton(){
                       {this.renderSettingButton()}
                       </WidgetCardToolbar>
                       <TrafficWidget 
+                        widget={this.props.widget} 
+                        onWidgetChange={this.props.onWidgetChange}
+                        ref = 'widget'
+                      />
+                    </div>
+                   ) 
+                  break;
+                case WidgetTypes.news:
+                  return (  
+                    <div>
+                      <WidgetCardToolbar 
+                        widget={this.props.widget}
+                        onWidgetChange={this.props.onWidgetChange}
+                        ref='toolbar'
+                      >
+                      {connectDragSource(
+                        <div>
+                          <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
+                            <DragHandle/>
+                          </IconButton>
+                        </div>
+                      )}
+                      {this.renderSettingButton()}
+                      </WidgetCardToolbar>
+                      <NewsWidget 
                         widget={this.props.widget} 
                         onWidgetChange={this.props.onWidgetChange}
                         ref = 'widget'

@@ -86,10 +86,11 @@ router.delete('/:id', (req, res, next)=>{
   });
 });
 
-//Create TimeWidget to this playlist
-router.post('/:id/timeWidget', (req, res, next)=>{
-  console.log("\n!!!!!!!Creating timeWidget for playlist id ", req.params.id);
-  models.timeWidget.create({id: uuid.v4(), playlistId: req.params.id})
+
+//Create widget to this playlist
+router.post('/:id/:widgetType', (req, res, next)=>{
+  console.log(`\n!!!!!!!Creating ${req.params.widgetType} for playlist id  ${req.params.id}`);
+  models[req.params.widgetType].create({id: uuid.v4(), playlistId: req.params.id})
   .then(findPlaylistforWidget)
   .then(addToPlaylistArray)
   .then(function(playlist){
@@ -98,31 +99,43 @@ router.post('/:id/timeWidget', (req, res, next)=>{
   });
 });
 
+// //Create TimeWidget to this playlist
+// router.post('/:id/timeWidget', (req, res, next)=>{
+//   console.log("\n!!!!!!!Creating timeWidget for playlist id ", req.params.id);
+//   models.timeWidget.create({id: uuid.v4(), playlistId: req.params.id})
+//   .then(findPlaylistforWidget)
+//   .then(addToPlaylistArray)
+//   .then(function(playlist){
+//     console.log("\n!!!!!returned variable after playlist update is", playlist.dataValues);
+//     res.json(playlist);
+//   });
+// });
 
 
-//Create TrafficWidget to this playlist
-router.post('/:id/trafficWidget', (req, res, next)=>{
-  console.log("\n!!!!!!!Creating trafficWidget for playlist id ", req.params.id);
-  models.trafficWidget.create({id: uuid.v4(), playlistId: req.params.id})
-  .then(findPlaylistforWidget)
-  .then(addToPlaylistArray)
-  .then(function(playlist){
-    console.log("\n!!!!!returned variable after playlist update is", playlist.dataValues);
-    res.json(playlist);
-  });
-});
 
-//Create TimeWidget to this playlist
-router.post('/:id/weatherWidget', (req, res, next)=>{
-  console.log("\n!!!!!!!Creating weatherWidget for playlist id ", req.params.id);
-  models.weatherWidget.create({id: uuid.v4(), playlistId: req.params.id})
-  .then(findPlaylistforWidget)
-  .then(addToPlaylistArray)
-  .then(function(playlist){
-    console.log("\n!!!!!returned variable after playlist update is", playlist.dataValues);
-    res.json(playlist);
-  });
-});
+// //Create TrafficWidget to this playlist
+// router.post('/:id/trafficWidget', (req, res, next)=>{
+//   console.log("\n!!!!!!!Creating trafficWidget for playlist id ", req.params.id);
+//   models.trafficWidget.create({id: uuid.v4(), playlistId: req.params.id})
+//   .then(findPlaylistforWidget)
+//   .then(addToPlaylistArray)
+//   .then(function(playlist){
+//     console.log("\n!!!!!returned variable after playlist update is", playlist.dataValues);
+//     res.json(playlist);
+//   });
+// });
+
+// //Create TimeWidget to this playlist
+// router.post('/:id/weatherWidget', (req, res, next)=>{
+//   console.log("\n!!!!!!!Creating weatherWidget for playlist id ", req.params.id);
+//   models.weatherWidget.create({id: uuid.v4(), playlistId: req.params.id})
+//   .then(findPlaylistforWidget)
+//   .then(addToPlaylistArray)
+//   .then(function(playlist){
+//     console.log("\n!!!!!returned variable after playlist update is", playlist.dataValues);
+//     res.json(playlist);
+//   });
+// });
 
 //Update playlist
 router.put('/:id', (req, res, next)=>{
