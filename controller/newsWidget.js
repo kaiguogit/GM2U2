@@ -22,14 +22,18 @@ function getSpeechString(widgetId, fn){
       if (!error && response.statusCode == 200) {
         console.log(JSON.parse(body)); // Print the body of response.
         var articles = JSON.parse(body).articles;
-        var speech = articles.reduce(function(previous, current){
+
+        var breakTag = "<break strength=\"medium\"></break>"
+        var speech = articles.splice(0, 3).reduce(function(previous, current){
           return previous + "<p>" +
             "<s>" + current.title + ". </s>" +
             "<s>" + current.description + ". </s>" + "</p>" +
-            "<break strength=\"medium\"></break>"
+            breakTag
         }, "");
 
-        speech = "The latest news are: " + speech;
+        sourceName =  sourceName.split("-").map(capitalizeWord).join(" ");
+
+        speech = `The latest news from ${sourceName}: ${breakTag} ${speech}`;
 
         speech = "<speak version=\"1.0\">" + speech + "</speak>"
         console.log("speech string is", speech);
@@ -44,6 +48,10 @@ function getSpeechString(widgetId, fn){
     });
   })
 }
+
+function capitalizeWord(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
 function getNews(widgetId, fn){
   models.newsWidget.findById(widgetId)
