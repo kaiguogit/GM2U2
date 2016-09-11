@@ -17,7 +17,6 @@ class Navbar extends Component {
           {/*  align-left items*/} 
           <ul className="left hide-on-small-only"> {/* on regular screens */}
             <li><a href="#" onClick={this.props.toggleSidebarLeft}><i className="material-icons left">library_add</i>Widgets</a></li>      
-            <li><a href="#"><i className="material-icons left">shop</i>Store</a></li>      
           </ul>
           <ul className="left hide-on-med-and-up"> {/* on mobile screens */}
             <li><a href="#" onClick={this.props.toggleSidebarLeft}><i className="material-icons">library_add</i></a></li>      
