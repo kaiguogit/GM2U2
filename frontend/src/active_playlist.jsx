@@ -212,6 +212,22 @@ class ActivePlaylist extends Component {
     return !(Number.isInteger(this.state.playingWidgetIndex) && this.state.playingWidgetIndex < this.props.playlist.widgets.length)
   }
 
+  //expand all collapse card
+  expandAll(){
+    //https://codepen.io/jasonpaul/pen/NxjvjW
+    //how to expand all
+    let $header = $('.collapsible .collapsible-header');
+    $(".collapsible-header").addClass("active");
+    $(".collapsible").collapsible({accordion: false});
+  }
+
+  //collapse all collapse card
+  collapseAll(){
+    $(".collapsible-header").removeClass("active");
+    $(".collapsible").collapsible({accordion: true});
+    $(".collapsible").collapsible({accordion: false});
+  }
+
   render() {
 
     return (
@@ -275,6 +291,8 @@ class ActivePlaylist extends Component {
                 onWidgetChange={this.props.onPlaylistChange} 
                 key={widget.id}
                 onMove={this.handleMove.bind(this)}
+                expandAll={this.expandAll}
+                collapseAll={this.collapseAll}
               />
             )
         }.bind(this)) }
