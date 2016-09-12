@@ -41,9 +41,6 @@ const widgetCardWrapperTarget = {
     console.log('old_index', old_index);
     console.log('new_index', new_index);
     Number.isInteger(old_index) && Number.isInteger(old_index) && props.onMove(old_index, new_index);
-
-    //expand all cards
-    props.expandAll();
   }
 };
 
@@ -55,17 +52,11 @@ const widgetCardSource = {
     return {old_index: props.position}
   },
   endDrag(props, monitor){
-    console.log('endDrag props:', props)
+    console.log('endDrag props:', props);
+    props.expandAll();
   }
 };
 
-// function collect(connect, monitor) {
-//   return {
-//     connectDropTarget: connect.dropTarget(),
-//     isOver: monitor.isOver(),
-//     canDrop: monitor.canDrop()
-//   };
-// }
 
 //material-ui for button
 const styles = {
@@ -73,6 +64,14 @@ const styles = {
       // lineHeight: '0rem',
       // padding: '0 0rem',
       minHeight: '0rem'
+    },
+    show:{
+      position: 'relative',
+      width: '100%',
+      height: '100%'
+    },
+    hide:{
+      display: 'none'
     }
   };
 
@@ -90,21 +89,16 @@ class WidgetCardWrapper extends Component {
   };
 
   renderGreyBox(){
-    return(
-      <div style={{
-        position: 'relative',
-        top: 0,
-        left: 0,
-        height: '150px',
-        width: '100%',
-        zIndex: 1,
-        opacity: 0.5,
-        backgroundColor: 'black',
-      }} 
-      />
-    );
+    // $('.greyBox').addClass("show");
+    console.log("this refs greybox", this.refs.greyBox);
+    $(this.refs.greyBox).addClass("show");
   }
 
+  hideGreyBox(){
+    // $('.greyBox').removeClass("show");
+    console.log("this refs greybox", this.refs.greyBox);
+    $(this.refs.greyBox).removeClass("show");
+  }
 
   handleMoveUp(){
     if(this.props.position !== 0){
@@ -162,22 +156,20 @@ class WidgetCardWrapper extends Component {
   render() {
 
     const { connectDropTarget, connectDragPreview, connectDragSource, isOver, canDrop, isDragging } = this.props;
-    {
-      /*
-      if (isDragging) {
-        return null;
-      }
-      */
+    
+    var showOrHide={};
+    if (isDragging) {
+      showOrHide = styles.hide;
+    }else{
+      showOrHide = styles.show;
     }
 
     return connectDropTarget(
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%'
-      }}>        
+      <div style={showOrHide}>        
         {/* Drop target grey box*/}
         {isOver && canDrop && this.renderGreyBox()}
+        {!isOver && this.hideGreyBox()}
+        <div className="greyBox" ref="greyBox"></div>
         {/* Widget wrapped in a div */}
         {this.props.widget.widgetType && 
           
@@ -196,7 +188,7 @@ class WidgetCardWrapper extends Component {
                 >
                 {connectDragSource(
                   <div>
-                    <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
+                    <IconButton tooltip="Drag" touch={true} tooltipPosition="top-center">
                       <DragHandle className="dragHandle"/>
                     </IconButton>
                   </div>
@@ -207,7 +199,7 @@ class WidgetCardWrapper extends Component {
                 {this.renderSettingButton()}
                 </WidgetCardToolbar>
               </div>
-              
+
               <div className={`collapsible-header active collapsible-header-${this.props.widget.id} active`} style={styles.collapisibleHead}>
               </div>
                 {( ()=>{switch(this.props.widget.widgetType){
@@ -265,7 +257,7 @@ class WidgetCardWrapper extends Component {
           
         }
         {!this.props.widget.widgetType && 
-          <div style={{minHeight:"150px", width:"100%"}}></div>
+          <div style={{minHeight:"100px", width:"100%"}}></div>
         }
 
       </div>

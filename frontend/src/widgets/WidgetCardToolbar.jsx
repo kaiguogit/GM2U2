@@ -66,7 +66,6 @@ class WidgetCardToolbar extends Component {
               primaryText="Delete This Widget" 
               onTouchTap={handleDeleteWidget.bind(this)}
             />
-            <MenuItem primaryText="More Info" />
           </IconMenu>
         </ToolbarGroup>
       </Toolbar>
