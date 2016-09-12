@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import WidgetIcon from './widget_icon.jsx';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 
 const style = {
-  marginRight: 50,
+  // marginRight: 50,
 };
 
 
@@ -27,7 +26,6 @@ class Playlist extends Component {
           <ContentClear />
         </FloatingActionButton>
         <h>{this.props.playlist.name}</h>
-        <WidgetIcon/>
       </div>
     );
   }

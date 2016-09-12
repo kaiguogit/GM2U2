@@ -1,15 +1,15 @@
 "use strict"
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function(sequelize, Sequelize) {
 
   var TrafficWidget = sequelize.define("trafficWidget", {
       id: { 
-        type: DataTypes.UUID, 
+        type: Sequelize.UUID, 
         primaryKey: true, 
-        defaultValue: DataTypes.UUIDV4, 
+        defaultValue: Sequelize.UUIDV4, 
       },
       widgetType:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         defaultValue: "traffic"
       },
       origin: {
@@ -26,10 +26,10 @@ module.exports = function(sequelize, DataTypes) {
         defaultValue: "walking"
       },
       createdAt: {
-        type: DataTypes.DATE
+        type: Sequelize.DATE
       },
       updatedAt: {
-        type: DataTypes.DATE
+        type: Sequelize.DATE
       },
   },{
     classMethods: {

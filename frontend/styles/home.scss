@@ -10,6 +10,40 @@
   align-content: flex-start;
 }
 
+.dragHandle:hover{
+  cursor: grab;
+  cursor: -webkit-grab;
+}
+
+// .greyBox {
+  /* Initially we don't want any height, and we want the contents to be hidden */
+  // max-height: 0;
+  // overflow: hidden;
+
+  /* Set our transitions up. */
+  // -webkit-transition: max-height 0.8s;
+  // -moz-transition: max-height 0.8s;
+  // transition: max-height 0.8s;
+// }
+.greyBox{
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 0px;
+  width: 100%;
+  z-index: 1;
+  opacity: 0.5;
+  background-color: black;
+  -webkit-transition: height 0.5s;
+  -moz-transition: height 0.5s;
+  transition: height 0.5s;
+}
+.greyBox.show {
+  /* On hover, set the max-height to something large. In this case there's an obvious limit. */
+  height: 100px;
+  // background-color: red;
+}
+
 .icon{
   padding: 5px;
   max-width: 60px

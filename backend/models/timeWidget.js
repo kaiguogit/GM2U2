@@ -1,22 +1,22 @@
 "use strict"
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function(sequelize, Sequelize) {
 
   var TimeWidget = sequelize.define("timeWidget", {
       id: { 
-        type: DataTypes.UUID, 
+        type: Sequelize.UUID, 
         primaryKey: true, 
-        defaultValue: DataTypes.UUIDV4, 
+        defaultValue: Sequelize.UUIDV4, 
       },
       widgetType:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         defaultValue: "time"
       },
       createdAt: {
-        type: DataTypes.DATE
+        type: Sequelize.DATE
       },
       updatedAt: {
-        type: DataTypes.DATE
+        type: Sequelize.DATE
       },
   },{
     classMethods: {

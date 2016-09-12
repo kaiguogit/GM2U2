@@ -57,10 +57,9 @@ class ActivePlaylist extends Component {
       'Authorization':  "Bearer " + window.localStorage.token
       }
     })
-    .then(function(widget) {
+    .then(function(playlist) {
       console.log("!!!!!response from create widiget is below");
-      console.log("created widget", widget);
-      console.log("created widget, type is", widget.widgetType);
+      console.log("created widget, new playlist is", playlist);
       this.props.onPlaylistChange();
       console.log("Inside of active playlist Playlist is", this.props.playlist);
     }.bind(this));
@@ -213,6 +212,22 @@ class ActivePlaylist extends Component {
     return !(Number.isInteger(this.state.playingWidgetIndex) && this.state.playingWidgetIndex < this.props.playlist.widgets.length)
   }
 
+  //expand all collapse card
+  expandAll(){
+    //https://codepen.io/jasonpaul/pen/NxjvjW
+    //how to expand all
+    let $header = $('.collapsible .collapsible-header');
+    $(".collapsible-header").addClass("active");
+    $(".collapsible").collapsible({accordion: false});
+  }
+
+  //collapse all collapse card
+  collapseAll(){
+    $(".collapsible-header").removeClass("active");
+    $(".collapsible").collapsible({accordion: true});
+    $(".collapsible").collapsible({accordion: false});
+  }
+
   render() {
 
     return (
@@ -276,6 +291,8 @@ class ActivePlaylist extends Component {
                 onWidgetChange={this.props.onPlaylistChange} 
                 key={widget.id}
                 onMove={this.handleMove.bind(this)}
+                expandAll={this.expandAll}
+                collapseAll={this.collapseAll}
               />
             )
         }.bind(this)) }
