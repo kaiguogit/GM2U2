@@ -227,8 +227,6 @@ class ActivePlaylist extends Component {
           style={styles.AlarmButton}
           onTouchTap={this.handleAlarmDialogOpen.bind(this)}
         />
-        <a className="waves-effect waves-light btn modal-trigger" href="#alarm">Modal</a>
-
         <div id="alarm" className="modal">
           <div className="modal-content">
             <Alarm 
@@ -258,6 +256,7 @@ class ActivePlaylist extends Component {
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
         <button onClick={this.handleAddWidget.bind(this, WidgetTypes.traffic)}>Add Traffic</button>
+        <button onClick={this.handleAddWidget.bind(this, WidgetTypes.news)}>Add News</button>
         <input type="text" name="phoneNumber"/>
         <button onClick={this.uploadPhoneNumber.bind(this)}>Enter Phone Number</button>
         <button onClick={this.ring.bind(this)}>Call</button>
