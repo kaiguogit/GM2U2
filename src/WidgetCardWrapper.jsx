@@ -18,6 +18,7 @@ import DragHandle from 'material-ui/svg-icons/editor/drag-handle';
 import IconButton from 'material-ui/IconButton';
 import Settings from 'material-ui/svg-icons/action/settings';
 import { ItemTypes, WidgetTypes, WidgetIconImage, WidgetIconImageX96 } from './Constants.js';
+import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 
 const widgetCardWrapperTarget = {
   canDrop(props, monitor) {
@@ -46,24 +47,32 @@ const widgetCardWrapperTarget = {
 const widgetCardSource = {
   beginDrag(props, monitor){
     console.log('beginDrag, props are', props);
+    console.log('beginDrag, monitor item is', monitor.getItem());
+    props.collapseAll();
     return {old_index: props.position}
   },
   endDrag(props, monitor){
-    console.log('endDrag props:', props)
+    console.log('endDrag props:', props);
+    props.expandAll();
   }
 };
 
-// function collect(connect, monitor) {
-//   return {
-//     connectDropTarget: connect.dropTarget(),
-//     isOver: monitor.isOver(),
-//     canDrop: monitor.canDrop()
-//   };
-// }
 
 //material-ui for button
-const style = {
-    marginRight: 20,
+const styles = {
+    collapisibleHead:{
+      // lineHeight: '0rem',
+      // padding: '0 0rem',
+      minHeight: '0rem'
+    },
+    show:{
+      position: 'relative',
+      width: '100%',
+      height: '100%'
+    },
+    hide:{
+      display: 'none'
+    }
   };
 
 class WidgetCardWrapper extends Component {
@@ -80,21 +89,16 @@ class WidgetCardWrapper extends Component {
   };
 
   renderGreyBox(){
-    return(
-      <div style={{
-        position: 'relative',
-        top: 0,
-        left: 0,
-        height: '150px',
-        width: '100%',
-        zIndex: 1,
-        opacity: 0.5,
-        backgroundColor: 'black',
-      }} 
-      />
-    );
+    // $('.greyBox').addClass("show");
+    console.log("this refs greybox", this.refs.greyBox);
+    $(this.refs.greyBox).addClass("show");
   }
 
+  hideGreyBox(){
+    // $('.greyBox').removeClass("show");
+    console.log("this refs greybox", this.refs.greyBox);
+    $(this.refs.greyBox).removeClass("show");
+  }
 
   handleMoveUp(){
     if(this.props.position !== 0){
@@ -114,153 +118,146 @@ class WidgetCardWrapper extends Component {
     img.onload = () => {
       this.props.connectDragPreview(img)
     };
+
+    //Initiate collapsible
+    $(".collapsible").collapsible({accordion: false});
+    // $('.collapsible').collapsible({
+    //   accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    // });
   }
 
-renderSettingButton(){
-  return (
-    <IconButton  
-      onTouchTap={this.toggleSettingExpanded.bind(this)} 
-      tooltip="Setting" 
-      touch={true} 
-      tooltipPosition="top-center"
-    >
-      <Settings color='grey900'/>
-    </IconButton>
-  )
-}
+  renderSettingButton(){
+    return (
+      <IconButton  
+        onTouchTap={this.toggleSettingExpanded.bind(this)} 
+        tooltip="Setting" 
+        touch={true} 
+        tooltipPosition="top-center"
+      >
+        <Settings color='grey900'/>
+      </IconButton>
+    )
+  }
 
+  toggleCollapsible(){
+
+    var $collapsible = $(`.collapsible-${this.props.widget.id}`);
+    var $header = $(`.collapsible-header-${this.props.widget.id}`);
+    var isActive = $header.hasClass("active");
+    if(isActive){
+      $header.removeClass("active");
+      $collapsible.collapsible({accordion: true});
+      $collapsible.collapsible({accordion: false});
+    }else{
+      $header.addClass("active");
+      $collapsible.collapsible({accordion: false});
+    }
+  }
   render() {
 
     const { connectDropTarget, connectDragPreview, connectDragSource, isOver, canDrop, isDragging } = this.props;
+    
+    var showOrHide={};
     if (isDragging) {
-      return null;
+      showOrHide = styles.hide;
+    }else{
+      showOrHide = styles.show;
     }
 
     return connectDropTarget(
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '100%'
-      }}>        
+      <div style={showOrHide}>        
         {/* Drop target grey box*/}
         {isOver && canDrop && this.renderGreyBox()}
+        {!isOver && this.hideGreyBox()}
+        <div className="greyBox" ref="greyBox"></div>
         {/* Widget wrapped in a div */}
-        {this.props.widget && 
+        {this.props.widget.widgetType && 
           
           <div style={{
             position: 'relative',
             width: '100%'
             }}
           >
-            {(() => { 
-              switch(this.props.widget.widgetType){
-                case WidgetTypes.time:
-                  return (
-                    <div>
-                      <WidgetCardToolbar 
-                        widget={this.props.widget}
-                        onWidgetChange={this.props.onWidgetChange} 
-                        ref='toolbar'                       
-                      >
-                      {connectDragSource(
-                        <div>
-                          <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
-                            <DragHandle/>
-                          </IconButton>
-                        </div>
-                        )}
-                      {this.renderSettingButton()}
-                      </WidgetCardToolbar>
-                      <TimeWidget 
-                        widget={this.props.widget} 
-                        onWidgetChange={this.props.onWidgetChange}
-                        ref = 'widget'
-                      />                      
-                    </div>
+          <ul className={`collapsible collapsible-${this.props.widget.id}`} data-collapsible="expandable">
+            <li>
+              <div>
+                <WidgetCardToolbar 
+                  widget={this.props.widget}
+                  onWidgetChange={this.props.onWidgetChange} 
+                  ref='toolbar'
+                >
+                {connectDragSource(
+                  <div>
+                    <IconButton tooltip="Drag" touch={true} tooltipPosition="top-center">
+                      <DragHandle className="dragHandle"/>
+                    </IconButton>
+                  </div>
+                  )}
+                <IconButton onTouchTap={this.toggleCollapsible.bind(this)}>
+                  <NavigationExpandMoreIcon />
+                </IconButton>
+                {this.renderSettingButton()}
+                </WidgetCardToolbar>
+              </div>
+
+              <div className={`collapsible-header active collapsible-header-${this.props.widget.id} active`} style={styles.collapisibleHead}>
+              </div>
+                {( ()=>{switch(this.props.widget.widgetType){
+                  case WidgetTypes.time:
+                    return (
+                      <div className="collapsible-body">
+                        <TimeWidget 
+                          widget={this.props.widget} 
+                          onWidgetChange={this.props.onWidgetChange}
+                          ref = 'widget'
+                        />
+                      </div>
                     )
-                  break;
-                case WidgetTypes.weather:
-                  return  (
-                    <div>
-                      <WidgetCardToolbar 
-                        widget={this.props.widget}
-                        onWidgetChange={this.props.onWidgetChange}
-                        ref='toolbar'
-                      >
-                      {connectDragSource(
-                        <div>
-                          <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
-                            <DragHandle/>
-                          </IconButton>
-                        </div>
-                      )}
-                      {this.renderSettingButton()}
-                      </WidgetCardToolbar>
-                      <WeatherWidget 
-                        widget={this.props.widget} 
-                        onWidgetChange={this.props.onWidgetChange}
-                        ref = 'widget'
-                      />
-                    </div>      
+                  break
+                  case WidgetTypes.weather:
+                    return (
+                      <div className="collapsible-body">
+                        <WeatherWidget 
+                          widget={this.props.widget} 
+                          onWidgetChange={this.props.onWidgetChange}
+                          ref = 'widget'
+                        />
+                      </div>
                     )
-                  break;
-                case WidgetTypes.traffic:
-                  return (  
-                    <div>
-                      <WidgetCardToolbar 
-                        widget={this.props.widget}
-                        onWidgetChange={this.props.onWidgetChange}
-                        ref='toolbar'
-                      >
-                      {connectDragSource(
-                        <div>
-                          <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
-                            <DragHandle/>
-                          </IconButton>
-                        </div>
-                      )}
-                      {this.renderSettingButton()}
-                      </WidgetCardToolbar>
-                      <TrafficWidget 
-                        widget={this.props.widget} 
-                        onWidgetChange={this.props.onWidgetChange}
-                        ref = 'widget'
-                      />
-                    </div>
-                   ) 
-                  break;
-                case WidgetTypes.news:
-                  return (  
-                    <div>
-                      <WidgetCardToolbar 
-                        widget={this.props.widget}
-                        onWidgetChange={this.props.onWidgetChange}
-                        ref='toolbar'
-                      >
-                      {connectDragSource(
-                        <div>
-                          <IconButton  tooltip="Drag" touch={true} tooltipPosition="top-center">
-                            <DragHandle/>
-                          </IconButton>
-                        </div>
-                      )}
-                      {this.renderSettingButton()}
-                      </WidgetCardToolbar>
-                      <NewsWidget 
-                        widget={this.props.widget} 
-                        onWidgetChange={this.props.onWidgetChange}
-                        ref = 'widget'
-                      />
-                    </div>
-                   ) 
-                  break;
-                default:
-                  return <div style={{minHeight:"150px", width:"100%"}}/> 
-                  break;  
-              }
-            })()}
+                  break
+                  case WidgetTypes.traffic:
+                    return (
+                      <div className="collapsible-body">
+                        <TrafficWidget 
+                          widget={this.props.widget} 
+                          onWidgetChange={this.props.onWidgetChange}
+                          ref = 'widget'
+                        />
+                      </div>
+                    )
+                  break
+                  case WidgetTypes.news:
+                    return (
+                      <div className="collapsible-body">
+                        <NewsWidget 
+                          widget={this.props.widget} 
+                          onWidgetChange={this.props.onWidgetChange}
+                          ref = 'widget'
+                        />
+                      </div>
+                    )
+                  break
+                  default:
+                    return <div style={{minHeight:"150px", width:"100%"}}></div> 
+                  break
+                }})()}
+            </li>
+          </ul>
           </div>
           
+        }
+        {!this.props.widget.widgetType && 
+          <div style={{minHeight:"100px", width:"100%"}}></div>
         }
 
       </div>

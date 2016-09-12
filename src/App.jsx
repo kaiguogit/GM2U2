@@ -53,7 +53,8 @@ class App extends Component {
   loggedIn(username){
     this.setState({
       username: username
-    })
+    });
+    window.location.reload();
   }
 
   addPlaylist(){
