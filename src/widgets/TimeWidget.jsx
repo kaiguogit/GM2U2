@@ -20,12 +20,11 @@ const styles = {
   radioButton: {
     marginBottom: 16,
   },
-  clock:{
+  clockWrapper:{
+    maxWidth: '500px',
     margin:'auto'
   }
 };
-
-
 
 class TimeWidget extends Component {
 
@@ -88,7 +87,9 @@ class TimeWidget extends Component {
         {moment().format('dddd MMMM Do')}
       </div>
         <div className="row" style={styles.clock}>
-          <div id={this.clockId}></div>
+          <div className="clockWrapper" style={styles.clockWrapper}>
+            <div id={this.clockId}></div>
+          </div>
         </div>
     </CardText>
       </Card>
