@@ -1,19 +1,19 @@
 "use strict"
   var models = require("./index.js");
 
-var User = function(sequelize, DataTypes) {
+var User = function(sequelize, Sequelize) {
 
     var User = sequelize.define("user", {
         name: {
-          type: DataTypes.STRING,
+          type: Sequelize.STRING,
           allowNull: false
         },
         googleId:{
-          type: DataTypes.STRING,
+          type: Sequelize.STRING,
           allowNull: true    
         },
         phoneNumber:{
-          type: DataTypes.STRING,
+          type: Sequelize.STRING,
           allowNull: true    
         }
     },{

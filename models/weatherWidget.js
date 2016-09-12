@@ -2,29 +2,29 @@
 // var addToPlaylistArray = require('./widgetLibrary.js').addToPlaylistArray;
 // var removeFromPlaylistArray = require('./widgetLibrary.js').removeFromPlaylistArray;
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function(sequelize, Sequelize) {
 
   var WeatherWidget = sequelize.define("weatherWidget", {
       id: { 
-        type: DataTypes.UUID, 
+        type: Sequelize.UUID, 
         primaryKey: true, 
-        defaultValue: DataTypes.UUIDV4, 
+        defaultValue: Sequelize.UUIDV4, 
       },
       widgetType:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         defaultValue: "weather"
       },
       cityName:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
       },
       cityQuery:{
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
       },
       createdAt: {
-        type: DataTypes.DATE
+        type: Sequelize.DATE
       },
       updatedAt: {
-        type: DataTypes.DATE
+        type: Sequelize.DATE
       },
   },{
     classMethods: {
