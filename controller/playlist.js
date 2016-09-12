@@ -2,6 +2,7 @@ var models = require("../models/index.js");
 var twilio = require('../modules/twilio.js').twilio;
 var twilioClient = require('../modules/twilio.js').client;
 var weatherController = require('./weatherWidget.js');
+var newsController = require('./newsWidget.js');
 var time = require('../modules/time');
 
 function ringOnAlarm(fn){
@@ -48,7 +49,7 @@ function ring(playlistId, fn){
   // var url = 'http://' + request.headers.host + '/outbound';
   // var url = 'https://gmtestdesploy.herokuapp.com/outbound';
   var url =  process.env.proxy + "/outbound?playlistId=" + playlistId;
-  
+  console.log(`Calling user for playlist ${playlistId}, the url for outbound is`, url);
   models.playlist.findById(playlistId)
   .then(function(playlist){
     return models.user.findById(playlist.dataValues.userId)
@@ -94,7 +95,13 @@ function twilioSpeech(playlistId, fn){
           speechPromises.push(weatherController.getSpeechString(widget.id));
           console.log("speechPromises is", speechPromises );
           break;
-        case "": 
+        case "news":
+          console.log("getting news widget speech");
+          speechPromises.push(
+            new Promise(function(resolve, reject){
+              newsController.getSpeechString(widget.id, resolve);
+            })
+          );
           break;
       }
     });
@@ -109,8 +116,8 @@ function twilioSpeech(playlistId, fn){
           '?voice=' + 'en-US_AllisonVoice' +
           '&accept=' + 'audio/wav' +
           '&text=' + encodeURIComponent(speech) +
-          '&X-WDC-PL-OPT-OUT=' +  'false';
-           // + '&download=true';
+          '&X-WDC-PL-OPT-OUT=' +  'false' + '&download=true';
+        console.log("Speech url is ", downloadURL);
         twiml.play(downloadURL)
         // .pause({length: 2});  
         // twiml.say(speech, {

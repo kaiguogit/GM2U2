@@ -2,7 +2,7 @@
 
 module.exports = function(sequelize, DataTypes) {
 
-  var TrafficWidget = sequelize.define("trafficWidget", {
+  var NewsWidget = sequelize.define("newsWidget", {
       id: { 
         type: DataTypes.UUID, 
         primaryKey: true, 
@@ -10,20 +10,12 @@ module.exports = function(sequelize, DataTypes) {
       },
       widgetType:{
         type: DataTypes.STRING,
-        defaultValue: "traffic"
+        defaultValue: "news"
       },
-      origin: {
+      source:{
         type: DataTypes.STRING,
         allowNull: true,
-      },
-      destination: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      mode: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: "walking"
+        defaultValue: "the-new-york-times"
       },
       createdAt: {
         type: DataTypes.DATE
@@ -34,10 +26,10 @@ module.exports = function(sequelize, DataTypes) {
   },{
     classMethods: {
       associate: function(models) {
-        TrafficWidget.belongsTo(models.playlist);
+        NewsWidget.belongsTo(models.playlist);
       }
     }
   });
 
-    return TrafficWidget;
+    return NewsWidget;
 }
