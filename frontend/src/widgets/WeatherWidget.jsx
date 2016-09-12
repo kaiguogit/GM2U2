@@ -89,6 +89,8 @@ class WeatherWidget extends Component {
       console.log("City changed, getting weather");
       this.setState({refreshing: true});
       this.getWeather();
+    }else{
+      console.log("City did not changed, won't update weather");
     }
   }
 

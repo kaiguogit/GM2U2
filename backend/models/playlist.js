@@ -1,24 +1,24 @@
 "use strict"
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function(sequelize, Sequelize) {
     var Playlist = sequelize.define("playlist", {
         name: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: false
         },
         widgets:{
-          type: DataTypes.ARRAY(DataTypes.JSON),
+          type: Sequelize.ARRAY(Sequelize.JSON),
           defaultValue: []
         },
         alarms:{
-          type: DataTypes.ARRAY(DataTypes.JSON),
+          type: Sequelize.ARRAY(Sequelize.JSON),
           defaultValue: []
         },
         createdAt: {
-          type: DataTypes.DATE
+          type: Sequelize.DATE
         },
         updatedAt: {
-          type: DataTypes.DATE
+          type: Sequelize.DATE
         }
     },{
       classMethods: {

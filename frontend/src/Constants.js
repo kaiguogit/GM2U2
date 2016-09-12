@@ -32,3 +32,14 @@ export const ClockFace = {
   TwentyFourHourClock: "TwentyFourHourClock",
   TwelveHourClock: "TwelveHourClock"
 }
+
+export const NewsSource = {
+  "the-new-york-times": {name: "the-new-york-times", sortBy: "popular"},
+  "espn": {name: "espn", sortBy: "top"},
+  "ign": {name: "ign", sortBy: "top"},
+  "google-news": {name: "google-news", sortBy: "top"},
+  "reddit-r-all": {name: "reddit-r-all", sortBy: "top"},
+  "new-scientist": {name: "new-scientist", sortBy: "top"},
+  "fox-sports": {name: "fox-sports", sortBy: "top"},
+  "nfl-news": {name: "nfl-news", sortBy: "top"},
+}

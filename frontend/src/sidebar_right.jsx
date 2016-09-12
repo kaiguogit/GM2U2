@@ -19,7 +19,7 @@ class SidebarRight extends Component {
             } 
           }
         >
-          <AppBar title="AppBar" />
+          <AppBar title="Playlists" />
 
           <button onClick={this.props.onAddPlaylist}>Add Playlist</button>
           {

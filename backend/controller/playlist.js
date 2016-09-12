@@ -48,7 +48,7 @@ function ring(playlistId, fn){
   // but you can hard code it or use something different if need be
   // var url = 'http://' + request.headers.host + '/outbound';
   // var url = 'https://gmtestdesploy.herokuapp.com/outbound';
-  var url =  process.env.proxy + "/outbound?playlistId=" + playlistId;
+  var url =  process.env.host + "/outbound?playlistId=" + playlistId;
   console.log(`Calling user for playlist ${playlistId}, the url for outbound is`, url);
   models.playlist.findById(playlistId)
   .then(function(playlist){
@@ -112,7 +112,7 @@ function twilioSpeech(playlistId, fn){
      console.log("waiting on promise all to finish");
       speeches.forEach(function(speech){
         
-        var downloadURL = process.env.proxy + '/api/synthesize' +
+        var downloadURL = process.env.host + '/api/synthesize' +
           '?voice=' + 'en-US_AllisonVoice' +
           '&accept=' + 'audio/wav' +
           '&text=' + encodeURIComponent(speech) +
@@ -128,7 +128,7 @@ function twilioSpeech(playlistId, fn){
         // .pause({length: 2});
         // console.log("speech is",speech)
       });
-      var url =  process.env.proxy + "/outbound?playlistId=" + playlistId;
+      var url =  process.env.host + "/outbound?playlistId=" + playlistId;
       twiml.redirect(url);
       fn(twiml);
     });
