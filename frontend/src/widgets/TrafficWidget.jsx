@@ -30,10 +30,10 @@ class TrafficWidget extends Component {
   constructor(props) {
     super(props);
     this.state = {      
-      expanded: true,
+      expanded: false,
       widgetLocalCopy:{},
       suggestions: [], 
-      modes: ['walking','bicycling','transit','driving','flying'],
+      modes: ['walking','bicycling','transit','driving'],
       mode: 'walking'
     };
   };
@@ -80,7 +80,7 @@ class TrafficWidget extends Component {
     this.setState({origin: formattedInput})
     console.log('state origin',this.state.origin)
     // save to database
-    var updatedWidgetLocalCopy = update(this.state.widgetLocalCopy, {origin: {$set: formattedInput}});
+    var updatedWidgetLocalCopy = update(this.state.widgetLocalCopy, {origin: {$set: input}});
     this.setState({
       widgetLocalCopy: updatedWidgetLocalCopy
     });
@@ -93,7 +93,7 @@ class TrafficWidget extends Component {
     this.setState({destination: formattedInput})
     console.log('state Destination',this.state.destination)
     // save to database
-    var updatedWidgetLocalCopy = update(this.state.widgetLocalCopy, {destination: {$set: formattedInput}});
+    var updatedWidgetLocalCopy = update(this.state.widgetLocalCopy, {destination: {$set: input}});
     this.setState({
       widgetLocalCopy: updatedWidgetLocalCopy
     });
@@ -122,18 +122,20 @@ class TrafficWidget extends Component {
             <p>settings</p>
             <AutoComplete 
               hintText='Enter location name or address' 
+              searchText={this.props.widget.origin}
               onUpdateInput={this.updateAutoComplete.bind(this)} 
               onNewRequest={this.updateMapOrigin.bind(this)} 
               dataSource={this.state.suggestions}
-              floatingLabelText="Route Origin"
+              floatingLabelText="Trip Origin"
               filter={AutoComplete.fuzzyFilter}
             /><br />
             <AutoComplete 
               hintText='Enter location name or address' 
+              searchText={this.props.widget.destination}
               onUpdateInput={this.updateAutoComplete.bind(this)} 
               onNewRequest={this.updateMapDestination.bind(this)} 
               dataSource={this.state.suggestions}
-              floatingLabelText="Route Origin"
+              floatingLabelText="Trip Destination"
               filter={AutoComplete.fuzzyFilter}
               /><br />
             <AutoComplete

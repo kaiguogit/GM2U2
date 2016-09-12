@@ -5,6 +5,8 @@ var time = require('../../modules/time');
 var weather = require('../../modules/weather');
 var traffic = require('../../modules/traffic');
 var weatherController = require('../../controller/weatherWidget');
+var newsController = require('../../controller/newsWidget');
+var trafficController = require('../../controller/trafficWidget');
 
 //helper methods
 var findPlaylistforWidget = require('../helper.js').findPlaylistforWidget;
@@ -88,7 +90,6 @@ router.get('/:type/:id/speech', (req, res, next) => {
       break;
 
     case "weather":
-
       //find the widget, get weather by City Name
       weatherController.getSpeechString(req.params.id)
       .then(function(speech){
@@ -97,13 +98,19 @@ router.get('/:type/:id/speech', (req, res, next) => {
         console.log("Error occured when getting weather speech", err);
         res.json(err);
       })
-      
       break;
 
     case "traffic":
-      var speech = 'requesting traffic speech';
-      console.log(speech);
-      res.json(speech);
+      var speech = trafficController.getSpeechString(req.params.id, function(speech){
+        console.log(speech);
+        res.json(speech);      
+      })
+      break;
+    case "news":
+      newsController.getSpeechString(req.params.id, function(speech){
+        res.json(speech);
+      })
+      break;
     default:
       break;
 
@@ -140,7 +147,11 @@ router.get('/:type/:id/view', (req, res, next) => {
         res.json(err);
       });
       break;
-
+    case "news":
+      newsController.getNews(req.params.id, function(news){
+        res.json(JSON.stringify(news));
+      })
+      break;
     default:
       break;
 
