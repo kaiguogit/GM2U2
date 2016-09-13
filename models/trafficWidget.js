@@ -13,15 +13,15 @@ module.exports = function(sequelize, Sequelize) {
         defaultValue: "traffic"
       },
       origin: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       destination: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       mode: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true,
         defaultValue: "walking"
       },
