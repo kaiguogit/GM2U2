@@ -1,6 +1,7 @@
 var webpack = require('webpack')
 var path = require('path');
-
+require('dotenv').config();
+console.log("\n!!!!!host in env is", process.env.host);
 module.exports = {
   entry: './viewModules/index.jsx',
 
@@ -26,13 +27,15 @@ module.exports = {
                presets:['es2015', 'react']
              }
       },
-      { test: /\.js$/, exclude: /node_modules/, 
-        loader: 'babel-loader?presets[]=es2015&presets[]=react' 
-      },
       {
         test: /\.scss$/,
         loaders: ["style", "css", "sass"]
       }
     ]
-  }
+  },
+  plugins:[
+    new webpack.DefinePlugin({
+      "process.env.host": process.env.host.toString()
+    })
+  ]
 }

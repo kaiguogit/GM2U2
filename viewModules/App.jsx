@@ -68,7 +68,7 @@ class App extends Component {
   addPlaylist(){
     console.log("Adding App playlists");
     $.ajax({
-        url: "http://localhost:3000/api/playlists",
+        url: `${process.env.host}/api/playlists`,
         method: "post",
         headers: {
         'Authorization':  "Bearer " + window.localStorage.token
@@ -83,7 +83,7 @@ class App extends Component {
   updatePlaylist(){
     console.log("Updating App playlists");
     $.ajax({
-        url: "http://localhost:3000/api/playlists",
+        url: `${process.env.host}/api/playlists`,
         method: "get",
         headers: {
         'Authorization':  "Bearer " + window.localStorage.token
@@ -104,7 +104,7 @@ class App extends Component {
   
   updatePhoneNumber(phoneNumber){
     $.ajax({
-      url: `http://localhost:3000/phone`,
+      url: `${process.env.host}/phone`,
       method: "post",
       headers: {
       'Authorization':  "Bearer " + window.localStorage.token
@@ -123,7 +123,7 @@ class App extends Component {
   deletePlaylist(id){
     console.log("Updating App playlists");
     $.ajax({
-        url: `http://localhost:3000/api/playlists/${id}`,
+        url: `${process.env.host}/api/playlists/${id}`,
         method: "delete",
         headers: {
         'Authorization':  "Bearer " + window.localStorage.token
@@ -161,6 +161,8 @@ class App extends Component {
         alignment: 'left' // Displays dropdown with edge aligned to the left of button
       }
     );
+
+    console.log("!!!!!!!!!host in env is"+ process.env.host);
   };
 
   render() {

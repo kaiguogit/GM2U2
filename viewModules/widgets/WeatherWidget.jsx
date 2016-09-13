@@ -111,7 +111,7 @@ class WeatherWidget extends Component {
   getWeather(){
     console.log("getting weather");
     $.ajax({
-      url: `http://localhost:3000/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/view`,
+      url: `${process.env.host}/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/view`,
       method: "get",
       headers: {
       'Authorization':  "Bearer " + window.localStorage.token
