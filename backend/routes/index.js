@@ -121,7 +121,7 @@ router.post('/login', function(req, res, next){
     console.log("created",created);
     console.log("******************found user is ", user.dataValues);
     user = user.dataValues;
-    var token = jwt.sign({ userId: user.id, userName: user.name }, process.env.jwt_secret);
+    var token = jwt.sign({ userId: user.id, userName: user.name, phoneNumber: user.PhoneNumber }, process.env.jwt_secret);
     user["token"] = token;
     res.json(user);
   });
