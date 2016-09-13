@@ -9,7 +9,7 @@ import React from 'react'
 import { renderToString } from 'react-dom/server'
 // and these to match the url to routes and then render
 import { match, RouterContext } from 'react-router'
-import routes from './viewModules/routes'
+import routes from './modules/routes'
 
 app.use(compression())
 

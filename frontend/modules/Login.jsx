@@ -4,7 +4,7 @@ import GoogleLogin from 'react-google-login';
  function responseGoogle(response){
     console.log("Response is", response);
     $.ajax({
-      url: "${process.env.host}/login",
+      url: `${process.env.host}/login`,
       method: "post",
       data: {
         googleId: response.googleId,

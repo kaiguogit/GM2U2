@@ -3,7 +3,7 @@ var path = require('path');
 require('dotenv').config();
 console.log("\n!!!!!host in env is", process.env.host);
 module.exports = {
-  entry: './viewModules/index.jsx',
+  entry: './modules/index.jsx',
 
   output: {
     path: 'public',
