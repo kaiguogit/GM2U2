@@ -35,6 +35,7 @@ class WidgetCardToolbar extends Component {
 
   capitalizeTitle(){
     if(this.props.widget.widgetType === "news"){
+      console.log(this.props.widget)
       return this.props.widget.source.name.split("-").map(this.capitalizeWord).join(" ");
     }else{
       return this.capitalizeWord(this.props.widget.widgetType);

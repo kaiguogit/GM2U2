@@ -172,6 +172,7 @@ class App extends Component {
           toggleSidebarRight={this.toggleSidebarRight.bind(this)} 
           loggedIn={this.loggedIn.bind(this)}
         />
+
         {!this.state.username &&
           <div>
             <Login />
@@ -187,16 +188,6 @@ class App extends Component {
               className='customSidebarLeft'
             />
 
-            {/*If Playlists is falsy*/}
-            {this.state.playlists.length === 0 &&
-              <div className = 'col s12 m10 offset-m1 l8 offset-l2'>
-                <RaisedButton 
-                  onClick={this.addPlaylist.bind(this)} 
-                  label="Add playlist" 
-                  primary={true} 
-                  style={raisedButtonStyle} />
-              </div>
-            }
 
             {/*If Playlist is []*/}
             {this.state.playlists && this.state.playlists.length === 0 &&
@@ -210,14 +201,14 @@ class App extends Component {
 
             {/* sidebar right - playlists */}
             {this.state.playlists && this.state.playlists.length > 0 && 
-            <SidebarRight 
-              onAddPlaylist={this.addPlaylist.bind(this)} 
-              onDeletePlaylist={this.deletePlaylist.bind(this)} 
-              toggleSidebarRight={this.toggleSidebarRight.bind(this)} 
-              open={this.state.uiState.sidebarRightOpen} 
-              playlists={this.state.playlists}
-              onSelectPlaylist={this.selectPlaylist.bind(this)}
-            />
+              <SidebarRight 
+                onAddPlaylist={this.addPlaylist.bind(this)} 
+                onDeletePlaylist={this.deletePlaylist.bind(this)} 
+                toggleSidebarRight={this.toggleSidebarRight.bind(this)} 
+                open={this.state.uiState.sidebarRightOpen} 
+                playlists={this.state.playlists}
+                onSelectPlaylist={this.selectPlaylist.bind(this)}
+              />
             }
 
             {/* centered content - active playlist */}

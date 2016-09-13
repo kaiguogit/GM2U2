@@ -14,6 +14,11 @@ module.exports = {
           type: DataTypes.STRING,
           defaultValue: "news"
         },
+        source: {
+          type: DataTypes.STRING,
+          allowNull: true,
+          defaultValue: "the-new-york-times"
+        },
         createdAt: {
           type: DataTypes.DATE
         },

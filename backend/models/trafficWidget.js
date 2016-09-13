@@ -12,6 +12,19 @@ module.exports = function(sequelize, Sequelize) {
         type: Sequelize.STRING,
         defaultValue: "traffic"
       },
+      origin: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      destination: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      mode: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: "walking"
+      },
       createdAt: {
         type: Sequelize.DATE
       },

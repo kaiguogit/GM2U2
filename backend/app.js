@@ -57,28 +57,6 @@ app.use('/api/playlists', routesPlaylist);
 app.use('/api/widgets/', routesWidget);
 
 
-//
-//IBM Waston Developer Cloud Synthesize
-//
-app.get('/api/synthesize', function(req, res, next) {
-  var transcript = textToSpeech.synthesize(req.query);
-  transcript.on('response', function(response) {
-    if (req.query.download) {
-      response.headers['content-disposition'] = 'attachment; filename=transcript.ogg';
-    }
-  });
-  transcript.on('error', function(error) {
-    next(error);
-  });
-  transcript.pipe(res);
-});
-
-app.use(jwt_mw({ secret: process.env.jwt_secret}).unless({path: ['/login']}));
-app.use('/api/playlists', routesPlaylist);
-app.use('/api/widgets/', routesWidget);
-
-
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
