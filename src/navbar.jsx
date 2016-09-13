@@ -2,16 +2,22 @@ import React, {Component} from 'react';
 
 import Login from './Login.jsx';
 
+const styles={
+  navbar:{
+    backgroundColor: '#575755'
+  }
+}
 class Navbar extends Component {
   handleLogOut(e){
     e.preventDefault();
     window.localStorage.clear();
     this.props.loggedIn(null);
   }
+
   render() {
     return (      
-      <div className='navbar-fixed'>
-        <nav>
+      <div className='navbar-fixed' >
+        <nav style={styles.navbar}>
           {/* logo centered */}
           <a href="#" className="brand-logo center"> G&apos;Morning!</a>    
           {/*  align-left items*/} 
