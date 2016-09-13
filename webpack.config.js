@@ -1,5 +1,6 @@
 var webpack = require('webpack')
 var path = require('path');
+
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config();
   console.log("host in env is", process.env.host);
