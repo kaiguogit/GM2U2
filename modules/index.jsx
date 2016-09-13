@@ -1,7 +1,7 @@
 // Application entrypoint.
 
 // Load up the application styles
-require("../styles/application.scss");
+require("../public/styles/application.scss");
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';

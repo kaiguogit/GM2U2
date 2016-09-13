@@ -84,7 +84,7 @@ class WidgetCardWrapper extends Component {
     }
   }
 
-  toggleSettingExpanded = () => {
+  toggleSettingExpanded(){
     this.refs.widget.toggleSettingExpanded();
   };
 

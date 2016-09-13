@@ -6,7 +6,7 @@ import newId from '../utils/newid.js'
 
 function synthesizeRequest(options) {
     var sessionPermissions = "false";
-    var downloadURL = 'http://localhost:3000/api/synthesize' +
+    var downloadURL = `${process.env.host}/api/synthesize` +
       '?voice=' + options.voice +
       '&text=' + encodeURIComponent(options.text) +
       '&X-WDC-PL-OPT-OUT=' +  sessionPermissions;
@@ -61,7 +61,7 @@ function onCanplaythrough() {
 function getSpeechString(){
   console.log("in getSpeechString");
   return $.ajax({
-    url: `http://localhost:3000/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/speech`,
+    url: `${process.env.host}/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/speech`,
     method: 'get',
     headers: {
         'Authorization':  "Bearer " + window.localStorage.token

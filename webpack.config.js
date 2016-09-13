@@ -1,28 +1,41 @@
+var webpack = require('webpack')
 var path = require('path');
-var webpack = require('webpack');
-
+require('dotenv').config();
+console.log("\n!!!!!host in env is", process.env.host);
 module.exports = {
-  devtool: 'eval',
-  entry: [
-    'webpack-dev-server/client?http://localhost:4000',
-    './src/index.jsx'
-  ],
+  entry: './modules/index.jsx',
+
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: 'public',
     filename: 'bundle.js',
-    publicPath: '/build/'
+    publicPath: '/'
   },
+
+  plugins: process.env.NODE_ENV === 'production' ? [
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin()
+  ] : [],
+
   module: {
     loaders: [
       {
-        test: /\.jsx?$/,
-        loaders: ['babel'],
-        include: path.join(__dirname, 'src')
+        test: /\.jsx?$/, exclude: /node_modules/, 
+        loader: 'babel',
+        query:
+             {
+               presets:['es2015', 'react']
+             }
       },
       {
         test: /\.scss$/,
         loaders: ["style", "css", "sass"]
       }
     ]
-  }
+  },
+  plugins:[
+    new webpack.DefinePlugin({
+      "process.env.host": process.env.host.toString()
+    })
+  ]
 }
