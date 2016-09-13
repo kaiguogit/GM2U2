@@ -23,7 +23,7 @@ function getTimeString(){
   // var hour = now.getHours() + " o'clock";
   // var minute = now.getMinutes() + " minutes";
   // var result = "It is " + day + " " + monthName + " " + date + " " + hour + " "+ minute;
-  var result = moment().format('dddd. MMMM Do. YYYY. h:mm a')
+  var result = "It is " + moment().format('dddd. MMMM Do. YYYY. h:mm a')
   // moment().format('dddd') + breakTag + moment().format('MMMM') + breakTag + moment().format('Do') + breakTag + moment().format('YYYY')
   // var breakTag = "<break strength=\"weak\">weak pause</break>"
 
