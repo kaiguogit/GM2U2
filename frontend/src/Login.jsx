@@ -11,11 +11,12 @@ import GoogleLogin from 'react-google-login';
         username: response.profileObj.name
       }
     }).done((user) => {
-      
+      console.log("Google response is", response);
       this.props.loggedIn(user.name);
       //Save token to localStorage
       window.localStorage.token = user.token;
       window.localStorage.username = user.name;
+      window.localStorage.phoneNumber = user.phoneNumber;
 
     }).fail(function(err){
       console.log(err);

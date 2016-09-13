@@ -3,6 +3,9 @@ import React, {Component} from 'react';
 //Material-ui
 import RaisedButton from 'material-ui/RaisedButton';
 import ActionAlarm from 'material-ui/svg-icons/action/alarm';
+import PhoneIcon from 'material-ui/svg-icons/communication/phone';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import PlayIcon from 'material-ui/svg-icons/av/play-circle-outline';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 
@@ -18,11 +21,16 @@ import newId from './utils/newid.js'
 
 
 const styles = {
+  activePlaylist:{
+  },
   AlarmButton: {
-    margin: 12,
+    margin: 1,
   },
   AlarmActionButton:{
     float: 'right'
+  },
+  PhoneDialog:{
+    width: '30%'
   }
 }
 class ActivePlaylist extends Component {
@@ -105,8 +113,6 @@ class ActivePlaylist extends Component {
 
   //Open alarm dialog
   handleAlarmDialogOpen(){
-    console.log("in dialogopen this is", this);
-
     // this.setState({alarmDialogOpen: true});
     $('#alarm').openModal();
   }
@@ -133,6 +139,24 @@ class ActivePlaylist extends Component {
 
     $('#alarm').closeModal();
   }
+
+  //Open alarm dialog
+  handlePhoneDialogOpen(){
+    // this.setState({alarmDialogOpen: true});
+    $('#editPhoneNumber').openModal();
+  }
+
+  //Open alarm dialog
+  handlePhoneDialogCancel(){
+    $('#editPhoneNumber').closeModal();
+  }
+
+  //Open alarm dialog
+  handlePhoneDialogSubmit(){
+    this.props.updatePhoneNumber($("input[name='phoneNumber']").val())
+    $('#editPhoneNumber').closeModal();
+  }
+
 
   //Change playingWidgetIndex to play next widget;
   playNextWidget(){
@@ -181,21 +205,6 @@ class ActivePlaylist extends Component {
     })
   }
 
-  uploadPhoneNumber(){
-    $.ajax({
-      url: `http://localhost:3000/phone`,
-      method: "post",
-      headers: {
-      'Authorization':  "Bearer " + window.localStorage.token
-      },
-      data: {phoneNumber: $("input[name='phoneNumber']").val()}
-    }).done(function(response){
-      console.log("uploadedPhoneNumber, response is", response);
-    }).fail(function(err){
-      console.log("failed to uploadPhoneNumber, error is", err);
-    });
-  }
-
   getChildContext(){
     return {playNextWidget: this.playNextWidget.bind(this)};
   }
@@ -231,9 +240,8 @@ class ActivePlaylist extends Component {
   render() {
 
     return (
-      <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2'>
-        
-
+      <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2' style={styles.activePlaylist}>
+        {/*Edit Alarm*/}
         <RaisedButton
           label="Set Alarm"
           labelPosition="after"
@@ -266,19 +274,56 @@ class ActivePlaylist extends Component {
           </div>
         </div>
         
-        <button onClick={this.playAllWidgets.bind(this)}>Play All</button>
-        <button onClick={this.ring.bind(this)}>Play All on phone</button>
-        <button onClick={this.handleAddWidget.bind(this, WidgetTypes.time)}>Add Widget</button>
-        <button onClick={this.handleAddWidget.bind(this, WidgetTypes.weather)}>Add Weather</button>
-        <button onClick={this.handleAddWidget.bind(this, WidgetTypes.traffic)}>Add Traffic</button>
-        <button onClick={this.handleAddWidget.bind(this, WidgetTypes.news)}>Add News</button>
-        <input type="text" name="phoneNumber"/>
-        <button onClick={this.uploadPhoneNumber.bind(this)}>Enter Phone Number</button>
-        <button onClick={this.ring.bind(this)}>Call</button>
+        {/*Edit Phone number*/}
+        <RaisedButton
+          label="Edit Phone No."
+          labelPosition="after"
+          primary={true}
+          icon={<EditIcon />}
+          style={styles.AlarmButton}
+          onTouchTap={this.handlePhoneDialogOpen.bind(this)}
+        />
+        <div id="editPhoneNumber" className="modal" style={styles.PhoneDialog}>
+          <div className="modal-content">
+              {this.context.phoneNumber &&
+                <p>Current Number: {this.context.phoneNumber}</p>
+              }
+              <input type="text" name="phoneNumber"/>
+          </div>
+          <div className="modal-footer">
+            <FlatButton
+              label="Submit"
+              primary={true}
+              onTouchTap={this.handlePhoneDialogSubmit.bind(this)}
+              style={styles.AlarmActionButton}
+            />
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              style={styles.AlarmActionButton}
+              onTouchTap={this.handlePhoneDialogCancel.bind(this)}
+            />
+          </div>
+        </div>
 
-        <p>{this.props.playlist.name}</p>
-        <p>Id {this.props.playlist.id}</p>
-        <p>playing widget index is  {this.state.playingWidgetIndex}</p>
+        <RaisedButton
+          label="Play on Phone"
+          labelPosition="after"
+          primary={true}
+          icon={<PhoneIcon />}
+          style={styles.AlarmButton}
+          onTouchTap={this.ring.bind(this)}
+        />
+
+        <RaisedButton
+          label="Play on Browser"
+          labelPosition="after"
+          primary={true}
+          icon={<PlayIcon />}
+          style={styles.AlarmButton}
+          onTouchTap={this.playAllWidgets.bind(this)}
+        />
+
         {
           this.props.playlist.widgets.map(function(widget, index){
             console.log("creating cards");
@@ -310,5 +355,9 @@ class ActivePlaylist extends Component {
 
 ActivePlaylist.childContextTypes = {
   playNextWidget: React.PropTypes.func
+};
+ActivePlaylist.contextTypes = {
+  username: React.PropTypes.string,
+  phoneNumber: React.PropTypes.string
 };
 export default ActivePlaylist;
