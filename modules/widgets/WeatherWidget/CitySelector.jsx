@@ -65,7 +65,7 @@ export default class CitySelector extends React.Component {
           floatingLabelText="Search by City Name"
           dataSourceConfig={dataSourceConfig}
           maxSearchResults={10}
-          onUpdateInput={this.handleUpdateInput}
+          onUpdateInput={this.handleUpdateInput.bind(this)}
           onNewRequest={this.handleSelectCity.bind(this)}
         />
       </div>
