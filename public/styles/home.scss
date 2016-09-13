@@ -1,0 +1,135 @@
+/*universal*/
+
+
+/*sidebar left*/
+
+#container_widgets{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: flex-start;
+}
+
+.dragHandle:hover{
+  cursor: grab;
+  cursor: -webkit-grab;
+}
+
+// .greyBox {
+  /* Initially we don't want any height, and we want the contents to be hidden */
+  // max-height: 0;
+  // overflow: hidden;
+
+  /* Set our transitions up. */
+  // -webkit-transition: max-height 0.8s;
+  // -moz-transition: max-height 0.8s;
+  // transition: max-height 0.8s;
+// }
+.greyBox{
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 0px;
+  width: 100%;
+  z-index: 1;
+  opacity: 0.5;
+  background-color: black;
+  -webkit-transition: height 0.5s;
+  -moz-transition: height 0.5s;
+  transition: height 0.5s;
+}
+.greyBox.show {
+  /* On hover, set the max-height to something large. In this case there's an obvious limit. */
+  height: 100px;
+  // background-color: red;
+}
+
+.icon{
+  padding: 5px;
+  max-width: 60px
+
+}
+
+.icon_logo{
+  height:45px;
+  width:45px;
+  margin: auto;
+}
+
+.icon_name{
+  text-align: center;
+}
+
+
+/*sidebar right*/
+#sidebar_right{
+  right: 0;
+  top: 64px;
+  max-width: 80vw;
+  border-color: black;
+  position: fixed;
+  height: calc(100vh - 64px);
+  background-color: #999;
+  display: flex;
+  overflow: scroll;
+  padding: 5px;
+  z-index: 1;
+}
+
+#sidebar_right.hidden{
+  display: none;
+}
+
+.playlist{
+  border-color: black;
+  border-style: solid;
+  margin: 5px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+/*contents*/
+#contents{
+  background-color: #ddd;
+  min-height: calc(100vh - 64px);
+}
+
+.muidocs-icon-custom-github:before {
+    content: "\e625";
+}
+
+input[type=text]:focus:not([readonly]){
+  box-shadow: 0 0px 0 0;
+}
+
+//Scroll inside of table
+//http://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
+.weatherForcast{
+  table {
+    width: 716px; /* 140px * 5 column + 16px scrollbar width */
+    border-spacing: 0;
+
+  }
+
+  tbody, thead tr { display: block; }
+
+  tbody {
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 1.2em;
+    line-height: 0px;
+  }
+
+  tbody td, thead th {
+      width: 140px;
+      padding: 0px 5px;
+  }
+
+  thead th:last-child {
+      width: 156px; /* 140px + 16px scrollbar width */
+  }
+}
+
+
