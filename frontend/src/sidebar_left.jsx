@@ -5,8 +5,11 @@ import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import { WidgetTypes, WidgetIconImage } from './Constants';
 
-const style = {
-  margin: 12,
+const styles = {
+  button:{margin: 12,},
+  leftBar:{
+    backgroundColor: '#ddd'
+  }
 };
 
 
@@ -14,11 +17,10 @@ class SidebarLeft extends Component {
 
   render() {
     return (
-
-      <Drawer open={this.props.open}>
-        <RaisedButton onClick={this.props.toggleSidebarLeft} label="Hide" primary={true} style={style} />
+      <Drawer open={this.props.open} >
+        <RaisedButton onClick={this.props.toggleSidebarLeft} label="Hide" primary={true} style={styles.button} />
         <p>Your widgets:</p>
-        <div id='container_widgets'>    
+        <div id='container_widgets' >    
           <WidgetIcon widgetType={WidgetTypes.time} imgsource={WidgetIconImage.time}/>
           <WidgetIcon widgetType={WidgetTypes.traffic} imgsource={WidgetIconImage.traffic} />
           <WidgetIcon widgetType={WidgetTypes.weather} imgsource={WidgetIconImage.weather}/>

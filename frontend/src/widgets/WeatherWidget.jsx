@@ -44,6 +44,8 @@ const styles = {
     float: "left",
     width: "50px",
     padding: "0 1px",
+  },lastRow:{
+    marginBottom: '0px'
   }
 };
 
@@ -187,7 +189,7 @@ class WeatherWidget extends Component {
             }
             </div>
             </div>
-            <div className="row">
+            <div className="row" style={styles.lastRow}>
               <div className="col s7">
                 <table className="weatherForcast">
                   <thead >
