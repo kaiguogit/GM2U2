@@ -143,23 +143,14 @@ class App extends Component {
             className='customSidebarLeft'
           />
 
-          {/*If Playlists is falsy*/}
-          {this.state.playlists.length === 0 &&
+
+          {/*If Playlist is []*/}
+          {this.state.username && this.state.playlists && this.state.playlists.length === 0 &&
             <div className = 'col s12 m10 offset-m1 l8 offset-l2'>
               <RaisedButton 
                 onClick={this.addPlaylist.bind(this)} 
                 label="Add playlist" 
                 primary={true} 
-                style={raisedButtonStyle} />
-            </div>
-          }
-
-          {/*If Playlist is []*/}
-          {this.state.playlists && this.state.playlists.length === 0 &&
-            <div className = 'col s12 m10 offset-m1 l8 offset-l2'>
-              <RaisedButton 
-                onClick={this.addPlaylist.bind(this)} 
-                label="Add playlist" primary={true} 
                 style={raisedButtonStyle} />
             </div>
           }

@@ -118,8 +118,7 @@ class TrafficWidget extends Component {
       <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
 
         <CardText expandable={true}>
-          <div>
-            <p>settings</p>
+          <div>          
             <AutoComplete 
               hintText='Enter location name or address' 
               searchText={this.props.widget.origin}
