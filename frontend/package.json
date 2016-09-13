@@ -1,10 +1,12 @@
 {
-  "name": "react-simple-boilerplate",
+  "name": "GM-react-frontend",
   "version": "1.0.0",
-  "description": "Simple and lightweight Boilerplate for ReactJS projects",
+  "description": "Voice Synthesizer morning alarm",
   "scripts": {
     "lint": "eslint src",
-    "start": "node server.js"
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:dev": "webpack-dev-server --inline --content-base public --history-api-fallback",
+    "start:prod": "webpack && node server.js"
   },
   "repository": {
     "type": "git",
@@ -43,6 +45,7 @@
   },
   "dependencies": {
     "dotenv": "^2.0.0",
+    "if-env": "^1.0.0",
     "material-ui": "^0.15.4",
     "moment": "^2.14.1",
     "react": "^15.3.1",
