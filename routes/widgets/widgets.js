@@ -7,6 +7,7 @@ var traffic = require('../../modules/traffic');
 var weatherController = require('../../controller/weatherWidget');
 var newsController = require('../../controller/newsWidget');
 var trafficController = require('../../controller/trafficWidget');
+var quotesController = require('../../controller/quotesWidget');
 
 //helper methods
 var findPlaylistforWidget = require('../helper.js').findPlaylistforWidget;
@@ -111,6 +112,11 @@ router.get('/:type/:id/speech', (req, res, next) => {
         res.json(speech);
       })
       break;
+    case "quotes":
+      quotesController.getSpeechString(req.params.id, function(speech){
+        res.json(speech);
+      })
+      break;
     default:
       break;
 
@@ -150,6 +156,11 @@ router.get('/:type/:id/view', (req, res, next) => {
     case "news":
       newsController.getNews(req.params.id, function(news){
         res.json(JSON.stringify(news));
+      })
+      break;
+    case "quotes":
+      quotesController.getQuote(req.params.id,function(data){
+        res.json(data);
       })
       break;
     default:
