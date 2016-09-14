@@ -7,13 +7,33 @@ const styles={
     backgroundColor: '#575755'
   }
 }
+var handleSignout;
+
 class Navbar extends Component {
 
   handleLogOut(e){
     e.preventDefault();
     window.localStorage.clear();
-    this.props.loggedIn(null);
+    this.props.loggedOut();
+    $.getScript('https://apis.google.com/js/platform.js')
+      .done(()=>{
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          console.log('User signed out.');
+        });
+      });
+   
+  
   };
+
+  componentDidMount(){
+    $.getScript('https://apis.google.com/js/platform.js')
+    .done(()=>{
+      gapi.load('auth2', function() {
+              gapi.auth2.init();
+      });
+    })
+  }
 
   render() {
     return (      
@@ -42,13 +62,6 @@ class Navbar extends Component {
                 <li><a href="#" onClick={this.handleLogOut.bind(this)}>Logout</a></li>
               </ul>
             </div>
-          }
-          {!this.context.username &&
-            <div>
-              <ul className="right"> {/* on regular screens */}
-                <li><Login loggedIn={this.props.loggedIn}/></li>
-              </ul>
-          </div>
           }
         </nav>
       </div>

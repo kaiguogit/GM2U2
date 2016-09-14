@@ -1,4 +1,7 @@
-require('dotenv').config();
+if(process.env.NODE_ENV !== 'production'){
+  console.log("Requiring dotenv npm ");
+  require('dotenv').config();
+}
 
 //server
 var express = require('express');
