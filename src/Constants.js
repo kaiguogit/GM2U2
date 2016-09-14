@@ -7,7 +7,8 @@ export const WidgetTypes = {
   traffic: "traffic",
   weather: "weather",
   calendar: "calendar",
-  news: "news"
+  news: "news",
+  quotes: "quotes"
 }
 
 export const WidgetIconImage = {
@@ -17,7 +18,8 @@ export const WidgetIconImage = {
   calendar: "./public/calendar.png",
   //http://c.dryicons.com/images/icon_sets/colorful_stickers_part_5_icons_set/png/256x256/news.png
   //http://dryicons.com/icon/colorful-stickers-part-5-icons-set/news/
-  news: "./public/news.png"
+  news: "./public/news.png",
+  quotes: "./public/quotes.png"
 }
 
 export const WidgetIconImageX96 = {
@@ -25,7 +27,8 @@ export const WidgetIconImageX96 = {
   traffic: "./public/x96/Maps.png",
   weather: "./public/x96/weather.png",
   calendar: "./public/x96/calendar.png",
-  news: "./public/news.png"
+  news: "./public/news.png",
+  quotes: "./public/x96/quotes.png" 
 }
 
 export const ClockFace = {
