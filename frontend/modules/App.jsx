@@ -21,6 +21,14 @@ const raisedButtonStyle = {
 const styles={
   app:{
     backgroundColor: '#ddd'
+  },
+  frontPage:{
+    height:'800px',
+    backgroundImage: 'url(/images/background-header.jpg)',
+    color: "white",
+  },
+  frontTitle:{
+    fontSize:'50px'
   }
 }
 
@@ -191,8 +199,13 @@ class App extends Component {
         />
 
         {!this.state.username &&
-          <div className="container">
-            <Login loggedIn={this.loggedIn.bind(this)}/>
+          <div style={styles.frontPage}>
+            <div className="center-align" style={styles.frontTitle}>
+              An Morning Alarm that can talk to you.
+            </div>
+            <div >
+              <Login loggedIn={this.loggedIn.bind(this)}/>
+            </div>
           </div>
         }
 

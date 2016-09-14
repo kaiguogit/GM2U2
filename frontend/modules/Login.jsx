@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 
-
+const style = {
+  margin:'auto',
+  width: '200px'
+}
 class Login extends Component {
 
   onSignIn(response){
@@ -48,7 +51,7 @@ class Login extends Component {
   // render
   render() {
     return (
-        <div id="my-signin2"></div>
+        <div id="my-signin2" style={style}></div>
       );
   }
 }
