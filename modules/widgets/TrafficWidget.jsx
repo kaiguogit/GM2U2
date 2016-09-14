@@ -38,7 +38,7 @@ class TrafficWidget extends Component {
     };
   };
 
-  toggleSettingExpanded = () => {
+  toggleSettingExpanded(){
     this.setState({expanded: !this.state.expanded});
   };
   

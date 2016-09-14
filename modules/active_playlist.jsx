@@ -59,7 +59,7 @@ class ActivePlaylist extends Component {
   handleAddWidget(widgetType){
     //Post request to add widget
     $.ajax({
-      url: `http://localhost:3000/api/playlists/${this.props.playlist.id}/${widgetType}Widget`,
+      url: `${process.env.host}/api/playlists/${this.props.playlist.id}/${widgetType}Widget`,
       method: "post",
       headers: {
       'Authorization':  "Bearer " + window.localStorage.token
@@ -91,7 +91,7 @@ class ActivePlaylist extends Component {
   //////////////////////////////
   uploadPlaylist(newPlaylist){
     $.ajax({
-      url: `http://localhost:3000/api/playlists/${this.props.playlist.id}`,
+      url: `${process.env.host}/api/playlists/${this.props.playlist.id}`,
       method: "put",
       data: {playlist: JSON.stringify(newPlaylist)},
       dataType: "json",
@@ -192,7 +192,7 @@ class ActivePlaylist extends Component {
   //Call User's phone number and play all widgets
   ring(){
     $.ajax({
-      url: `http://localhost:3000/api/playlists/${this.props.playlist.id}/call`,
+      url: `${process.env.host}/api/playlists/${this.props.playlist.id}/call`,
       method: 'get',
       headers: {
       'Authorization':  "Bearer " + window.localStorage.token

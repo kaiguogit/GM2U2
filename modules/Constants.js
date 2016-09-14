@@ -12,23 +12,23 @@ export const WidgetTypes = {
 }
 
 export const WidgetIconImage = {
-  time: "./public/clock-icon.jpg",
-  traffic: "./public/Maps.png",
-  weather: "./public/weather.png",
-  calendar: "./public/calendar.png",
+  time: "/images/clock-icon.jpg",
+  traffic: "/images/Maps.png",
+  weather: "/images/weather.png",
+  calendar: "/images/calendar.png",
   //http://c.dryicons.com/images/icon_sets/colorful_stickers_part_5_icons_set/png/256x256/news.png
   //http://dryicons.com/icon/colorful-stickers-part-5-icons-set/news/
-  news: "./public/news.png",
-  quotes: "./public/quotes.png"
+  news: "/images/news.png",
+  quotes: "/images/quotes.png"
 }
 
 export const WidgetIconImageX96 = {
-  time: "./public/x96/clock-icon.jpg",
-  traffic: "./public/x96/Maps.png",
-  weather: "./public/x96/weather.png",
-  calendar: "./public/x96/calendar.png",
-  news: "./public/news.png",
-  quotes: "./public/x96/quotes.png" 
+  time: "/images/x96/clock-icon.jpg",
+  traffic: "/images/x96/Maps.png",
+  weather: "/images/x96/weather.png",
+  calendar: "/images/x96/calendar.png",
+  news: "/images/news.png",
+  quotes: "/images/x96/quotes.png" 
 }
 
 export const ClockFace = {

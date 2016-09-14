@@ -18,7 +18,6 @@ function collect(connect, monitor) {
 }
 
 class WidgetIcon extends Component {
-
   render() {
     const { connectDragSource, isDragging, connectDragPreview } = this.props;
 

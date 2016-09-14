@@ -55,7 +55,7 @@ class NewsWidget extends Component {
   }
 
 
-  toggleSettingExpanded = () => {
+  toggleSettingExpanded(){
     this.setState({expanded: !this.state.expanded});
   };
 
@@ -97,7 +97,7 @@ class NewsWidget extends Component {
     this.setState({refreshing: true});
     console.log("getting news");
     $.ajax({
-      url: `http://localhost:3000/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/view`,
+      url: `${process.env.host}/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/view`,
       method: "get",
       dataType: "json",
       headers: {

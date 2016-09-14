@@ -38,7 +38,7 @@ export default class CitySelector extends React.Component {
     };
   }
 
-  handleUpdateInput = (value) => {
+  handleUpdateInput(value){
     searchCity(value, function(cities){
       this.setState({
         dataSource: cities,
