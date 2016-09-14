@@ -4,6 +4,7 @@ var twilioClient = require('../modules/twilio.js').client;
 var weatherController = require('./weatherWidget.js');
 var newsController = require('./newsWidget.js');
 var time = require('../modules/time');
+var moment = require('moment');
 
 function ringOnAlarm(fn){
  console.log("Checking all playlists alarms. Calling user if alarm is triggered.");
@@ -109,7 +110,18 @@ function twilioSpeech(playlistId, fn){
     var twiml = new twilio.TwimlResponse();
 
     Promise.all(speechPromises).then(function(speeches){
-     console.log("waiting on promise all to finish");
+      console.log("waiting on promise all to finish");
+
+     //Greeting 
+      var user = "Kai";
+      var humanizedGreeting = "Good " + getGreetingTime(moment()) + ", " + user + ".";
+      var downloadURL = process.env.host + '/api/synthesize' +
+        '?voice=' + 'en-US_AllisonVoice' +
+        '&accept=' + 'audio/wav' +
+        '&text=' + encodeURIComponent(humanizedGreeting) +
+        '&X-WDC-PL-OPT-OUT=' +  'false' + '&download=true';
+      twiml.play(downloadURL);
+
       speeches.forEach(function(speech){
         
         var downloadURL = process.env.host + '/api/synthesize' +
@@ -134,9 +146,40 @@ function twilioSpeech(playlistId, fn){
     });
   });
 }
+
+function getGreetingTime (m) {
+  var g = null; //return g
+  
+  if(!m || !m.isValid()) { return; } //if we can't find a valid or filled moment, we return.
+  
+  var split_afternoon = 12 //24hr time to split the afternoon
+  var split_evening = 17 //24hr time to split the evening
+  var currentHour = parseFloat(m.format("HH"));
+  
+  if(currentHour >= split_afternoon && currentHour <= split_evening) {
+    g = "afternoon";
+  } else if(currentHour >= split_evening) {
+    g = "evening";
+  } else {
+    g = "morning";
+  }
+  
+  return g;
+}
+// https://gist.github.com/James1x0/8443042
+/* USE
+    //The var "humanizedGreeting" below will equal (assuming the time is 8pm) "Good evening, James."
+    
+    var user = "James";
+    var humanizedGreeting = "Good " + getGreetingTime(moment()) + ", " + user + ".";
+*/
+
 var playlistController = {
   twilioSpeech: twilioSpeech,
   ring: ring,
   ringOnAlarm: ringOnAlarm
 };
+
+
+
 module.exports = playlistController

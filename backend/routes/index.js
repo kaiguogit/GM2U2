@@ -12,20 +12,7 @@ var jwt = require('jsonwebtoken');
 var jwt_mw = require('express-jwt');
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log("user in request is ", req.user);
-
-  models.playlist.all().then(function(playlists) {
-    console.log("*******************user in route", req.user);
-    console.log("********************session in request is ", req.session);
-    if(req.user){
-      console.log("setting uid into session");
-      res.render('index', {playlists: playlists, user: req.user});
-    }else{
-      res.render('index', {playlists: playlists, user: {}});
-    }
-    
-  // send HTML file populated with quotes here
-  });
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 //
