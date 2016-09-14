@@ -21,6 +21,14 @@ const raisedButtonStyle = {
 const styles={
   app:{
     backgroundColor: '#ddd'
+  },
+  frontPage:{
+    height:'800px',
+    backgroundImage: 'url(/images/background-header.jpg)',
+    color: "white",
+  },
+  frontTitle:{
+    fontSize:'50px'
   }
 }
 
@@ -62,11 +70,19 @@ class App extends Component {
     })
   }
 
-  loggedIn(username){
+  loggedIn(user){
     this.setState({
-      username: username
+      username: user.name,
     });
-    window.location.reload();
+
+    this.updatePlaylist();
+    // window.location.reload();
+  }
+
+  loggedOut(){
+    this.setState({
+      username: null
+    });
   }
 
   addPlaylist(){
@@ -169,6 +185,19 @@ class App extends Component {
     console.log("!!!!!!!!!host in env is"+ process.env.host);
   };
 
+  onSignIn(googleUser) {
+    console.log("launched");
+    console.log(googleUser);
+    var profile = googleUser.getBasicProfile();
+    console.log(profile);
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail());
+    console.log('FamilyName: ' + profile.getFamilyName());
+    console.log('GivenName: ' + profile.getGivenName());
+  }
+
   render() {
     return (
       <div style={styles.app}>
@@ -176,12 +205,17 @@ class App extends Component {
         <Navbar 
           toggleSidebarLeft={this.toggleSidebarLeft.bind(this)} 
           toggleSidebarRight={this.toggleSidebarRight.bind(this)} 
-          loggedIn={this.loggedIn.bind(this)}
+          loggedOut={this.loggedOut.bind(this)}
         />
 
         {!this.state.username &&
-          <div>
-            <Login />
+          <div style={styles.frontPage}>
+            <div className="center-align" style={styles.frontTitle}>
+              A Morning Alarm that can talk to you.
+            </div>
+            <div >
+              <Login loggedIn={this.loggedIn.bind(this)}/>
+            </div>
           </div>
         }
 
@@ -231,9 +265,7 @@ class App extends Component {
             
           </div>
         }
-        {this.state.username &&
-          <Footer/>
-        }
+
       </div>
     );
   }

@@ -6,6 +6,7 @@ import ActionAlarm from 'material-ui/svg-icons/action/alarm';
 import PhoneIcon from 'material-ui/svg-icons/communication/phone';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import PlayIcon from 'material-ui/svg-icons/av/play-circle-outline';
+import PauseIcon from 'material-ui/svg-icons/av/pause-circle-outline';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 
@@ -31,6 +32,9 @@ const styles = {
   },
   PhoneDialog:{
     width: '30%'
+  },
+  pauseButton:{
+    backgroundColor: '#FF3B58'
   }
 }
 class ActivePlaylist extends Component {
@@ -158,6 +162,15 @@ class ActivePlaylist extends Component {
   }
 
 
+  pauseAllWidget(){
+    $('audio').attr("src", "");
+    $('audio').each(function(index, item){
+      item.controls = false;
+    });
+    $('body').css('cursor', 'auto');
+    this.setState({playingWidgetIndex: null});
+
+  }
   //Change playingWidgetIndex to play next widget;
   playNextWidget(){
     if(this.isPlayingDone()){
@@ -191,18 +204,23 @@ class ActivePlaylist extends Component {
 
   //Call User's phone number and play all widgets
   ring(){
-    $.ajax({
-      url: `${process.env.host}/api/playlists/${this.props.playlist.id}/call`,
-      method: 'get',
-      headers: {
-      'Authorization':  "Bearer " + window.localStorage.token
-      }
-    }).done(function(response){
-      console.log(response);
-      Materialize.toast(response.message, 4000,'',function(){})
-    }).fail(function(err){
-      console.log(err);
-    })
+    if(this.context.phoneNumber){
+      $.ajax({
+        url: `${process.env.host}/api/playlists/${this.props.playlist.id}/call`,
+        method: 'get',
+        headers: {
+        'Authorization':  "Bearer " + window.localStorage.token
+        }
+      }).done(function(response){
+        console.log(response);
+        Materialize.toast(response.message, 4000,'',function(){})
+      }).fail(function(err){
+        console.log(err);
+      })
+    }else{
+      Materialize.toast("No Phone Number in record. Please set a phone number", 4000,'',function(){})
+
+    }
   }
 
   getChildContext(){
@@ -314,15 +332,26 @@ class ActivePlaylist extends Component {
           style={styles.AlarmButton}
           onTouchTap={this.ring.bind(this)}
         />
-
-        <RaisedButton
-          label="Play on Browser"
-          labelPosition="after"
-          primary={true}
-          icon={<PlayIcon />}
-          style={styles.AlarmButton}
-          onTouchTap={this.playAllWidgets.bind(this)}
-        />
+        {this.isPlaying() &&
+          <RaisedButton
+            label="Stop playing"
+            labelPosition="after"
+            secondary={true}
+            icon={<PauseIcon />}
+            onTouchTap={this.pauseAllWidget.bind(this)}
+          />
+        }
+        {!this.isPlaying() &&
+          <RaisedButton
+            label="Play on Browser"
+            labelPosition="after"
+            primary={true}
+            icon={<PlayIcon />}
+            style={styles.AlarmButton}
+            onTouchTap={this.playAllWidgets.bind(this)}
+          />
+        }
+        
 
         {
           this.props.playlist.widgets.map(function(widget, index){

@@ -1,7 +1,11 @@
 var webpack = require('webpack')
 var path = require('path');
-require('dotenv').config();
-console.log("\n!!!!!host in env is", process.env.host);
+
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').config();
+  console.log("host in env is", process.env.host);
+}
+
 module.exports = {
   entry: './modules/index.jsx',
 
