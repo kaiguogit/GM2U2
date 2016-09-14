@@ -22,13 +22,18 @@ const styles={
   app:{
     backgroundColor: '#ddd'
   },
+  //http://www.skinnyopinion.com/wp-content/uploads/2014/02/morning-sunrise.jpg
   frontPage:{
     height:'800px',
     backgroundImage: 'url(/images/background-header.jpg)',
-    color: "white",
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    color: '#575755',
+    paddingTop: '190px'
   },
   frontTitle:{
-    fontSize:'50px'
+    fontSize:'60px',
+    fontFamily: "'overlock', 'courier', 'serif'"
   }
 }
 
@@ -207,7 +212,7 @@ class App extends Component {
         {!this.state.username &&
           <div style={styles.frontPage}>
             <div className="center-align" style={styles.frontTitle}>
-              A Morning Alarm that can talk to you.
+              A Morning Alarm That Talks to You.
             </div>
             <div >
               <Login loggedIn={this.loggedIn.bind(this)}/>
