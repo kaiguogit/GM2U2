@@ -66,11 +66,19 @@ class App extends Component {
     })
   }
 
-  loggedIn(username){
+  loggedIn(user){
     this.setState({
-      username: username
+      username: user.name,
     });
+
+    this.updatePlaylist();
     // window.location.reload();
+  }
+
+  loggedOut(){
+    this.setState({
+      username: null
+    });
   }
 
   addPlaylist(){
@@ -171,8 +179,6 @@ class App extends Component {
     );
 
     console.log("!!!!!!!!!host in env is"+ process.env.host);
-
-
   };
 
   onSignIn(googleUser) {
@@ -195,13 +201,13 @@ class App extends Component {
         <Navbar 
           toggleSidebarLeft={this.toggleSidebarLeft.bind(this)} 
           toggleSidebarRight={this.toggleSidebarRight.bind(this)} 
-          loggedIn={this.loggedIn.bind(this)}
+          loggedOut={this.loggedOut.bind(this)}
         />
 
         {!this.state.username &&
           <div style={styles.frontPage}>
             <div className="center-align" style={styles.frontTitle}>
-              An Morning Alarm that can talk to you.
+              A Morning Alarm that can talk to you.
             </div>
             <div >
               <Login loggedIn={this.loggedIn.bind(this)}/>
