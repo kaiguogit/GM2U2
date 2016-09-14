@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 const style = {
   margin:'auto',
-  width: '200px'
+  width: '250px'
 }
 class Login extends Component {
 
@@ -23,11 +23,11 @@ class Login extends Component {
      }).done(function(user) {
        console.log("Google response is", response);
        console.log("this is", this);
-       this.props.loggedIn(user.name);
        //Save token to localStorage
        window.localStorage.token = user.token;
        window.localStorage.username = user.name;
        window.localStorage.phoneNumber = user.phoneNumber;
+       this.props.loggedIn(user);
 
      }.bind(this)).fail(function(err){
        console.log(err);
@@ -40,7 +40,7 @@ class Login extends Component {
              // execute any gapi calls here...
              gapi.signin2.render('my-signin2', {
                'scope': 'https://www.googleapis.com/auth/plus.login',
-               'width': 200,
+               'width': 250,
                'height': 50,
                'longtitle': true,
                'theme': 'dark',
