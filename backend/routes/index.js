@@ -81,26 +81,18 @@ router.post('/phone', function(req, res, next){
   });
 })
 
-
-router.get('/login', function(req, res, next){
-  console.log("user in request is ", req.user);
-  models.user.findById(1).then(function(user){
-    console.log("!!!!!!!!!!!login user id is ", user.id);
-    var token = jwt.sign({ userId: user.id, userName: user.name }, process.env.jwt_secret);
-    console.log("!!!!!!token is ", token);
-    var decoded = jwt.verify(token, process.env.jwt_secret);
-    console.log("!!!!!!decoded token is ",decoded.userId);
-    res.json({
-      success: true,
-      message: "Enjoy your token!",
-      token: token
-    });
-  });
-});
-
 router.post('/login', function(req, res, next){
 
-  models.user.findOrCreate({where: { googleId: req.body.googleId, name: req.body.username }, defaults: {job: 'Create user by google id'}})
+  models.user.findOrCreate({
+    where: { 
+      googleId: req.body.googleId, 
+      name: req.body.name,
+      familyName: req.body.familyName,
+      givenName: req.body.givenName,
+      imageUrl: req.body.imageUrl,
+      email: req.body.email,
+      accessToken: req.body.accessToken
+    }, defaults: {job: 'Create user by google id'}})
   .spread(function(user, created) {
     console.log(user.get({
       plain: true

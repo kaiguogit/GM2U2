@@ -8,7 +8,12 @@ import GoogleLogin from 'react-google-login';
       method: "post",
       data: {
         googleId: response.googleId,
-        username: response.profileObj.name
+        name: response.profileObj.name,
+        familyName: response.profileObj.familyName,
+        givenName: response.profileObj.givenName,
+        imageUrl: response.profileObj.imageUrl,
+        email: response.profileObj.email,
+        accessToken: response.accessToken
       }
     }).done((user) => {
       console.log("Google response is", response);

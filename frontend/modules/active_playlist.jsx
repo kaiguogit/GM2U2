@@ -191,18 +191,23 @@ class ActivePlaylist extends Component {
 
   //Call User's phone number and play all widgets
   ring(){
-    $.ajax({
-      url: `${process.env.host}/api/playlists/${this.props.playlist.id}/call`,
-      method: 'get',
-      headers: {
-      'Authorization':  "Bearer " + window.localStorage.token
-      }
-    }).done(function(response){
-      console.log(response);
-      Materialize.toast(response.message, 4000,'',function(){})
-    }).fail(function(err){
-      console.log(err);
-    })
+    if(this.context.phoneNumber){
+      $.ajax({
+        url: `${process.env.host}/api/playlists/${this.props.playlist.id}/call`,
+        method: 'get',
+        headers: {
+        'Authorization':  "Bearer " + window.localStorage.token
+        }
+      }).done(function(response){
+        console.log(response);
+        Materialize.toast(response.message, 4000,'',function(){})
+      }).fail(function(err){
+        console.log(err);
+      })
+    }else{
+      Materialize.toast("No Phone Number in record. Please set a phone number", 4000,'',function(){})
+
+    }
   }
 
   getChildContext(){
@@ -314,15 +319,27 @@ class ActivePlaylist extends Component {
           style={styles.AlarmButton}
           onTouchTap={this.ring.bind(this)}
         />
-
-        <RaisedButton
-          label="Play on Browser"
-          labelPosition="after"
-          primary={true}
-          icon={<PlayIcon />}
-          style={styles.AlarmButton}
-          onTouchTap={this.playAllWidgets.bind(this)}
-        />
+        {this.isPlaying() &&
+          <RaisedButton
+            label="Stop playing"
+            labelPosition="after"
+            primary={true}
+            icon={<PlayIcon />}
+            style={styles.AlarmButton}
+            onTouchTap={this.playAllWidgets.bind(this)}
+          />
+        }
+        {!this.isPlaying() &&
+          <RaisedButton
+            label="Play on Browser"
+            labelPosition="after"
+            primary={true}
+            icon={<PlayIcon />}
+            style={styles.AlarmButton}
+            onTouchTap={this.playAllWidgets.bind(this)}
+          />
+        }
+        
 
         {
           this.props.playlist.widgets.map(function(widget, index){
