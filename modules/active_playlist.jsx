@@ -6,6 +6,7 @@ import ActionAlarm from 'material-ui/svg-icons/action/alarm';
 import PhoneIcon from 'material-ui/svg-icons/communication/phone';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import PlayIcon from 'material-ui/svg-icons/av/play-circle-outline';
+import PauseIcon from 'material-ui/svg-icons/av/pause-circle-outline';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 
@@ -31,6 +32,9 @@ const styles = {
   },
   PhoneDialog:{
     width: '30%'
+  },
+  pauseButton:{
+    backgroundColor: '#FF3B58'
   }
 }
 class ActivePlaylist extends Component {
@@ -158,6 +162,15 @@ class ActivePlaylist extends Component {
   }
 
 
+  pauseAllWidget(){
+    $('audio').attr("src", "");
+    $('audio').each(function(index, item){
+      item.controls = false;
+    });
+    $('body').css('cursor', 'auto');
+    this.setState({playingWidgetIndex: null});
+
+  }
   //Change playingWidgetIndex to play next widget;
   playNextWidget(){
     if(this.isPlayingDone()){
@@ -323,10 +336,9 @@ class ActivePlaylist extends Component {
           <RaisedButton
             label="Stop playing"
             labelPosition="after"
-            primary={true}
-            icon={<PlayIcon />}
-            style={styles.AlarmButton}
-            onTouchTap={this.playAllWidgets.bind(this)}
+            secondary={true}
+            icon={<PauseIcon />}
+            onTouchTap={this.pauseAllWidget.bind(this)}
           />
         }
         {!this.isPlaying() &&
