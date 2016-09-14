@@ -17,8 +17,8 @@ function getSpeechString(widgetId, fn){
   function sendString(error, response, body){
     var data = JSON.parse(body);
     var string = "Following is a quote by "
-    string = string + data.quoteAuthor + ". "
-    string = string + data.quoteText 
+    string = string + data.quoteAuthor.trim() + ". "
+    string = string + data.quoteText
     fn(string);
   }
 };
