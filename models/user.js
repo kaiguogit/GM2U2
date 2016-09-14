@@ -15,6 +15,26 @@ var User = function(sequelize, Sequelize) {
         phoneNumber:{
           type: Sequelize.STRING,
           allowNull: true    
+        },
+        email:{
+          type: Sequelize.STRING,
+          allowNull: true    
+        },
+        familyName:{
+          type: Sequelize.STRING,
+          allowNull: true    
+        },
+        givenName:{
+          type: Sequelize.STRING,
+          allowNull: true    
+        },
+        imageUrl:{
+          type: Sequelize.STRING,
+          allowNull: true    
+        },
+        accessToken:{
+          type: Sequelize.STRING,
+          allowNull: true    
         }
     },{
       classMethods: {

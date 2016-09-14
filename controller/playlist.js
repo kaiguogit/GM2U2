@@ -112,37 +112,41 @@ function twilioSpeech(playlistId, fn){
     Promise.all(speechPromises).then(function(speeches){
       console.log("waiting on promise all to finish");
 
-     //Greeting 
-      var user = "Kai";
-      var humanizedGreeting = "Good " + getGreetingTime(moment()) + ", " + user + ".";
-      var downloadURL = process.env.host + '/api/synthesize' +
-        '?voice=' + 'en-US_AllisonVoice' +
-        '&accept=' + 'audio/wav' +
-        '&text=' + encodeURIComponent(humanizedGreeting) +
-        '&X-WDC-PL-OPT-OUT=' +  'false' + '&download=true';
-      twiml.play(downloadURL);
+      models.user.findById(playlist.userId)
+      .then(function(user){
+        //Greeting 
+         var user = user.givenName;
+         var humanizedGreeting = "Good " + getGreetingTime(moment()) + ", " + user + ".";
+         var downloadURL = process.env.host + '/api/synthesize' +
+           '?voice=' + 'en-US_AllisonVoice' +
+           '&accept=' + 'audio/wav' +
+           '&text=' + encodeURIComponent(humanizedGreeting) +
+           '&X-WDC-PL-OPT-OUT=' +  'false' + '&download=true';
+         twiml.play(downloadURL);
 
-      speeches.forEach(function(speech){
-        
-        var downloadURL = process.env.host + '/api/synthesize' +
-          '?voice=' + 'en-US_AllisonVoice' +
-          '&accept=' + 'audio/wav' +
-          '&text=' + encodeURIComponent(speech) +
-          '&X-WDC-PL-OPT-OUT=' +  'false' + '&download=true';
-        console.log("Speech url is ", downloadURL);
-        twiml.play(downloadURL)
-        // .pause({length: 2});  
-        // twiml.say(speech, {
-        //   voice: 'alice',
-        //   language: 'en-US',
-        //   loop: '0'
-        // })
-        // .pause({length: 2});
-        // console.log("speech is",speech)
-      });
-      var url =  process.env.host + "/outbound?playlistId=" + playlistId;
-      twiml.redirect(url);
-      fn(twiml);
+         speeches.forEach(function(speech){
+           
+           var downloadURL = process.env.host + '/api/synthesize' +
+             '?voice=' + 'en-US_AllisonVoice' +
+             '&accept=' + 'audio/wav' +
+             '&text=' + encodeURIComponent(speech) +
+             '&X-WDC-PL-OPT-OUT=' +  'false' + '&download=true';
+           console.log("Speech url is ", downloadURL);
+           twiml.play(downloadURL)
+           // .pause({length: 2});  
+           // twiml.say(speech, {
+           //   voice: 'alice',
+           //   language: 'en-US',
+           //   loop: '0'
+           // })
+           // .pause({length: 2});
+           // console.log("speech is",speech)
+         });
+         var url =  process.env.host + "/outbound?playlistId=" + playlistId;
+         twiml.redirect(url);
+         fn(twiml);
+      })
+     
     });
   });
 }
