@@ -163,7 +163,22 @@ class App extends Component {
     );
 
     console.log("!!!!!!!!!host in env is"+ process.env.host);
+
+
   };
+
+  onSignIn(googleUser) {
+    console.log("launched");
+    console.log(googleUser);
+    var profile = googleUser.getBasicProfile();
+    console.log(profile);
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail());
+    console.log('FamilyName: ' + profile.getFamilyName());
+    console.log('GivenName: ' + profile.getGivenName());
+  }
 
   render() {
     return (
@@ -176,8 +191,8 @@ class App extends Component {
         />
 
         {!this.state.username &&
-          <div>
-            <Login />
+          <div className="container">
+            <Login loggedIn={this.loggedIn.bind(this)}/>
           </div>
         }
 
@@ -226,9 +241,7 @@ class App extends Component {
             
           </div>
         }
-        {this.state.username &&
-          <Footer/>
-        }
+
       </div>
     );
   }

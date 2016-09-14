@@ -1,43 +1,54 @@
 import React, {Component} from 'react';
-import GoogleLogin from 'react-google-login';
 
- function responseGoogle(response){
-    console.log("Response is", response);
-    $.ajax({
-      url: `${process.env.host}/login`,
-      method: "post",
-      data: {
-        googleId: response.googleId,
-        name: response.profileObj.name,
-        familyName: response.profileObj.familyName,
-        givenName: response.profileObj.givenName,
-        imageUrl: response.profileObj.imageUrl,
-        email: response.profileObj.email,
-        accessToken: response.accessToken
-      }
-    }).done((user) => {
-      console.log("Google response is", response);
-      this.props.loggedIn(user.name);
-      //Save token to localStorage
-      window.localStorage.token = user.token;
-      window.localStorage.username = user.name;
-      window.localStorage.phoneNumber = user.phoneNumber;
 
-    }).fail(function(err){
-      console.log(err);
-    });
-  }
 class Login extends Component {
 
+  onSignIn(response){
+     console.log("Response is", response);
+     $.ajax({
+       url: `${process.env.host}/login`,
+       method: "post",
+       data: {
+         googleId: response.El,
+         name: response.getBasicProfile().getName(),
+         familyName: response.getBasicProfile().getFamilyName(),
+         givenName: response.getBasicProfile().getGivenName(),
+         imageUrl: response.getBasicProfile().getImageUrl(),
+         email: response.getBasicProfile().getEmail(),
+         accessToken: response.Zi.access_token
+       }
+     }).done(function(user) {
+       console.log("Google response is", response);
+       console.log("this is", this);
+       this.props.loggedIn(user.name);
+       //Save token to localStorage
+       window.localStorage.token = user.token;
+       window.localStorage.username = user.name;
+       window.localStorage.phoneNumber = user.phoneNumber;
+
+     }.bind(this)).fail(function(err){
+       console.log(err);
+     });
+   }
+
+   componentDidMount(){
+     $.getScript('https://apis.google.com/js/platform.js')
+         .done(() => {
+             // execute any gapi calls here...
+             gapi.signin2.render('my-signin2', {
+               'scope': 'https://www.googleapis.com/auth/plus.login',
+               'width': 200,
+               'height': 50,
+               'longtitle': true,
+               'theme': 'dark',
+               'onsuccess': this.onSignIn.bind(this)
+             })
+         });
+   }
   // render
   render() {
     return (
-        <GoogleLogin
-          clientId="381712618241-mjfqk9us65hroajpmjgt7ale2tsossjb.apps.googleusercontent.com"
-          buttonText="Login"
-          onSuccess={responseGoogle.bind(this)}
-          onFailure={responseGoogle.bind(this)}
-        />
+        <div id="my-signin2"></div>
       );
   }
 }
