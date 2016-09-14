@@ -18,11 +18,6 @@ function collect(connect, monitor) {
 }
 
 class WidgetIcon extends Component {
-  componentDidMount() {
-    const img = new Image();
-    img.src = '/images/Maps-preview.jpg'
-    // img.onload = () => this.props.connectDragPreview(img);
-  }
   render() {
     const { connectDragSource, isDragging, connectDragPreview } = this.props;
 
@@ -37,7 +32,7 @@ class WidgetIcon extends Component {
                 height: '100%'
                 }} src={this.props.imgsource}/>
         {this.props.children}
-        <small className='icon_name truncate'>{this.props.widgetType}</small>
+        <span className='icon_name truncate'>{this.props.widgetType}</span>
       </div>
     );
   }
