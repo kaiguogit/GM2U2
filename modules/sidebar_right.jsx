@@ -5,13 +5,25 @@ import AppBar from 'material-ui/AppBar';
 
 class SidebarRight extends Component {
 
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    console.log('sidebar active playlist is:', this.props.activePlaylist)     
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('sidebar active playlist is:', this.props.activePlaylist)     
+  }
+
   render() {
     return (
       <div>
         
         <Drawer 
           docked={false}
-          width={200} 
+          width={250} 
           openSecondary={true} 
           open={this.props.open} 
           onRequestChange={(open) => {
@@ -31,6 +43,7 @@ class SidebarRight extends Component {
                   onDeletePlaylist={this.props.onDeletePlaylist} 
                   playlist={playlist} 
                   key={playlist.id}
+                  activePlaylist = {this.props.activePlaylist}
                 />  
               )
             }.bind(this)) 
