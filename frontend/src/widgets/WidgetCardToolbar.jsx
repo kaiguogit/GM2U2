@@ -50,7 +50,7 @@ class WidgetCardToolbar extends Component {
     return (
       <Toolbar  >
         <ToolbarGroup firstChild={true} className="valign-wrapper">
-          <Avatar src={WidgetIconImage[this.props.widget.widgetType]}/>
+          <Avatar src={WidgetIconImage[this.props.widget.widgetType]} style={{borderRadius: '10%', margin: '10px'}}/>
           <ToolbarTitle style={styles.title} text={this.capitalizeTitle()} />
           <AudioPlayer ref="audioPlayer" className="valign" widget={this.props.widget}/> 
         </ToolbarGroup>

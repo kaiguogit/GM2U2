@@ -3,6 +3,7 @@ import TimeWidget from './widgets/TimeWidget.jsx';
 import TrafficWidget from './widgets/TrafficWidget.jsx';
 import WeatherWidget from './widgets/WeatherWidget.jsx';
 import NewsWidget from './widgets/NewsWidget.jsx';
+import QuotesWidget from './widgets/QuotesWidget.jsx';
 import WidgetCardToolbar from './widgets/WidgetCardToolbar.jsx'
 
 
@@ -240,6 +241,17 @@ class WidgetCardWrapper extends Component {
                     return (
                       <div className="collapsible-body">
                         <NewsWidget 
+                          widget={this.props.widget} 
+                          onWidgetChange={this.props.onWidgetChange}
+                          ref = 'widget'
+                        />
+                      </div>
+                    )
+                  break
+                  case WidgetTypes.quotes:
+                    return (
+                      <div className="collapsible-body">
+                        <QuotesWidget 
                           widget={this.props.widget} 
                           onWidgetChange={this.props.onWidgetChange}
                           ref = 'widget'
