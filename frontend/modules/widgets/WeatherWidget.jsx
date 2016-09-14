@@ -119,11 +119,10 @@ class WeatherWidget extends Component {
     }).done(function(weather){
       console.log("weather obj is", weather);
       ///Testing purpose, SetTimeout to be removed
-      setTimeout(function(){
-        this.setState({weather: weather});
-        this.setState({refreshing: false});
-      }.bind(this), 50)
-    }.bind(this)).fail(function(err){
+      this.setState({weather: weather});
+      this.setState({refreshing: false});
+    }.bind(this))
+    .fail(function(err){
       console.log(err);
       this.setState({refreshing: false});
     });
@@ -164,7 +163,7 @@ class WeatherWidget extends Component {
         //Main Content
         {weather && 
           <div>
-            <div className="row">
+            <div className="row" style={styles.lastRow}>
               <div className="col s4">
                 <h3>{weather.current_observation.display_location.city}</h3>
               </div>
