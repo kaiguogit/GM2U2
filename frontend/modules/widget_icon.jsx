@@ -18,6 +18,14 @@ function collect(connect, monitor) {
 }
 
 class WidgetIcon extends Component {
+<<<<<<< HEAD:frontend/modules/widget_icon.jsx
+=======
+  componentDidMount() {
+    const img = new Image();
+    img.src = '/images/Maps-preview.jpg'
+    // img.onload = () => this.props.connectDragPreview(img);
+  }
+>>>>>>> 5cdbe6811c4cfa03dcbe7b9f11ce78ab0efb7a0a:frontend/modules/widget_icon.jsx
   render() {
     const { connectDragSource, isDragging, connectDragPreview } = this.props;
 
