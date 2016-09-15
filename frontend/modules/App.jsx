@@ -22,13 +22,18 @@ const styles={
   app:{
     backgroundColor: '#ddd'
   },
+  //http://www.skinnyopinion.com/wp-content/uploads/2014/02/morning-sunrise.jpg
   frontPage:{
     height:'800px',
     backgroundImage: 'url(/images/background-header.jpg)',
-    color: "white",
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    color: '#575755',
+    paddingTop: '190px'
   },
   frontTitle:{
-    fontSize:'50px'
+    fontSize:'60px',
+    fontFamily: "'overlock', 'courier', 'serif'"
   }
 }
 
@@ -198,6 +203,23 @@ class App extends Component {
     console.log('GivenName: ' + profile.getGivenName());
   }
 
+  //expand all collapse card
+  expandAll(){
+    //https://codepen.io/jasonpaul/pen/NxjvjW
+    //how to expand all
+    let $header = $('.collapsible .collapsible-header');
+    $(".collapsible-header").addClass("active");
+    $(".collapsible").collapsible({accordion: false});
+  }
+
+  //collapse all collapse card
+  collapseAll(){
+    $(".collapsible-header").removeClass("active");
+    $(".collapsible").collapsible({accordion: true});
+    $(".collapsible").collapsible({accordion: false});
+  }
+
+
   render() {
     return (
       <div style={styles.app}>
@@ -211,7 +233,7 @@ class App extends Component {
         {!this.state.username &&
           <div style={styles.frontPage}>
             <div className="center-align" style={styles.frontTitle}>
-              A Morning Alarm that can talk to you.
+              A Morning Alarm That Talks to You.
             </div>
             <div >
               <Login loggedIn={this.loggedIn.bind(this)}/>
@@ -226,6 +248,8 @@ class App extends Component {
               open={this.state.uiState.sidebarLeftOpen} 
               toggleSidebarLeft={this.toggleSidebarLeft.bind(this)}
               className='customSidebarLeft'
+              expandAll={this.expandAll}
+              collapseAll={this.collapseAll}
             />
 
 
@@ -259,7 +283,9 @@ class App extends Component {
                 playlist={this.state.activePlaylist} 
                 id={this.state.activePlaylist.id} 
                 onPlaylistChange={this.updatePlaylist.bind(this)}
-                updatePhoneNumber={this.updatePhoneNumber.bind(this)} 
+                updatePhoneNumber={this.updatePhoneNumber.bind(this)}
+                expandAll={this.expandAll}
+                collapseAll={this.collapseAll}
               />
             }          
             

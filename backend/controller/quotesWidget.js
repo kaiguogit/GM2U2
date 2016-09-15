@@ -15,10 +15,13 @@ function getSpeechString(widgetId, fn){
   // request(url, sendString);
 
   function sendString(error, response, body){
-    var data = JSON.parse(body);
     var string = "Following is a quote by "
-    string = string + data.quoteAuthor + ". "
-    string = string + data.quoteText 
+    if(body.quoteAuthor){
+      string = string + body.quoteAuthor.trim() + ". "
+    }else{
+      string = string + "Unknown Author. "
+    }
+    string = string + body.quoteText
     fn(string);
   }
 };
@@ -27,7 +30,8 @@ function getQuote(widgetId, fn){
   url='http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en'
   request(url, sendQuote);
   function sendQuote(error, response, body){
-    fn(body);
+    console.log("\n!!!!!!!Quotes get from api is, ", body);
+    fn(body.replace(/\\/g, ""));
   };
 };
 

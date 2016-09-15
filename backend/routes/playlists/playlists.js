@@ -90,9 +90,21 @@ router.delete('/:id', (req, res, next)=>{
 //Create widget to this playlist
 router.post('/:id/:widgetType', (req, res, next)=>{
   console.log(`\n!!!!!!!Creating ${req.params.widgetType} for playlist id  ${req.params.id}`);
+  console.log(`\n!!!Position in request is`, req.body.position);
+  var newWidget;
   models[req.params.widgetType].create({id: uuid.v4(), playlistId: req.params.id})
-  .then(findPlaylistforWidget)
-  .then(addToPlaylistArray)
+  .then(function(widget){
+    newWidget = widget;
+    return findPlaylistforWidget(widget);
+  })
+  .then(function(playlist){
+    console.log("Playlist is", playlist);
+    if(req.body.position){
+      return addToPlaylistArray(playlist, newWidget, req.body.position);
+    }else{
+      return addToPlaylistArray(playlist, newWidget);
+    }
+  })
   .then(function(playlist){
     console.log("\n!!!!!returned variable after playlist update is", playlist.dataValues);
     res.json(playlist);

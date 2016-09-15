@@ -5,6 +5,7 @@ import { DragSource } from 'react-dnd';
 const widgetIconSource = {
   beginDrag(props) {
     console.log("Begin drag, widgettype is", props.widgetType);
+    props.collapseAll();
     return {widgetType: props.widgetType};
   }
 };
@@ -24,8 +25,9 @@ class WidgetIcon extends Component {
     return connectDragSource(
       <div style={{
         position: 'relative',
-        width: '50%',
-        height: '50%'
+        width: '30%',
+        height: '50%',
+        margin: '20px'
       }}>
         <img style={{
                 width: '100%',
