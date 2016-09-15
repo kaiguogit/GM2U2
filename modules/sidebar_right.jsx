@@ -40,8 +40,6 @@ class SidebarRight extends Component {
     })
     
     return (
-      <div>
-        
         <Drawer 
           className = "sidebar_playlists"
           docked={false}
@@ -76,7 +74,6 @@ class SidebarRight extends Component {
             <ContentAdd />
           </FloatingActionButton>
         </Drawer>
-      </div>
     );
   }
 }
