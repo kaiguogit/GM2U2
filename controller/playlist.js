@@ -3,6 +3,8 @@ var twilio = require('../modules/twilio.js').twilio;
 var twilioClient = require('../modules/twilio.js').client;
 var weatherController = require('./weatherWidget.js');
 var newsController = require('./newsWidget.js');
+var trafficController = require('./trafficWidget.js');
+var quotesController = require('./quotesWidget.js');
 var time = require('../modules/time');
 var moment = require('moment');
 
@@ -101,6 +103,22 @@ function twilioSpeech(playlistId, fn){
           speechPromises.push(
             new Promise(function(resolve, reject){
               newsController.getSpeechString(widget.id, resolve);
+            })
+          );
+          break;
+        case "traffic":
+          console.log("getting traffic widget speech");
+          speechPromises.push(
+            new Promise(function(resolve, reject){
+              trafficController.getSpeechString(widget.id, resolve);
+            })
+          );
+          break;
+        case "quotes":
+          console.log("getting quotes widget speech");
+          speechPromises.push(
+            new Promise(function(resolve, reject){
+              quotesController.getSpeechString(widget.id, resolve);
             })
           );
           break;
