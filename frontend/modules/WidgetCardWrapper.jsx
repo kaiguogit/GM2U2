@@ -30,7 +30,7 @@ const widgetCardWrapperTarget = {
     console.log("droping here, props is", props);
     // dropping icon, then add widget
     const widgetType = monitor.getItem().widgetType;
-    widgetType && props.onDropWidgetIcon(widgetType);
+    widgetType && props.onDropWidgetIcon(widgetType, props.position);
     // dropping widget, then move widget
     var old_index = monitor.getItem().old_index;
     if(old_index < props.position){
