@@ -30,7 +30,7 @@ const widgetCardWrapperTarget = {
     console.log("droping here, props is", props);
     // dropping icon, then add widget
     const widgetType = monitor.getItem().widgetType;
-    widgetType && props.onDropWidgetIcon(widgetType);
+    widgetType && props.onDropWidgetIcon(widgetType, props.position);
     // dropping widget, then move widget
     var old_index = monitor.getItem().old_index;
     if(old_index < props.position){
@@ -42,6 +42,7 @@ const widgetCardWrapperTarget = {
     console.log('old_index', old_index);
     console.log('new_index', new_index);
     Number.isInteger(old_index) && Number.isInteger(old_index) && props.onMove(old_index, new_index);
+    props.expandAll();
   }
 };
 
@@ -54,7 +55,6 @@ const widgetCardSource = {
   },
   endDrag(props, monitor){
     console.log('endDrag props:', props);
-    props.expandAll();
   }
 };
 
@@ -165,7 +165,7 @@ class WidgetCardWrapper extends Component {
     }
 
     return connectDropTarget(
-      <div style={showOrHide}>        
+      <div style={showOrHide} id={this.props.widget.id} className="widgetCardWrapper">        
         {/* Drop target grey box*/}
         {isOver && canDrop && this.renderGreyBox()}
         {!isOver && this.hideGreyBox()}
