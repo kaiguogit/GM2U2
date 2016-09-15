@@ -40,16 +40,16 @@ class QuotesWidget extends Component {
   getQuote(){
     console.log('getting quote')
     $.ajax({
-      url: `http://localhost:3000/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/view`,
+      url: `${process.env.host}/api/widgets/${this.props.widget.widgetType}/${this.props.widget.id}/view`,
       method: "get",
-      dataType: "json",
       headers: {
       'Authorization':  "Bearer " + window.localStorage.token
       }
     }).done(function(data){
-      console.log(data)
-      this.saveQuote(data);
+      console.log("data from backend before parse", data)
       var data = JSON.parse(data)      
+      console.log("data from backend after parse", data)
+      this.saveQuote(data);
       this.setState({author: data.quoteAuthor});
       this.setState({quote: data.quoteText});
       // save quote to database for get speech string
@@ -79,7 +79,14 @@ class QuotesWidget extends Component {
         //Main Content
         <CardText>
         <h4 style={quoteStyle}>{this.state.quote}</h4>
-        <h6>- <a href={`http://en.wikipedia.org/wiki/${this.state.author}`} target="_blank">{this.state.author}</a></h6>
+        <h6>- 
+          {this.state.author &&
+            <a href={`http://en.wikipedia.org/wiki/${this.state.author}`} target="_blank"> {this.state.author}</a>
+          }
+          {!this.state.author &&
+            <span>Unknown Author</span>
+          }
+        </h6>
         </CardText>
       </Card>
     );
