@@ -74,7 +74,7 @@ var playNextWidget;
 class AudioPlayer extends Component {
 
   componentWillMount(){
-    var audioId = newId();
+    var audioId = "audio-" + this.props.widget.id;
     this.audioId = audioId;
   }
 

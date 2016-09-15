@@ -7,6 +7,8 @@ import PhoneIcon from 'material-ui/svg-icons/communication/phone';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import PlayIcon from 'material-ui/svg-icons/av/play-circle-outline';
 import PauseIcon from 'material-ui/svg-icons/av/pause-circle-outline';
+import ForwardIcon from 'material-ui/svg-icons/av/fast-forward';
+import RewindIcon from 'material-ui/svg-icons/av/fast-rewind';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 
@@ -174,11 +176,13 @@ class ActivePlaylist extends Component {
       //Stop
       this.showAll();
       this.unDimAll();
+      this.pauseAllWidget();
       console.log("Setting playingWidgetIndex to null");
       this.setState({playingWidgetIndex: null});
     }else{
       //Play next widget
       var id = this.props.playlist.widgets[this.state.playingWidgetIndex].id;
+      $(`#audio-${id}`).attr('src', "");
       this.slideAway(id);
       console.log("Setting playingWidgetIndex to", this.state.playingWidgetIndex + 1);
       this.setState({playingWidgetIndex: this.state.playingWidgetIndex + 1});
@@ -270,21 +274,7 @@ class ActivePlaylist extends Component {
     return result;
   }
 
-  //expand all collapse card
-  expandAll(){
-    //https://codepen.io/jasonpaul/pen/NxjvjW
-    //how to expand all
-    let $header = $('.collapsible .collapsible-header');
-    $(".collapsible-header").addClass("active");
-    $(".collapsible").collapsible({accordion: false});
-  }
 
-  //collapse all collapse card
-  collapseAll(){
-    $(".collapsible-header").removeClass("active");
-    $(".collapsible").collapsible({accordion: true});
-    $(".collapsible").collapsible({accordion: false});
-  }
 
   render() {
 
@@ -372,6 +362,16 @@ class ActivePlaylist extends Component {
             onTouchTap={this.pauseAllWidget.bind(this)}
           />
         }
+        {this.isPlaying() &&
+          <RaisedButton
+            label="Next Widget"
+            labelPosition="after"
+            secondary={true}
+            icon={<ForwardIcon />}
+            onTouchTap={this.playNextWidget.bind(this)}
+          />
+        }
+        
         {!this.isPlaying() &&
           <RaisedButton
             label="Play on Browser"
@@ -396,8 +396,8 @@ class ActivePlaylist extends Component {
                 onWidgetChange={this.props.onPlaylistChange} 
                 key={widget.id}
                 onMove={this.handleMove.bind(this)}
-                expandAll={this.expandAll}
-                collapseAll={this.collapseAll}
+                expandAll={this.props.expandAll}
+                collapseAll={this.props.collapseAll}
               />
             )
         }.bind(this)) }
