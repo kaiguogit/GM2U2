@@ -166,7 +166,7 @@ class WidgetCardWrapper extends Component {
     }
 
     return connectDropTarget(
-      <div style={showOrHide}>        
+      <div style={showOrHide} id={this.props.widget.id} className="widgetCardWrapper">        
         {/* Drop target grey box*/}
         {isOver && canDrop && this.renderGreyBox()}
         {!isOver && this.hideGreyBox()}

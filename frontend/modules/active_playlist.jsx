@@ -50,13 +50,7 @@ class ActivePlaylist extends Component {
   //If playingWidgetIndex is validated, play widget
   componentDidUpdate(){
     if(this.isPlaying()){
-      if(!this.isPlayingDone()){
-        console.log(`Playing ${this.state.playingWidgetIndex}th widget`);
-        this.playWidget();      
-      }else{
-        console.log("Setting playingWidgetIndex to null ");
-        this.setState({playingWidgetIndex: null})
-      }
+      this.playWidget();      
     }
   }
   //Ajax call to Add widget to this playlist
@@ -168,6 +162,8 @@ class ActivePlaylist extends Component {
       item.controls = false;
     });
     $('body').css('cursor', 'auto');
+    this.showAll();
+    this.unDimAll();
     this.setState({playingWidgetIndex: null});
 
   }
@@ -175,13 +171,39 @@ class ActivePlaylist extends Component {
   playNextWidget(){
     if(this.isPlayingDone()){
       //Stop
+      this.showAll();
+      this.unDimAll();
       console.log("Setting playingWidgetIndex to null");
       this.setState({playingWidgetIndex: null});
     }else{
       //Play next widget
+      var id = this.props.playlist.widgets[this.state.playingWidgetIndex].id;
+      this.slideAway(id);
       console.log("Setting playingWidgetIndex to", this.state.playingWidgetIndex + 1);
       this.setState({playingWidgetIndex: this.state.playingWidgetIndex + 1});
     }
+  }
+
+  slideAway(widgetId){
+    console.log("slideaway is called");
+    $(`#${widgetId}`).animate({left: '150%'}, 1000).hide('slow');
+  }
+
+  showAll(){
+    console.log("show all is called");
+    $(".widgetCardWrapper").animate({left: '0%'}, 500).fadeIn('slow');
+  }
+
+  dimAll(){
+    $(".widgetCardWrapper").css("opacity", "0.3");
+  }
+
+  unDimAll(){
+    $(".widgetCardWrapper").css("opacity", "1");
+  }
+
+  unDim(widgetId){
+    $(`#${widgetId}`).css("opacity", "1");
   }
 
   //Call audio player of each widget to play
@@ -189,6 +211,9 @@ class ActivePlaylist extends Component {
     var id = this.props.playlist.widgets[this.state.playingWidgetIndex].id;
     var playingWidget = this.refs[id]
     console.log("playingWidget is", playingWidget);
+    console.log("playing widget id is", playingWidget.props.widget.id);
+    this.dimAll();
+    this.unDim(id);
     playingWidget.decoratedComponentInstance.decoratedComponentInstance.refs["toolbar"].refs["audioPlayer"].handleSpeak();
   }
 
@@ -236,7 +261,12 @@ class ActivePlaylist extends Component {
   //Index is not a number or out of range of widgets count
   //It means the playing is done. 
   isPlayingDone(){
-    return !(Number.isInteger(this.state.playingWidgetIndex) && this.state.playingWidgetIndex < this.props.playlist.widgets.length)
+    console.log("checking if playing is done");
+    console.log("index is", this.state.playingWidgetIndex);
+    console.log("index is out of widget count", (this.state.playingWidgetIndex >= (this.props.playlist.widgets.length - 1)));
+    var result = (!(Number.isInteger(this.state.playingWidgetIndex)) || (this.state.playingWidgetIndex >= (this.props.playlist.widgets.length - 1)))
+    console.log("result passed out is", result);
+    return result;
   }
 
   //expand all collapse card
