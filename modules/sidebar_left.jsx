@@ -21,11 +21,11 @@ class SidebarLeft extends Component {
         <RaisedButton onClick={this.props.toggleSidebarLeft} label="Hide" primary={true} style={styles.button} />
         <p>Your widgets:</p>
         <div id='container_widgets' >    
-          <WidgetIcon widgetType={WidgetTypes.time} imgsource={WidgetIconImage.time}/>
-          <WidgetIcon widgetType={WidgetTypes.traffic} imgsource={WidgetIconImage.traffic} />
-          <WidgetIcon widgetType={WidgetTypes.weather} imgsource={WidgetIconImage.weather}/>
-          <WidgetIcon widgetType={WidgetTypes.news} imgsource={WidgetIconImage.news}/>
-          <WidgetIcon widgetType={WidgetTypes.quotes} imgsource={WidgetIconImage.quotes}/>
+          <WidgetIcon widgetType={WidgetTypes.time} imgsource={WidgetIconImage.time} collapseAll={this.props.collapseAll}/>
+          <WidgetIcon widgetType={WidgetTypes.traffic} imgsource={WidgetIconImage.traffic} collapseAll={this.props.collapseAll}/>
+          <WidgetIcon widgetType={WidgetTypes.weather} imgsource={WidgetIconImage.weather} collapseAll={this.props.collapseAll}/>
+          <WidgetIcon widgetType={WidgetTypes.news} imgsource={WidgetIconImage.news} collapseAll={this.props.collapseAll}/>
+          <WidgetIcon widgetType={WidgetTypes.quotes} imgsource={WidgetIconImage.quotes} collapseAll={this.props.collapseAll}/>
         </div>
       </Drawer>
     );

@@ -42,6 +42,7 @@ const widgetCardWrapperTarget = {
     console.log('old_index', old_index);
     console.log('new_index', new_index);
     Number.isInteger(old_index) && Number.isInteger(old_index) && props.onMove(old_index, new_index);
+    props.expandAll();
   }
 };
 
@@ -54,7 +55,6 @@ const widgetCardSource = {
   },
   endDrag(props, monitor){
     console.log('endDrag props:', props);
-    props.expandAll();
   }
 };
 
