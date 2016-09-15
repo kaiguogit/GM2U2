@@ -74,7 +74,7 @@ class Playlist extends Component {
           <CardHeader
             title={this.props.playlist.name}
             subtitle={this.state.info}              
-            style={{display: 'inline-block', width: '75%'}}
+            style={{display: 'inline-block', width: '75%', paddingRight: '0px'}}
           />
           <IconButton 
             tooltip="Delete Playlist" 
