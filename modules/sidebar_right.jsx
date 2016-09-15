@@ -7,6 +7,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 
 const style = {
   float: 'right',
+  marginTop: 5,
   marginRight: 20,
 };
 
