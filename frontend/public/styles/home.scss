@@ -86,8 +86,12 @@
 #contents{
   background-color: #ddd;
   min-height: calc(100vh - 64px);
+  transition: 0.3s;
 }
 
+#contents.offset{
+  margin-left: 256px; 
+}
 .muidocs-icon-custom-github:before {
     content: "\e625";
 }
