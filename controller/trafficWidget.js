@@ -17,7 +17,8 @@ function getSpeechString(widgetId, fn){
     else {
       var getOriginId = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${origin}&key=${process.env.GOOGLE_MAPS_API_KEY}`
       var getDestinationId = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${destination}&key=${process.env.GOOGLE_MAPS_API_KEY}`
-      
+      var originId;
+      var destinationId;
       console.log(getOriginId)
 
       request(getOriginId,setOriginId);
@@ -25,14 +26,22 @@ function getSpeechString(widgetId, fn){
       function setOriginId(error, response, body){
         var data = JSON.parse(body);
         console.log('origin:',data)
-        originId = data.results[0].place_id;
+        if(data && data.results && data.results[0] && data.results[0].place_id){
+          originId = data.results[0].place_id;
+        }else{
+         originId = "";
+        }
         request(getDestinationId,setDestinationId)
       };
 
       function setDestinationId(error, response, body){
         var data = JSON.parse(body);
         console.log('destination:',data);
-        destinationId = data.results[0].place_id;
+        if(data && data.results && data.results[0] && data.results[0].place_id){
+           destinationId = data.results[0].place_id;
+        }else{
+           destinationId = "";
+        }
         var getDistance = `https://maps.googleapis.com/maps/api/distancematrix/json?&mode=${mode}&origins=place_id:${originId}&destinations=place_id:${destinationId}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
         request(getDistance,setString);
       };
