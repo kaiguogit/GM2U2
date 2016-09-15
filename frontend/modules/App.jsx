@@ -126,6 +126,9 @@ class App extends Component {
         if( !this.state.activePlaylist && this.state.playlists.length > 0 ){
           this.setState({activePlaylist: this.state.playlists[0]})
         }
+        if(this.state.playlists.length === 0 ){
+          this.setState({activePlaylist: null})
+        }
 
         //update the ActivePlaylist
         this.selectPlaylist(this.state.activePlaylist.id);

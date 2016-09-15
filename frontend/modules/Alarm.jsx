@@ -371,7 +371,10 @@ var Alarm = React.createClass({
         date.setHours(this.refs.hourDigit.state.value);
         date.setMinutes(this.refs.minuteDigit.state.value);
         date.setSeconds(this.refs.secondDigit.state.value);
+        var checkBox = $('input[type=checkbox]')
+        console.log("this checkbox is", checkBox);
         this.refs.alarmList.handleAddEntry({time: date, comment: this.refs.comment.value });
+
     },
     render: function(){ 
         var date = new Date();
@@ -398,37 +401,46 @@ var Alarm = React.createClass({
                                   label="Sun"
                                   defaultChecked={true}
                                   style={styles.checkbox}
+                                  ref="repeat"
                                 />
                             <Checkbox
                                   label="Mon"
                                   defaultChecked={true}
                                   style={styles.checkbox}
+                                  ref="repeat"
                                 />
                             <Checkbox
                                   label="Tue"
                                   defaultChecked={true}
                                   style={styles.checkbox}
+                                  ref="repeat"
                                 />
                             <Checkbox
                                   label="Wed"
                                   defaultChecked={true}
                                   style={styles.checkbox}
+                                  ref="repeat"
                                 />
                             <Checkbox
                                   label="Thu"
                                   defaultChecked={true}
                                   style={styles.checkbox}
+                                  ref="repeat"
                                 />
                             <Checkbox
                                   label="Fri"
                                   defaultChecked={true}
                                   style={styles.checkbox}
+                                  ref="repeat"
+                                  value="Fri"
                                 />
                             <Checkbox
                                   label="Sta"
                                   defaultChecked={true}
                                   style={styles.checkbox}
+                                  ref="repeat"
                                 />
+
                         </div>
                     </div>
                     <p>Alarms</p>
