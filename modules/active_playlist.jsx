@@ -54,11 +54,12 @@ class ActivePlaylist extends Component {
     }
   }
   //Ajax call to Add widget to this playlist
-  handleAddWidget(widgetType){
+  handleAddWidget(widgetType, position){
     //Post request to add widget
     $.ajax({
       url: `${process.env.host}/api/playlists/${this.props.playlist.id}/${widgetType}Widget`,
       method: "post",
+      data: {position: position},
       headers: {
       'Authorization':  "Bearer " + window.localStorage.token
       }
