@@ -31,6 +31,7 @@ class TrafficWidget extends Component {
     super(props);
     this.state = {      
       expanded: false,
+      map: false,
       widgetLocalCopy:{},
       suggestions: [], 
       modes: ['walking','bicycling','transit','driving'],
@@ -48,10 +49,30 @@ class TrafficWidget extends Component {
     console.log("traffic widget mounted, this.props.widget:", this.props.widget);
     this.setState({widgetLocalCopy: this.props.widget});      
     this.setState({AutocompleteService: new google.maps.places.AutocompleteService()});
+    var origin = this.props.widget.origin;
+    var destination = this.props.widget.destination;
+    if(origin == '' || destination == ''){
+      this.setState({expanded: true});
+      this.setState({map: false});
+    }
   };
 
   componentDidUpdate(prevProps, prevState) {
     console.log('traffic widget updated, widgetLocalCopy:', this.state.widgetLocalCopy)
+  };
+
+  componentWillReceiveProps(nextProps) {
+    console.log('component will receive props, nextProps', nextProps)
+    var origin = nextProps.widget.origin;
+    var destination = nextProps.widget.destination;
+    if(origin == '' || destination == ''){
+      this.setState({expanded: true});
+      this.setState({map: false});
+    } else {
+      this.setState({expanded: false});
+      this.setState({map: true});
+    }
+
   };
 
   displaySuggestions(predictions, status) {
@@ -118,25 +139,11 @@ class TrafficWidget extends Component {
       <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
 
         <CardText expandable={true}>
+          {
+            this.state.expanded &&
+            <h5>Please fill in the following trip information:</h5>
+          }
           <div>          
-            <AutoComplete 
-              hintText='Enter location name or address' 
-              searchText={this.props.widget.origin}
-              onUpdateInput={this.updateAutoComplete.bind(this)} 
-              onNewRequest={this.updateMapOrigin.bind(this)} 
-              dataSource={this.state.suggestions}
-              floatingLabelText="Trip Origin"
-              filter={AutoComplete.fuzzyFilter}
-            /><br />
-            <AutoComplete 
-              hintText='Enter location name or address' 
-              searchText={this.props.widget.destination}
-              onUpdateInput={this.updateAutoComplete.bind(this)} 
-              onNewRequest={this.updateMapDestination.bind(this)} 
-              dataSource={this.state.suggestions}
-              floatingLabelText="Trip Destination"
-              filter={AutoComplete.fuzzyFilter}
-              /><br />
             <AutoComplete
               floatingLabelText="Mode of Transportation"
               filter={AutoComplete.noFilter}
@@ -145,12 +152,41 @@ class TrafficWidget extends Component {
               searchText={this.props.widget.mode}
               onNewRequest={this.updateMapMode.bind(this)} 
             />
+            <br />
+            <AutoComplete 
+              hintText='Enter location name or address' 
+              searchText={this.props.widget.origin}
+              onUpdateInput={this.updateAutoComplete.bind(this)} 
+              onNewRequest={this.updateMapOrigin.bind(this)} 
+              dataSource={this.state.suggestions}
+              floatingLabelText="Trip Origin"
+              filter={AutoComplete.fuzzyFilter}
+              fullWidth={true}
+            />
+            <br />
+            <AutoComplete 
+              hintText='Enter location name or address' 
+              searchText={this.props.widget.destination}
+              onUpdateInput={this.updateAutoComplete.bind(this)} 
+              onNewRequest={this.updateMapDestination.bind(this)} 
+              dataSource={this.state.suggestions}
+              floatingLabelText="Trip Destination"
+              filter={AutoComplete.fuzzyFilter}
+              fullWidth={true}
+              />
           </div>
         </CardText>
 
-        <CardText>      
-          <iframe width="100%" height="500" frameBorder="0" style={{border:0}} src={`https://www.google.com/maps/embed/v1/directions?mode=${this.props.widget.mode}&origin=${this.props.widget.origin}&destination=${this.props.widget.destination}&key=AIzaSyDuX8bDIG5SH98UqlVdrVyTH6K5G-pZoHY`}>
-          </iframe>
+        <CardText> 
+          { 
+            this.state.map &&
+            <iframe 
+              width="100%" height="500" 
+              frameBorder="0" 
+              style={{border:0}} 
+              src={`https://www.google.com/maps/embed/v1/directions?mode=${this.props.widget.mode}&origin=${this.props.widget.origin}&destination=${this.props.widget.destination}&key=AIzaSyDuX8bDIG5SH98UqlVdrVyTH6K5G-pZoHY`}>
+            </iframe>
+          }     
         </CardText>          
         
       </Card>
