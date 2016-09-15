@@ -5,9 +5,14 @@ module.exports.findPlaylistforWidget = function(widget){
   return models.playlist.findById(widget.playlistId);
 }
 
-module.exports.addToPlaylistArray = function(playlist){
+module.exports.addToPlaylistArray = function(playlist, widget, position){
+  console.log("in add to playlist array, this is", this);
   var widgets = playlist.dataValues.widgets
-  widgets.push(this);
+  if(position){
+    widgets.splice(position, 0, widget)
+  }else{
+    widgets.push(widget);
+  }
   return playlist.updateAttributes({widgets: widgets});
 }
 
