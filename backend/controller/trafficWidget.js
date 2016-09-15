@@ -11,54 +11,58 @@ function getSpeechString(widgetId, fn){
     var destination = widget.dataValues.destination;
     var mode = widget.dataValues.mode;
 
-    var getOriginId = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${origin}&key=${process.env.GOOGLE_MAPS_API_KEY}`
-    var getDestinationId = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${destination}&key=${process.env.GOOGLE_MAPS_API_KEY}`
-    
-    
-    console.log(getOriginId)
+    if(!origin || !destination){
+      fn("Your traffic widget has not been initialized.");
+    }
+    else {
+      var getOriginId = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${origin}&key=${process.env.GOOGLE_MAPS_API_KEY}`
+      var getDestinationId = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${destination}&key=${process.env.GOOGLE_MAPS_API_KEY}`
+      
+      console.log(getOriginId)
 
-    request(getOriginId,setOriginId);
+      request(getOriginId,setOriginId);
 
-    function setOriginId(error, response, body){
-      var data = JSON.parse(body);
-      console.log('origin:',data)
-      originId = data.results[0].place_id;
-      request(getDestinationId,setDestinationId)
-    };
-
-    function setDestinationId(error, response, body){
-      var data = JSON.parse(body);
-      console.log('destination:',data);
-      destinationId = data.results[0].place_id;
-      var getDistance = `https://maps.googleapis.com/maps/api/distancematrix/json?&mode=${mode}&origins=place_id:${originId}&destinations=place_id:${destinationId}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
-      request(getDistance,setString);
-    };
-  
-    function setString(error, response, body){
-      var data = JSON.parse(body);
-      console.log(data);
-      var speech = "Trip information. " ;
-      speech = speech+'Trip starts at '+ origin+'. ';
-      speech = speech+'The destination is '+ destination+'. ';
-      speech = speech+'The distance is '+ data.rows[0].elements[0].distance.text+'. ';
-      speech = speech+'Travel time is '+ data.rows[0].elements[0].duration.text+' ';
-      switch (mode){
-        case 'walking':
-        speech = speech+'on foot. '
-        break;
-        case 'driving':
-        speech = speech+'by car. '
-        break;
-        case 'transit':
-        speech = speech+'by transit. '
-        break;
-        case 'bicycling':
-        speech = speech+'by bike. '        
+      function setOriginId(error, response, body){
+        var data = JSON.parse(body);
+        console.log('origin:',data)
+        originId = data.results[0].place_id;
+        request(getDestinationId,setDestinationId)
       };
-      speech = speech.replace('mins','minutes')
-      console.log(speech);
-      fn(speech);
-    };
+
+      function setDestinationId(error, response, body){
+        var data = JSON.parse(body);
+        console.log('destination:',data);
+        destinationId = data.results[0].place_id;
+        var getDistance = `https://maps.googleapis.com/maps/api/distancematrix/json?&mode=${mode}&origins=place_id:${originId}&destinations=place_id:${destinationId}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+        request(getDistance,setString);
+      };
+    
+      function setString(error, response, body){
+        var data = JSON.parse(body);
+        console.log(data);
+        var speech = "Trip information. " ;
+        speech = speech+'Trip starts at '+ origin+'. ';
+        speech = speech+'The destination is '+ destination+'. ';
+        speech = speech+'The distance is '+ data.rows[0].elements[0].distance.text+'. ';
+        speech = speech+'Travel time is '+ data.rows[0].elements[0].duration.text+' ';
+        switch (mode){
+          case 'walking':
+          speech = speech+'on foot. '
+          break;
+          case 'driving':
+          speech = speech+'by car. '
+          break;
+          case 'transit':
+          speech = speech+'by transit. '
+          break;
+          case 'bicycling':
+          speech = speech+'by bike. '        
+        };
+        speech = speech.replace('mins','minutes')
+        console.log(speech);
+        fn(speech);
+      };
+    }
   };
 }
 
