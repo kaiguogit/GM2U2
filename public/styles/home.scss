@@ -72,13 +72,18 @@
   transition: 0.5s;
 }
 
+.playlist div{
+  padding-right: 0 !important;
+}
+
 .playlist.active{
   margin: 5px;
   padding: 0px;
 }
 
 .playlist.active > div {
-  background-color: #d1d9e3 !important;
+  background-color: #fff5e4 !important;
+  // background-color: #d1d9e3 !important;
 }
 
 
@@ -86,8 +91,12 @@
 #contents{
   background-color: #ddd;
   min-height: calc(100vh - 64px);
+  transition: 0.3s;
 }
 
+#contents.offset{
+  margin-left: 256px; 
+}
 .muidocs-icon-custom-github:before {
     content: "\e625";
 }
