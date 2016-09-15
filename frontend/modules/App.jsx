@@ -199,6 +199,23 @@ class App extends Component {
     console.log('GivenName: ' + profile.getGivenName());
   }
 
+  //expand all collapse card
+  expandAll(){
+    //https://codepen.io/jasonpaul/pen/NxjvjW
+    //how to expand all
+    let $header = $('.collapsible .collapsible-header');
+    $(".collapsible-header").addClass("active");
+    $(".collapsible").collapsible({accordion: false});
+  }
+
+  //collapse all collapse card
+  collapseAll(){
+    $(".collapsible-header").removeClass("active");
+    $(".collapsible").collapsible({accordion: true});
+    $(".collapsible").collapsible({accordion: false});
+  }
+
+
   render() {
     return (
       <div style={styles.app}>
@@ -227,6 +244,8 @@ class App extends Component {
               open={this.state.uiState.sidebarLeftOpen} 
               toggleSidebarLeft={this.toggleSidebarLeft.bind(this)}
               className='customSidebarLeft'
+              expandAll={this.expandAll}
+              collapseAll={this.collapseAll}
             />
 
 
@@ -259,7 +278,9 @@ class App extends Component {
                 playlist={this.state.activePlaylist} 
                 id={this.state.activePlaylist.id} 
                 onPlaylistChange={this.updatePlaylist.bind(this)}
-                updatePhoneNumber={this.updatePhoneNumber.bind(this)} 
+                updatePhoneNumber={this.updatePhoneNumber.bind(this)}
+                expandAll={this.expandAll}
+                collapseAll={this.collapseAll}
               />
             }          
             
