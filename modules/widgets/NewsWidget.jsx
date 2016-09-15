@@ -61,7 +61,6 @@ class NewsWidget extends Component {
 
 
   componentDidMount() {
-    console.log("weather widget mounted");
     //save a local copy of widget to state.
     this.setState({widgetLocalCopy: this.props.widget});
     this.getNews();

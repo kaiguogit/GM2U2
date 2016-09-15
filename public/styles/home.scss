@@ -62,40 +62,41 @@
 
 
 /*sidebar right*/
-#sidebar_right{
-  right: 0;
-  top: 64px;
-  max-width: 80vw;
-  border-color: black;
-  position: fixed;
-  height: calc(100vh - 64px);
-  background-color: #999;
-  display: flex;
+.sidebar_playlists{
   overflow: scroll;
-  padding: 5px;
-  z-index: 1;
-}
-
-#sidebar_right.hidden{
-  display: none;
 }
 
 .playlist{
-  border-color: black;
-  border-style: solid;
   margin: 5px;
   padding: 5px;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
+  transition: 0.5s;
 }
+
+.playlist div{
+  padding-right: 0 !important;
+}
+
+.playlist.active{
+  margin: 5px;
+  padding: 0px;
+}
+
+.playlist.active > div {
+  background-color: #fff5e4 !important;
+  // background-color: #d1d9e3 !important;
+}
+
 
 /*contents*/
 #contents{
   background-color: #ddd;
   min-height: calc(100vh - 64px);
+  transition: 0.3s;
 }
 
+#contents.offset{
+  margin-left: 256px; 
+}
 .muidocs-icon-custom-github:before {
     content: "\e625";
 }

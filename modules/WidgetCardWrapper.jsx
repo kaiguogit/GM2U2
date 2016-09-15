@@ -91,7 +91,6 @@ class WidgetCardWrapper extends Component {
 
   renderGreyBox(){
     // $('.greyBox').addClass("show");
-    console.log("this refs greybox", this.refs.greyBox);
     $(this.refs.greyBox).addClass("show");
   }
 
