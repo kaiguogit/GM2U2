@@ -5,9 +5,22 @@ import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentClear from 'material-ui/svg-icons/content/clear';
+
 import Checkbox from 'material-ui/Checkbox';
 import {List, ListItem} from 'material-ui/List';
 import Toggle from 'material-ui/Toggle';
+
+
+const styles = {
+  checkbox: {
+    marginBottom: 0,
+    float: 'left',
+    maxWidth: '13%'
+  },
+  digits:{
+    width: '400px'
+  }
+};
 /* a function which performs zerofill on a numeric */
 var paddy = function(n, p, c){
     var pad_char = (typeof c !== 'undefined' ? c : '0');
@@ -370,7 +383,7 @@ var Alarm = React.createClass({
             <div className="alarm">
                 <Clock />
                 <div className="alarm-container">
-                    <div className="row alarm-digits">
+                    <div className="row alarm-digits" style={styles.digits}>
                         <AlarmDigit numberSystem={24} val={date.getHours()} ref="hourDigit"/>
                         <AlarmDigit numberSystem={60} val={date.getMinutes()} onCarry={this.handleCarry.bind(this, 'hourDigit')} onBorrow={this.handleBorrow.bind(this, 'hourDigit')} ref="minuteDigit"/>
                         <AlarmDigit numberSystem={60} val={date.getSeconds()} onCarry={this.handleCarry.bind(this, 'minuteDigit')} onBorrow={this.handleBorrow.bind(this, 'minuteDigit')} ref="secondDigit"/>
@@ -380,6 +393,43 @@ var Alarm = React.createClass({
                         <FloatingActionButton mini={true} onTouchTap={this.handleAddAlarm}>
                           <ContentAdd />
                         </FloatingActionButton>
+                        <div>
+                            <Checkbox
+                                  label="Sun"
+                                  defaultChecked={true}
+                                  style={styles.checkbox}
+                                />
+                            <Checkbox
+                                  label="Mon"
+                                  defaultChecked={true}
+                                  style={styles.checkbox}
+                                />
+                            <Checkbox
+                                  label="Tue"
+                                  defaultChecked={true}
+                                  style={styles.checkbox}
+                                />
+                            <Checkbox
+                                  label="Wed"
+                                  defaultChecked={true}
+                                  style={styles.checkbox}
+                                />
+                            <Checkbox
+                                  label="Thu"
+                                  defaultChecked={true}
+                                  style={styles.checkbox}
+                                />
+                            <Checkbox
+                                  label="Fri"
+                                  defaultChecked={true}
+                                  style={styles.checkbox}
+                                />
+                            <Checkbox
+                                  label="Sta"
+                                  defaultChecked={true}
+                                  style={styles.checkbox}
+                                />
+                        </div>
                     </div>
                     <p>Alarms</p>
                     <AlarmList alarms={this.props.alarms} ref="alarmList" onRing={this.handleRing}/>
