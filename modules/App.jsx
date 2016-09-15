@@ -50,7 +50,11 @@ class App extends Component {
   }
 
   getChildContext() {
-    return {username: this.state.username, phoneNumber: this.state.phoneNumber};
+    return {
+      username: this.state.username, 
+      phoneNumber: this.state.phoneNumber,
+      activePlaylist: this.state.activePlaylist
+    };
   }
 
   toggleSidebarLeft() {
@@ -266,8 +270,9 @@ class App extends Component {
                 onDeletePlaylist={this.deletePlaylist.bind(this)} 
                 toggleSidebarRight={this.toggleSidebarRight.bind(this)} 
                 open={this.state.uiState.sidebarRightOpen} 
-                playlists={this.state.playlists}
+                playlists={this.state.playlists}                
                 onSelectPlaylist={this.selectPlaylist.bind(this)}
+                activePlaylist={this.state.activePlaylist}
               />
             }
 
@@ -294,6 +299,7 @@ class App extends Component {
 
 App.childContextTypes = {
   username: React.PropTypes.string,
-  phoneNumber: React.PropTypes.string
+  phoneNumber: React.PropTypes.string,
+  activePlaylist: React.PropTypes.object
 };
 export default DragDropContext(HTML5Backend)(App);

@@ -40,6 +40,7 @@ export default class CitySelector extends React.Component {
 
   handleUpdateInput(value){
     searchCity(value, function(cities){
+      console.log('inside autocomplete callback,this is ', this)
       this.setState({
         dataSource: cities,
       });

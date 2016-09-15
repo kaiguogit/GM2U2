@@ -11,6 +11,9 @@ import ForwardIcon from 'material-ui/svg-icons/av/fast-forward';
 import RewindIcon from 'material-ui/svg-icons/av/fast-rewind';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import IconButton from 'material-ui/IconButton';
+import AutoComplete from 'material-ui/AutoComplete';
 
 //Components
 import TimeWidget from './widgets/TimeWidget.jsx'
@@ -37,6 +40,10 @@ const styles = {
   },
   pauseButton:{
     backgroundColor: '#FF3B58'
+  },
+  playlistName:{
+    fontFamily: 'Georgia',
+    fontSize: '2em'
   }
 }
 class ActivePlaylist extends Component {
@@ -46,6 +53,8 @@ class ActivePlaylist extends Component {
     super(props);
     this.state = {
       playingWidgetIndex: null,
+      editingName: false,
+      dataSource:[]
     }
   }
 
@@ -86,6 +95,20 @@ class ActivePlaylist extends Component {
 
     this.uploadPlaylist(newPlaylist);
   }
+
+  startEditName(){
+    this.setState({editingName: true})
+  }
+
+  finishEditName(value){
+    if(value.trim() === "" ){
+      this.setState({editingName: false});
+    } else {
+    var newPlaylist = this.props.playlist;
+    newPlaylist.name = value;
+    this.uploadPlaylist(newPlaylist);
+    this.setState({editingName: false});
+  }}
 
   //////////////////////////////
   //AJAX CALL!!!!!update playlist 
@@ -280,6 +303,26 @@ class ActivePlaylist extends Component {
 
     return (
       <div id = 'contents' className = 'col s12 m10 offset-m1 l8 offset-l2' style={styles.activePlaylist}>
+        <div>
+          {
+            !this.state.editingName &&
+            <span style={styles.playlistName} >{this.props.playlist.name}</span>
+          }
+          {
+            this.state.editingName &&
+            <AutoComplete
+              hintText={this.props.playlist.name}
+              textFieldStyle={styles.playlistName}
+              dataSource={this.state.dataSource}
+              onNewRequest={this.finishEditName.bind(this)}
+            />
+          }
+          <IconButton             
+            onClick={this.startEditName.bind(this)}
+          >
+            <EditIcon color={'#575755'}/>
+          </IconButton>
+        </div>
         {/*Edit Alarm*/}
         <RaisedButton
           label="Set Alarm"

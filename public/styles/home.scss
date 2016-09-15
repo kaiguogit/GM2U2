@@ -62,33 +62,25 @@
 
 
 /*sidebar right*/
-#sidebar_right{
-  right: 0;
-  top: 64px;
-  max-width: 80vw;
-  border-color: black;
-  position: fixed;
-  height: calc(100vh - 64px);
-  background-color: #999;
-  display: flex;
+.sidebar_playlists{
   overflow: scroll;
-  padding: 5px;
-  z-index: 1;
-}
-
-#sidebar_right.hidden{
-  display: none;
 }
 
 .playlist{
-  border-color: black;
-  border-style: solid;
   margin: 5px;
   padding: 5px;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
+  transition: 0.5s;
 }
+
+.playlist.active{
+  margin: 5px;
+  padding: 0px;
+}
+
+.playlist.active > div {
+  background-color: #d1d9e3 !important;
+}
+
 
 /*contents*/
 #contents{
