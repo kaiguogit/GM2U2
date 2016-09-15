@@ -15,10 +15,12 @@ module.exports = function(sequelize, Sequelize) {
       origin: {
         type: Sequelize.STRING,
         allowNull: true,
+        defaultValue: ""
       },
       destination: {
         type: Sequelize.STRING,
         allowNull: true,
+        defaultValue: ""
       },
       mode: {
         type: Sequelize.STRING,
