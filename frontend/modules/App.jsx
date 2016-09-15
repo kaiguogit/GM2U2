@@ -63,6 +63,11 @@ class App extends Component {
         sidebarLeftOpen: !this.state.uiState.sidebarLeftOpen
       }
     })
+    if(this.state.uiState.sidebarLeftOpen){
+      $('#contents').removeClass('offset');
+    } else {
+      $('#contents').addClass('offset');
+    }
   }
 
   toggleSidebarRight() {

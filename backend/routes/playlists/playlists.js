@@ -60,7 +60,7 @@ router.post('/', (req, res, next) => {
   .then(function(playlists){
     console.log("\n!!!!found user's playlists", playlists);
     //Get board name by + 1
-    var playlistName = "Playlist" + (playlists.length + 1);
+    var playlistName = "Playlist " + (playlists.length + 1);
     
     //Create board
     models.playlist
