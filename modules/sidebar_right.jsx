@@ -26,6 +26,19 @@ class SidebarRight extends Component {
   }
 
   render() {
+    var playlists = this.props.playlists
+    var sortedPlaylists = playlists.sort(function(a,b){
+      var nameA = a.name.toUpperCase();
+      var nameB = b.name.toUpperCase(); 
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    })
+    
     return (
       <div>
         
@@ -42,7 +55,7 @@ class SidebarRight extends Component {
         >
           <AppBar title="Playlists" />
           {
-            this.props.playlists.map(function(playlist){
+            sortedPlaylists.map(function(playlist){
               return (
                 <Playlist 
                   onTouchTap={this.handleClose}
