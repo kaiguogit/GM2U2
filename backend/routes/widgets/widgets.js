@@ -117,8 +117,8 @@ router.get('/:type/:id/speech', (req, res, next) => {
       })
       break;
     default:
+        res.json("Cannot find widget with type" +req.params.type );
       break;
-
   }
 });
 
