@@ -46,11 +46,10 @@ function anyAlarmOnTime(alarms){
 }
 
 function ring(playlistId, fn){
-   // This should be the publicly accessible URL for your application
-  // Here, we just use the host for the application making the request,
-  // but you can hard code it or use something different if need be
-  // var url = 'http://' + request.headers.host + '/outbound';
-  // var url = 'https://gmtestdesploy.herokuapp.com/outbound';
+  //Call user's phone number.
+  //URL is for twilio to get speech instruction once call is answered
+  //Twilio will send resquest to /outbound route to get speech instruction 
+  //outbound route is in /routes/index.js
   var url =  process.env.host + "/outbound?playlistId=" + playlistId;
   console.log(`Calling user for playlist ${playlistId}, the url for outbound is`, url);
   models.playlist.findById(playlistId)

@@ -13,7 +13,7 @@ function getSpeechString(widgetId){
         return weather.currentWeather(widget.cityQuery, viewOrSpeech);
       }else{
         return new Promise(function(resolve, reject){
-          reject("There is no city selected. Please click the setting button to select a city.");
+          resolve("There is no city selected. Please click the setting button to select a city.");
         });
       }
     })
