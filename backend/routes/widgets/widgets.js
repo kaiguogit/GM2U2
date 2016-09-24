@@ -96,7 +96,6 @@ router.get('/:type/:id/speech', (req, res, next) => {
       .then(function(speech){
         res.json(speech);
       }).catch(function(err){
-        console.log("Error occured when getting weather speech", err);
         res.json(err);
       })
       break;
