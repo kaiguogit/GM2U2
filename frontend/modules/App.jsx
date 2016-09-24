@@ -24,7 +24,7 @@ const styles={
   },
   //http://www.skinnyopinion.com/wp-content/uploads/2014/02/morning-sunrise.jpg
   frontPage:{
-    height:'800px',
+    height:'100vh',
     backgroundImage: 'url(/images/background-header.jpg)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',

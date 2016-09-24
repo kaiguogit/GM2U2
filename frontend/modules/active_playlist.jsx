@@ -252,6 +252,7 @@ class ActivePlaylist extends Component {
   playAllWidgets(){
     if(this.props.playlist.widgets.length > 0 ){
       console.log("Setting playingWidgetIndex to 0 ");
+      this.props.expandAll();
       this.setState({playingWidgetIndex: 0});
     }else{
       console.log("No widget to play");
