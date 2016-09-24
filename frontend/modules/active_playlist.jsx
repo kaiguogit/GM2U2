@@ -177,7 +177,10 @@ class ActivePlaylist extends Component {
 
   //Open alarm dialog
   handlePhoneDialogSubmit(){
-    this.props.updatePhoneNumber($("input[name='phoneNumber']").val())
+    var input = $("input[name='phoneNumber']").val();
+    if(input){
+       this.props.updatePhoneNumber(input);
+    }
     $('#editPhoneNumber').closeModal();
   }
 
@@ -323,6 +326,7 @@ class ActivePlaylist extends Component {
             <EditIcon color={'#575755'}/>
           </IconButton>
         </div>
+
         {/*Edit Alarm*/}
         <RaisedButton
           label="Set Alarm"
@@ -332,6 +336,8 @@ class ActivePlaylist extends Component {
           style={styles.AlarmButton}
           onTouchTap={this.handleAlarmDialogOpen.bind(this)}
         />
+
+      {/*Alarm Modal*/}
         <div id="alarm" className="modal">
           <div className="modal-content">
             <Alarm 
@@ -365,10 +371,12 @@ class ActivePlaylist extends Component {
           style={styles.AlarmButton}
           onTouchTap={this.handlePhoneDialogOpen.bind(this)}
         />
+
+      {/*Phone number modal*/}
         <div id="editPhoneNumber" className="modal" style={styles.PhoneDialog}>
           <div className="modal-content">
               {this.context.phoneNumber &&
-                <p>Current Number: {this.context.phoneNumber}</p>
+                <p>Current Number: {this.context.phoneNumber==="null" ? "Not set" : this.context.phoneNumber}</p>
               }
               <input type="text" name="phoneNumber"/>
           </div>
@@ -388,6 +396,7 @@ class ActivePlaylist extends Component {
           </div>
         </div>
 
+        {/*Play on phone*/}
         <RaisedButton
           label="Play on Phone"
           labelPosition="after"
@@ -415,6 +424,7 @@ class ActivePlaylist extends Component {
           />
         }
         
+        {/*Play on browser*/}
         {!this.isPlaying() &&
           <RaisedButton
             label="Play on Browser"
@@ -427,6 +437,7 @@ class ActivePlaylist extends Component {
         }
         
 
+      {/*WidgetCards*/}
         {
           this.props.playlist.widgets.map(function(widget, index){
             console.log("creating cards");
@@ -444,6 +455,7 @@ class ActivePlaylist extends Component {
               />
             )
         }.bind(this)) }
+
         {/* place holder div with min height but no widget type */}
         <WidgetCardWrapper 
           position={this.props.playlist.widgets.length}
