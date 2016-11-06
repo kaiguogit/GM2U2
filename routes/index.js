@@ -1,4 +1,5 @@
 var express = require('express');
+var path      = require("path");
 
 var playlistController = require('../controller/playlist.js');
 
@@ -10,6 +11,8 @@ var router = express.Router();
 var models = require("../models");
 var jwt = require('jsonwebtoken');
 var jwt_mw = require('express-jwt');
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));

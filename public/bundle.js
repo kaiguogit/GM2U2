@@ -27315,7 +27315,7 @@
 	    value: function addPlaylist() {
 	      console.log("Adding App playlists");
 	      $.ajax({
-	        url: (`http://localhost:3000`) + "/api/playlists",
+	        url: (`https://good-morning-to-you-too.herokuapp.com`) + "/api/playlists",
 	        method: "post",
 	        headers: {
 	          'Authorization': "Bearer " + window.localStorage.token
@@ -27330,7 +27330,7 @@
 	    value: function updatePlaylist() {
 	      console.log("Updating App playlists");
 	      $.ajax({
-	        url: (`http://localhost:3000`) + "/api/playlists",
+	        url: (`https://good-morning-to-you-too.herokuapp.com`) + "/api/playlists",
 	        method: "get",
 	        headers: {
 	          'Authorization': "Bearer " + window.localStorage.token
@@ -27354,7 +27354,7 @@
 	    key: "updatePhoneNumber",
 	    value: function updatePhoneNumber(phoneNumber) {
 	      $.ajax({
-	        url: (`http://localhost:3000`) + "/phone",
+	        url: (`https://good-morning-to-you-too.herokuapp.com`) + "/phone",
 	        method: "post",
 	        headers: {
 	          'Authorization': "Bearer " + window.localStorage.token
@@ -27374,7 +27374,7 @@
 	    value: function deletePlaylist(id) {
 	      console.log("Updating App playlists");
 	      $.ajax({
-	        url: (`http://localhost:3000`) + "/api/playlists/" + id,
+	        url: (`https://good-morning-to-you-too.herokuapp.com`) + "/api/playlists/" + id,
 	        method: "delete",
 	        headers: {
 	          'Authorization': "Bearer " + window.localStorage.token
@@ -27414,7 +27414,7 @@
 	        alignment: 'left' // Displays dropdown with edge aligned to the left of button
 	      });
 
-	      console.log("!!!!!!!!!host in env is" + (`http://localhost:3000`));
+	      console.log("!!!!!!!!!host in env is" + (`https://good-morning-to-you-too.herokuapp.com`));
 	    }
 	  }, {
 	    key: "onSignIn",
@@ -27786,7 +27786,7 @@
 	    value: function onSignIn(response) {
 	      console.log("Response is", response);
 	      $.ajax({
-	        url: (`http://localhost:3000`) + '/login',
+	        url: (`https://good-morning-to-you-too.herokuapp.com`) + '/login',
 	        method: "post",
 	        data: {
 	          googleId: response.El,
@@ -45888,7 +45888,7 @@
 	    value: function handleAddWidget(widgetType, position) {
 	      //Post request to add widget
 	      $.ajax({
-	        url: (`http://localhost:3000`) + '/api/playlists/' + this.props.playlist.id + '/' + widgetType + 'Widget',
+	        url: (`https://good-morning-to-you-too.herokuapp.com`) + '/api/playlists/' + this.props.playlist.id + '/' + widgetType + 'Widget',
 	        method: "post",
 	        data: { position: position },
 	        headers: {
@@ -45943,7 +45943,7 @@
 	    key: 'uploadPlaylist',
 	    value: function uploadPlaylist(newPlaylist) {
 	      $.ajax({
-	        url: (`http://localhost:3000`) + '/api/playlists/' + this.props.playlist.id,
+	        url: (`https://good-morning-to-you-too.herokuapp.com`) + '/api/playlists/' + this.props.playlist.id,
 	        method: "put",
 	        data: { playlist: JSON.stringify(newPlaylist) },
 	        dataType: "json",
@@ -46121,7 +46121,7 @@
 	    value: function ring() {
 	      if (this.context.phoneNumber) {
 	        $.ajax({
-	          url: (`http://localhost:3000`) + '/api/playlists/' + this.props.playlist.id + '/call',
+	          url: (`https://good-morning-to-you-too.herokuapp.com`) + '/api/playlists/' + this.props.playlist.id + '/call',
 	          method: 'get',
 	          headers: {
 	            'Authorization': "Bearer " + window.localStorage.token
@@ -49750,7 +49750,7 @@
 	function handleDeleteWidget() {
 
 	  $.ajax({
-	    url: (`http://localhost:3000`) + "/api/widgets/" + this.props.widget.widgetType + "/" + this.props.widget.id,
+	    url: (`https://good-morning-to-you-too.herokuapp.com`) + "/api/widgets/" + this.props.widget.widgetType + "/" + this.props.widget.id,
 	    method: "delete",
 	    headers: {
 	      'Authorization': "Bearer " + window.localStorage.token
@@ -49767,7 +49767,7 @@
 	function uploadSetting() {
 	  console.log("uploading setting");
 	  return $.ajax({
-	    url: (`http://localhost:3000`) + "/api/widgets/" + this.props.widget.widgetType + "/" + this.props.widget.id,
+	    url: (`https://good-morning-to-you-too.herokuapp.com`) + "/api/widgets/" + this.props.widget.widgetType + "/" + this.props.widget.id,
 	    method: "put",
 	    data: { widget: JSON.stringify(this.state.widgetLocalCopy) },
 	    headers: {
@@ -50992,7 +50992,7 @@
 
 	function synthesizeRequest(options) {
 	  var sessionPermissions = "false";
-	  var downloadURL = (`http://localhost:3000`) + '/api/synthesize' + '?voice=' + options.voice + '&text=' + encodeURIComponent(options.text) + '&X-WDC-PL-OPT-OUT=' + sessionPermissions;
+	  var downloadURL = (`https://good-morning-to-you-too.herokuapp.com`) + '/api/synthesize' + '?voice=' + options.voice + '&text=' + encodeURIComponent(options.text) + '&X-WDC-PL-OPT-OUT=' + sessionPermissions;
 
 	  if (options.download) {
 	    downloadURL += '&download=true';
@@ -51042,7 +51042,7 @@
 	function getSpeechString() {
 	  console.log("in getSpeechString");
 	  return $.ajax({
-	    url: (`http://localhost:3000`) + '/api/widgets/' + this.props.widget.widgetType + '/' + this.props.widget.id + '/speech',
+	    url: (`https://good-morning-to-you-too.herokuapp.com`) + '/api/widgets/' + this.props.widget.widgetType + '/' + this.props.widget.id + '/speech',
 	    method: 'get',
 	    headers: {
 	      'Authorization': "Bearer " + window.localStorage.token
@@ -66747,7 +66747,7 @@
 	    value: function getWeather() {
 	      console.log("getting weather");
 	      $.ajax({
-	        url: (`http://localhost:3000`) + '/api/widgets/' + this.props.widget.widgetType + '/' + this.props.widget.id + '/view',
+	        url: (`https://good-morning-to-you-too.herokuapp.com`) + '/api/widgets/' + this.props.widget.widgetType + '/' + this.props.widget.id + '/view',
 	        method: "get",
 	        headers: {
 	          'Authorization': "Bearer " + window.localStorage.token
@@ -69117,7 +69117,7 @@
 	      this.setState({ refreshing: true });
 	      console.log("getting news");
 	      $.ajax({
-	        url: (`http://localhost:3000`) + '/api/widgets/' + this.props.widget.widgetType + '/' + this.props.widget.id + '/view',
+	        url: (`https://good-morning-to-you-too.herokuapp.com`) + '/api/widgets/' + this.props.widget.widgetType + '/' + this.props.widget.id + '/view',
 	        method: "get",
 	        dataType: "json",
 	        headers: {
@@ -69409,7 +69409,7 @@
 	    value: function getQuote() {
 	      console.log('getting quote');
 	      $.ajax({
-	        url: (`http://localhost:3000`) + '/api/widgets/' + this.props.widget.widgetType + '/' + this.props.widget.id + '/view',
+	        url: (`https://good-morning-to-you-too.herokuapp.com`) + '/api/widgets/' + this.props.widget.widgetType + '/' + this.props.widget.id + '/view',
 	        method: "get",
 	        headers: {
 	          'Authorization': "Bearer " + window.localStorage.token

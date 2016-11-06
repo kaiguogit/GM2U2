@@ -10,7 +10,7 @@ module.exports = {
   entry: './modules/index.jsx',
 
   output: {
-    path: 'public',
+    path: '../public',
     filename: 'bundle.js',
     publicPath: '/'
   },

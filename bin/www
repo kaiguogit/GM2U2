@@ -21,6 +21,7 @@ app.set('port', port);
 models.sequelize.sync().then(function () {
   // Start the server
     var server = app.listen(app.get('port'), function() {
+        console.log('Production Express server running at localhost:' + app.get('port'));
         debug('Express server listening on port ' + server.address().port);
     });
 });
