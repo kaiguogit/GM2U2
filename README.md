@@ -11,5 +11,5 @@ npm start
 ### How to build react front end
 ```
 cd frontend
-npm build
+npm run build
 ```
